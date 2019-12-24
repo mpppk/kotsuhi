@@ -1,4 +1,5 @@
 import { Grid } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { counterActionCreators } from '../actions/counter';
@@ -23,6 +24,9 @@ import TemplateList from '../components/TemplateList';
 
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
+    exportCsvButton: {
+      float: 'right'
+    },
     root: {
       flexGrow: 1,
       margin: 10
@@ -41,12 +45,21 @@ export const Index: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <Grid container={true} spacing={2}>
+      <Grid container={true} spacing={2} justify={'flex-end'}>
         <Grid item={true} xs={4}>
           <TemplateList />
         </Grid>
         <Grid item={true} xs={8}>
           <TemplateDetail />
+        </Grid>
+        <Grid item={true} xs={2}>
+          <Button
+            variant="outlined"
+            color="primary"
+            className={classes.exportCsvButton}
+          >
+            Export CSV
+          </Button>
         </Grid>
       </Grid>
     </div>
