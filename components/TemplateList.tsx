@@ -1,9 +1,12 @@
+import Badge from '@material-ui/core/Badge';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Badge from '@material-ui/core/Badge';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import MoreHoriz from '@material-ui/icons/MoreHorizOutlined';
 import NoteIcon from '@material-ui/icons/Note';
 import * as React from 'react';
 
@@ -40,6 +43,11 @@ export default function TemplateList() {
             <NoteIcon />
           </ListItemIcon>
           <ListItemText primary="Template1" />
+          <ListItemSecondaryAction>
+            <IconButton edge="end" aria-label="more">
+              <MoreHoriz />
+            </IconButton>
+          </ListItemSecondaryAction>
         </ListItem>
         <ListItem
           button={true}
@@ -52,6 +60,11 @@ export default function TemplateList() {
             </Badge>
           </ListItemIcon>
           <ListItemText primary="Template2" />
+          <ListItemSecondaryAction>
+            <IconButton edge="end" aria-label="more">
+              <MoreHoriz />
+            </IconButton>
+          </ListItemSecondaryAction>
         </ListItem>
         <ListItem
           button={true}
@@ -64,6 +77,11 @@ export default function TemplateList() {
             </Badge>
           </ListItemIcon>
           <ListItemText primary="Template3" />
+          <ListItemSecondaryAction>
+            <IconButton edge="end" aria-label="more">
+              <MoreHoriz />
+            </IconButton>
+          </ListItemSecondaryAction>
         </ListItem>
       </List>
     </div>
