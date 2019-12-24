@@ -40,7 +40,8 @@ export const Index: React.FC = () => {
   );
 };
 
-(Index as any).getInitialProps = props => {
+// FIXME
+(Index as any).getInitialProps = (props: any) => {
   const { store, isServer } = props.ctx;
   store.dispatch(counterActionCreators.requestAmountChanging({ amount: 1 }));
   return { isServer };

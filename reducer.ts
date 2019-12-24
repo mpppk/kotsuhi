@@ -7,7 +7,7 @@ import {
 export const exampleInitialState = {
   count: 0,
   isReadyFirebase: false,
-  user: (null as IUser) || null
+  user: null as IUser | null
 };
 
 export interface IUser {

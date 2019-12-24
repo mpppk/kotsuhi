@@ -1234,6 +1234,23 @@
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
 
+"@types/next-redux-saga@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@types/next-redux-saga/-/next-redux-saga-3.0.2.tgz#1440cabcfa1f979ccd52dd9e298fb53e0d39ed72"
+  dependencies:
+    "@types/next-redux-wrapper" "^2.0.2"
+    "@types/react" "*"
+    redux "^3.6.0"
+
+"@types/next-redux-wrapper@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@types/next-redux-wrapper/-/next-redux-wrapper-2.0.2.tgz#ab74f5988911b3403c4da91c6d7dabac4aa2f9fb"
+  dependencies:
+    "@types/node" "*"
+    "@types/react" "*"
+    "@types/react-redux" "*"
+    redux "^3.6.0"
+
 "@types/node@*":
   version "12.12.7"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.7.tgz#01e4ea724d9e3bd50d90c11fd5980ba317d8fa11"
@@ -1252,7 +1269,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-redux@7.1.5":
+"@types/react-redux@*", "@types/react-redux@7.1.5":
   version "7.1.5"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.5.tgz#c7a528d538969250347aa53c52241051cf886bd3"
   dependencies:
@@ -4688,6 +4705,10 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
+lodash-es@^4.2.1:
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
+
 lodash._reinterpolate@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
@@ -4737,7 +4758,7 @@ lodash.templatesettings@^4.0.0:
   dependencies:
     lodash._reinterpolate "^3.0.0"
 
-lodash@^4.15.0, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.4:
+lodash@^4.15.0, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.4, lodash@^4.2.1:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
 
@@ -6533,6 +6554,15 @@ redux@4.0.5:
     loose-envify "^1.4.0"
     symbol-observable "^1.2.0"
 
+redux@^3.6.0:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-3.7.2.tgz#06b73123215901d25d065be342eb026bc1c8537b"
+  dependencies:
+    lodash "^4.2.1"
+    lodash-es "^4.2.1"
+    loose-envify "^1.1.0"
+    symbol-observable "^1.0.3"
+
 redux@^4.0.0, redux@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.4.tgz#4ee1aeb164b63d6a1bcc57ae4aa0b6e6fa7a3796"
@@ -7243,7 +7273,7 @@ supports-color@^6.1.0:
   dependencies:
     has-flag "^3.0.0"
 
-symbol-observable@^1.2.0:
+symbol-observable@^1.0.3, symbol-observable@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
 

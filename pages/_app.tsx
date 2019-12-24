@@ -9,7 +9,8 @@ import theme from '../src/theme';
 import createStore from '../store';
 
 class MyApp extends App {
-  public static async getInitialProps({ Component, ctx }) {
+  // FIXME
+  public static async getInitialProps({ Component, ctx }: any) {
     let pageProps = {};
 
     if (Component.getInitialProps) {
