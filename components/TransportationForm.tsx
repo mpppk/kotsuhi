@@ -6,6 +6,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,6 +36,9 @@ export default function TransportationForm() {
             <MenuItem value={'複数'}>複数</MenuItem>
           </Select>
         </FormControl>
+        <Button variant="outlined" color={'secondary'}>
+          Save
+        </Button>
       </form>
     </div>
   );
