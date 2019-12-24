@@ -1,5 +1,7 @@
 import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
 import { counterActionCreators } from '../actions/counter';
@@ -44,25 +46,35 @@ export const Index: React.FC = () => {
   const classes = useStyles(undefined);
 
   return (
-    <div className={classes.root}>
-      <Grid container={true} spacing={2} justify={'flex-end'}>
-        <Grid item={true} xs={4}>
-          <TemplateList />
+    <Container maxWidth="lg">
+      <div className={classes.root}>
+        <Grid container={true} spacing={2} justify={'flex-end'}>
+          <Grid item={true} xs={4}>
+            <TemplateList />
+            <ButtonGroup
+              color="primary"
+              aria-label="outlined primary button group"
+            >
+              <Button>Add</Button>
+              <Button>Import</Button>
+              <Button>Export</Button>
+            </ButtonGroup>
+          </Grid>
+          <Grid item={true} xs={8}>
+            <TemplateDetail />
+          </Grid>
+          <Grid item={true} xs={2}>
+            <Button
+              variant="outlined"
+              color="primary"
+              className={classes.exportCsvButton}
+            >
+              Export CSV
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item={true} xs={8}>
-          <TemplateDetail />
-        </Grid>
-        <Grid item={true} xs={2}>
-          <Button
-            variant="outlined"
-            color="primary"
-            className={classes.exportCsvButton}
-          >
-            Export CSV
-          </Button>
-        </Grid>
-      </Grid>
-    </div>
+      </div>
+    </Container>
   );
 };
 
