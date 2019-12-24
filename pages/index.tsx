@@ -1,6 +1,7 @@
 import { Grid } from '@material-ui/core';
 import React from 'react';
 import { counterActionCreators } from '../actions/counter';
+import TemplateDetail from '../components/TemplateDetail';
 import TemplateList from '../components/TemplateList';
 
 // const useHandlers = () => {
@@ -29,8 +30,11 @@ export const Index: React.FC = () => {
 
   return (
     <Grid container={true} spacing={2}>
-      <Grid item={true} xs={8}>
+      <Grid item={true} xs={4}>
         <TemplateList />
+      </Grid>
+      <Grid item={true} xs={8}>
+        <TemplateDetail />
       </Grid>
     </Grid>
   );
