@@ -1,6 +1,7 @@
+const withCSS = require('@zeit/next-css');
 require('dotenv').config();
 
-module.exports = {
+module.exports = withCSS({
   publicRuntimeConfig: {
     firebase: {
       apiKey: process.env.FIREBASE_API_KEY,
@@ -13,4 +14,4 @@ module.exports = {
       storageBucket: process.env.FIREBASE_STORAGE_BUCKET
     }
   }
-};
+});
