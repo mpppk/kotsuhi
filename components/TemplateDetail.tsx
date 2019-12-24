@@ -1,12 +1,15 @@
 import { Paper } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
 import DaysPicker from './DaysPicker';
+import Transportation from './Transportation';
+import TransportationForm from './TransportationForm';
 
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
-    title: {
+    content: {
       padding: 16
     }
   })
@@ -20,9 +23,12 @@ export default function TemplateDetail() {
   };
   return (
     <Paper>
-      <Typography variant={'h4'} className={classes.title}>
-        Template1
-      </Typography>
+      <div className={classes.content}>
+        <Typography variant={'h4'}>Template2</Typography>
+        <Transportation />
+        <TransportationForm />
+        <Button variant="outlined">Add transportation</Button>
+      </div>
       <DaysPicker onClickDay={handleClickDay} />
     </Paper>
   );
