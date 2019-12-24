@@ -1,43 +1,38 @@
+import { Grid } from '@material-ui/core';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { counterActionCreators } from '../actions/counter';
-import Page from '../components/Page';
-import { State } from '../reducer';
+import TemplateList from '../components/TemplateList';
 
-const useHandlers = () => {
-  const dispatch = useDispatch();
-  return {
-    clickAsyncIncrementButton: () => {
-      dispatch(counterActionCreators.clickAsyncIncrementButton(undefined));
-    },
-    clickDecrementButton: () => {
-      dispatch(counterActionCreators.clickDecrementButton(undefined));
-    },
-    clickIncrementButton: () => {
-      dispatch(counterActionCreators.clickIncrementButton(undefined));
-    },
-    empty: () => {} //tslint:disable-line
-  };
-};
+// const useHandlers = () => {
+//   const dispatch = useDispatch();
+//   return {
+//     clickAsyncIncrementButton: () => {
+//       dispatch(counterActionCreators.clickAsyncIncrementButton(undefined));
+//     },
+//     clickDecrementButton: () => {
+//       dispatch(counterActionCreators.clickDecrementButton(undefined));
+//     },
+//     clickIncrementButton: () => {
+//       dispatch(counterActionCreators.clickIncrementButton(undefined));
+//     },
+//     empty: () => {} //tslint:disable-line
+//   };
+// };
 
 // tslint:disable-next-line variable-name
 export const Index: React.FC = () => {
-  const handlers = useHandlers();
-  const globalState = useSelector((state: State) => ({
-    count: state.count,
-    user: state.user
-  }));
+  // const handlers = useHandlers();
+  // const globalState = useSelector((state: State) => ({
+  //   count: state.count,
+  //   user: state.user
+  // }));
 
   return (
-    <Page
-      user={globalState.user}
-      count={globalState.count}
-      title="Index Page"
-      onClickIncrementButton={handlers.clickIncrementButton}
-      onClickDecrementButton={handlers.clickDecrementButton}
-      onClickIncrementLaterButton={handlers.clickAsyncIncrementButton}
-      onClickLogout={handlers.empty}
-    />
+    <Grid container={true} spacing={2}>
+      <Grid item={true} xs={8}>
+        <TemplateList />
+      </Grid>
+    </Grid>
   );
 };
 
