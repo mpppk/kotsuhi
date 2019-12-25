@@ -5,6 +5,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Edit from '@material-ui/icons/EditOutlined';
 import * as React from 'react';
+import { Transportation as TransportationEntity } from '../models/transportation';
 import DaysPicker from './DaysPicker';
 import Transportation from './Transportation';
 import TransportationForm from './TransportationForm';
@@ -16,6 +17,10 @@ const useStyles = makeStyles((_theme: Theme) =>
     }
   })
 );
+
+const emptyHandler = (transportation: TransportationEntity) => {
+  console.log('hello', transportation);
+};
 
 export default function TemplateDetail() {
   const classes = useStyles(undefined);
@@ -33,7 +38,7 @@ export default function TemplateDetail() {
           </IconButton>
         </Typography>
         <Transportation />
-        <TransportationForm />
+        <TransportationForm onClickSave={emptyHandler} />
         <Button variant="outlined">Add transportation</Button>
       </div>
       <DaysPicker onClickDay={handleClickDay} />
