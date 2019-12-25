@@ -5,6 +5,12 @@ export interface Transportation {
   departure: string;
   destination: string;
   fare: number;
-  purpose: string;
   line: Line;
+  purpose: string;
+}
+
+export interface TransportationTemplate {
+  description: string;
+  title: string;
+  transportations: Transportation[];
 }

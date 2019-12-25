@@ -7,6 +7,7 @@ import React from 'react';
 import { counterActionCreators } from '../actions/counter';
 import TemplateDetail from '../components/TemplateDetail';
 import TemplateList from '../components/TemplateList';
+import { TransportationTemplate } from '../models/model';
 
 // const useHandlers = () => {
 //   const dispatch = useDispatch();
@@ -44,6 +45,20 @@ export const Index: React.FC = () => {
   //   user: state.user
   // }));
   const classes = useStyles(undefined);
+  const transportationTemplate: TransportationTemplate = {
+    description: 'test-description',
+    title: 'Template1',
+    transportations: [
+      {
+        arrival: '東京',
+        departure: '横浜',
+        destination: 'どこかビル',
+        fare: 525,
+        line: 'JR',
+        purpose: '打ち合わせ'
+      }
+    ]
+  };
 
   return (
     <Container maxWidth="lg">
@@ -61,7 +76,7 @@ export const Index: React.FC = () => {
             </ButtonGroup>
           </Grid>
           <Grid item={true} xs={8}>
-            <TemplateDetail />
+            <TemplateDetail template={transportationTemplate} />
           </Grid>
           <Grid item={true} xs={2}>
             <Button

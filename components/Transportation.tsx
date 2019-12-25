@@ -3,6 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Edit from '@material-ui/icons/EditOutlined';
 import * as React from 'react';
+import { Transportation as TransportationEntity } from '../models/model';
 
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
@@ -10,17 +11,25 @@ const useStyles = makeStyles((_theme: Theme) =>
   })
 );
 
-export default function TransportationForm() {
+interface TransportationProps {
+  index: number;
+  transportation: TransportationEntity;
+}
+
+export default function Transportation(props: TransportationProps) {
   const classes = useStyles(undefined);
+  const t = props.transportation;
   return (
     <div className={classes.root}>
       <Typography>
-        Transportation 1
+        Transportation {props.index}
         <IconButton edge="end" aria-label="more">
           <Edit />
         </IconButton>
       </Typography>
-      <p>横浜→東京 ¥525 JR どこかビル 打ち合わせ</p>
+      <p>
+        {t.departure}→{t.arrival} ¥{t.fare} {t.line} {t.destination} {t.purpose}
+      </p>
     </div>
   );
 }
