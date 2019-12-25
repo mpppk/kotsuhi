@@ -5,20 +5,8 @@ import {
 } from './actions/counter';
 
 export const exampleInitialState = {
-  count: 0,
-  isReadyFirebase: false,
-  user: null as IUser | null
+  count: 0
 };
-
-export interface IUser {
-  displayName: string;
-  email: string;
-  emailVerified: boolean;
-  photoURL: string;
-  isAnonymous: boolean;
-  phoneNumber: string | null;
-  uid: string;
-}
 
 export type State = typeof exampleInitialState;
 
