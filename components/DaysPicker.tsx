@@ -4,11 +4,11 @@ import DayPicker, { DateUtils } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { DayModifiers } from 'react-day-picker/types/common';
 
-interface IDaysPickerProps {
+interface DaysPickerProps {
   onClickDay: (days: Date[]) => void;
 }
 
-export default function DaysPicker(props: IDaysPickerProps) {
+export default function DaysPicker(props: DaysPickerProps) {
   const [selectedDays, setSelectedDays] = useState([] as Date[]);
 
   const handleDayClick = (day: Date, { selected }: DayModifiers) => {
