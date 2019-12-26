@@ -57,6 +57,7 @@ const selectedDays = [[], []] as Date[][];
 
 export const initialState = {
   count: 0,
+  isEditingTitle: false,
   selectedDays,
   templateDetailIndex: 0,
   templates
@@ -69,6 +70,14 @@ const addCount = (state: State, amount: number) => {
 };
 
 const reducer = reducerWithInitialState(initialState)
+  .case(indexActionCreators.updateTitle, (state, payload) => {
+    const newTemplates = [...state.templates];
+    newTemplates[payload.index].title = payload.title;
+    return { ...state, templates: newTemplates };
+  })
+  .case(indexActionCreators.updateTitleEditMode, (state, isEditingTitle) => {
+    return { ...state, isEditingTitle };
+  })
   .case(
     indexActionCreators.updateTemplateDetailIndex,
     (state, templateDetailIndex) => {

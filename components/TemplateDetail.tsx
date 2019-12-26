@@ -1,9 +1,6 @@
 import { Paper } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Edit from '@material-ui/icons/EditOutlined';
 import { useState } from 'react';
 import * as React from 'react';
 import {
@@ -11,11 +8,16 @@ import {
   TransportationTemplate
 } from '../models/model';
 import DaysPicker from './DaysPicker';
+import TemplateDetailTitle from './TemplateDetailTitle';
+import TemplateDetailTitleForm from './TemplateDetailTitleForm';
 import Transportation from './Transportation';
 import TransportationForm from './TransportationForm';
 
 interface TemplateDetailProps {
+  isEditingTitle: boolean;
   template: TransportationTemplate;
+  onClickEditTitleButton: (title: string) => void;
+  onClickSaveTitleButton: (title: string) => void;
   onUpdate: (t: TransportationEntity, i: number) => void;
   onUpdateCalendar: (dates: Date[]) => void;
   selectedDays: Date[];
@@ -54,15 +56,24 @@ export default function TemplateDetail(props: TemplateDetailProps) {
     };
   };
 
+  const handleClickEditTitleButton = () => {
+    props.onClickEditTitleButton(props.template.title);
+  };
+
   return (
     <Paper>
       <div className={classes.content}>
-        <Typography variant={'h4'}>
-          {props.template.title}
-          <IconButton edge="end" aria-label="more">
-            <Edit />
-          </IconButton>
-        </Typography>
+        {props.isEditingTitle ? (
+          <TemplateDetailTitleForm
+            title={props.template.title}
+            onClickSaveTitleButton={props.onClickSaveTitleButton}
+          />
+        ) : (
+          <TemplateDetailTitle
+            title={props.template.title}
+            onClickEditButton={handleClickEditTitleButton}
+          />
+        )}
         {props.template.transportations.map((t, i) =>
           editTransportationIndices.includes(i) ? (
             <TransportationForm

@@ -12,7 +12,7 @@ import TemplateList from '../components/TemplateList';
 import { Transportation, TransportationTemplate } from '../models/model';
 import { State } from '../reducer';
 
-const useHandlers = () => {
+const useHandlers = (state: GlobalState) => {
   const dispatch = useDispatch();
   return {
     updateDays: (dates: Date[], index: number) => {
@@ -20,8 +20,30 @@ const useHandlers = () => {
     },
     updateTemplateDetailIndex: (index: number) => {
       dispatch(indexActionCreators.updateTemplateDetailIndex(index));
+    },
+    updateTitle: (title: string) => {
+      dispatch(indexActionCreators.updateTitleEditMode(false));
+      dispatch(
+        indexActionCreators.updateTitle({
+          title,
+          index: state.templateDetailIndex
+        })
+      );
+    },
+    updateTitleEditMode: () => {
+      dispatch(indexActionCreators.updateTitleEditMode(true));
     }
   };
+};
+
+type GlobalState = ReturnType<typeof useGlobalState>;
+const useGlobalState = () => {
+  return useSelector((s: State) => ({
+    isEditingTitle: s.isEditingTitle,
+    selectedDays: s.selectedDays,
+    templateDetailIndex: s.templateDetailIndex,
+    templates: s.templates
+  }));
 };
 
 const useStyles = makeStyles((_theme: Theme) =>
@@ -38,13 +60,9 @@ const useStyles = makeStyles((_theme: Theme) =>
 
 // tslint:disable-next-line variable-name
 export const Index: React.FC = () => {
-  const handlers = useHandlers();
   const classes = useStyles(undefined);
-  const state = useSelector((s: State) => ({
-    selectedDays: s.selectedDays,
-    templateDetailIndex: s.templateDetailIndex,
-    templates: s.templates
-  }));
+  const state = useGlobalState();
+  const handlers = useHandlers(state);
 
   const handleTemplateUpdate = (
     transportation: Transportation,
@@ -92,6 +110,9 @@ export const Index: React.FC = () => {
               )}
               selectedDays={state.selectedDays[state.templateDetailIndex]}
               template={state.templates[state.templateDetailIndex]}
+              isEditingTitle={state.isEditingTitle}
+              onClickEditTitleButton={handlers.updateTitleEditMode}
+              onClickSaveTitleButton={handlers.updateTitle}
             />
           </Grid>
           <Grid item={true} xs={2}>
