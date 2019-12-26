@@ -28,7 +28,7 @@ describe('generateCsvStrList', () => {
 
     const expectedCsvStr =
       'N00000,100,v.1.04,立替交通費,BD01\r\n' +
-      '2020/01/01,月,departure,arrival,JR,100,destination,purpose\r\n';
+      '2020/01/01,水,departure,arrival,JR,100,destination,purpose\r\n';
 
     const csvStrList = generateCsvStrList(config, [template], dateList);
     expect(csvStrList).toHaveLength(1);

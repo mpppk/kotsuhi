@@ -40,7 +40,7 @@ const generateTableHeader = (
   version: string,
   code: string
 ): string[] => {
-  return [employeeId, version, String(fareSum), code];
+  return [employeeId, String(fareSum), version, '立替交通費', code];
 };
 
 const toStringFromCsv = (csv: Csv): string => {
@@ -51,7 +51,7 @@ const toStringFromCsv = (csv: Csv): string => {
     csv.code
   );
   const rowStrList = csv.rows.map(toStringFromRow);
-  return header.join(',') + '\r\n' + rowStrList.join('\r\n');
+  return header.join(',') + '\r\n' + rowStrList.join('\r\n') + '\r\n';
 };
 
 export const generateCsvStrList = (
@@ -119,7 +119,9 @@ const generateRow = (transportation: Transportation, date: Date): CsvRow => {
 };
 
 const formatDate = (date: Date): string => {
-  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/`;
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}/${month}/${d}`;
 };
 
 const toDayOfWeek = (date: Date): DayOfWeek => {
