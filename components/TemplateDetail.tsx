@@ -45,8 +45,9 @@ export default function TemplateDetail(props: TemplateDetailProps) {
 
   const genClickSaveButtonHandler = (i: number) => {
     return (transportation: TransportationEntity) => {
-      const newEditTransportationIndices = [...editTransportationIndices];
-      newEditTransportationIndices.splice(i, 1);
+      const newEditTransportationIndices = editTransportationIndices.filter(
+        ei => ei !== i
+      );
       setEditTransportationIndices(newEditTransportationIndices);
       props.onUpdate(transportation, i);
     };

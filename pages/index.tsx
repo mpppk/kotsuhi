@@ -40,7 +40,7 @@ const useStyles = makeStyles((_theme: Theme) =>
 const transportationTemplates: TransportationTemplate[] = [
   {
     description: 'test-description',
-    title: 'Template1',
+    title: '東京↔横浜',
     transportations: [
       {
         arrival: '東京',
@@ -49,6 +49,36 @@ const transportationTemplates: TransportationTemplate[] = [
         fare: 525,
         line: 'JR',
         purpose: '打ち合わせ'
+      },
+      {
+        arrival: '横浜',
+        departure: '東京',
+        destination: '自社',
+        fare: 525,
+        line: 'JR',
+        purpose: '帰社'
+      }
+    ]
+  },
+  {
+    description: 'test-description',
+    title: '新宿↔横浜',
+    transportations: [
+      {
+        arrival: '新宿',
+        departure: '横浜',
+        destination: 'なにかビル',
+        fare: 450,
+        line: '複数',
+        purpose: '打ち合わせ'
+      },
+      {
+        arrival: '横浜',
+        departure: '新宿',
+        destination: '自社',
+        fare: 525,
+        line: '複数',
+        purpose: '帰社'
       }
     ]
   }
