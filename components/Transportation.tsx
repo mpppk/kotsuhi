@@ -13,17 +13,27 @@ const useStyles = makeStyles((_theme: Theme) =>
 
 interface TransportationProps {
   index: number;
+  onClickEditButton: (t: TransportationEntity, i: number) => void;
   transportation: TransportationEntity;
 }
 
 export default function Transportation(props: TransportationProps) {
   const classes = useStyles(undefined);
   const t = props.transportation;
+
+  const handleClickEditButton = () => {
+    props.onClickEditButton(props.transportation, props.index);
+  };
+
   return (
     <div className={classes.root}>
       <Typography>
         Transportation {props.index}
-        <IconButton edge="end" aria-label="more">
+        <IconButton
+          onClick={handleClickEditButton}
+          edge="end"
+          aria-label="more"
+        >
           <Edit />
         </IconButton>
       </Typography>

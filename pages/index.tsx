@@ -4,26 +4,47 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { indexActionCreators } from '../actions';
 import { counterActionCreators } from '../actions/counter';
 import TemplateDetail from '../components/TemplateDetail';
 import TemplateList from '../components/TemplateList';
-import { TransportationTemplate } from '../models/model';
+import { Transportation, TransportationTemplate } from '../models/model';
+import { State } from '../reducer';
 
-// const useHandlers = () => {
-//   const dispatch = useDispatch();
-//   return {
-//     clickAsyncIncrementButton: () => {
-//       dispatch(counterActionCreators.clickAsyncIncrementButton(undefined));
-//     },
-//     clickDecrementButton: () => {
-//       dispatch(counterActionCreators.clickDecrementButton(undefined));
-//     },
-//     clickIncrementButton: () => {
-//       dispatch(counterActionCreators.clickIncrementButton(undefined));
-//     },
-//     empty: () => {} //tslint:disable-line
-//   };
-// };
+const useHandlers = (state: GlobalState) => {
+  const dispatch = useDispatch();
+  return {
+    updateDays: (dates: Date[], index: number) => {
+      dispatch(indexActionCreators.updateDays({ dates, index }));
+    },
+    updateTemplateDetailIndex: (index: number) => {
+      dispatch(indexActionCreators.updateTemplateDetailIndex(index));
+    },
+    updateTitle: (title: string) => {
+      dispatch(indexActionCreators.updateTitleEditMode(false));
+      dispatch(
+        indexActionCreators.updateTitle({
+          index: state.templateDetailIndex,
+          title
+        })
+      );
+    },
+    updateTitleEditMode: () => {
+      dispatch(indexActionCreators.updateTitleEditMode(true));
+    }
+  };
+};
+
+type GlobalState = ReturnType<typeof useGlobalState>;
+const useGlobalState = () => {
+  return useSelector((s: State) => ({
+    isEditingTitle: s.isEditingTitle,
+    selectedDays: s.selectedDays,
+    templateDetailIndex: s.templateDetailIndex,
+    templates: s.templates
+  }));
+};
 
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
@@ -39,25 +60,27 @@ const useStyles = makeStyles((_theme: Theme) =>
 
 // tslint:disable-next-line variable-name
 export const Index: React.FC = () => {
-  // const handlers = useHandlers();
-  // const globalState = useSelector((state: State) => ({
-  //   count: state.count,
-  //   user: state.user
-  // }));
   const classes = useStyles(undefined);
-  const transportationTemplate: TransportationTemplate = {
-    description: 'test-description',
-    title: 'Template1',
-    transportations: [
-      {
-        arrival: '東京',
-        departure: '横浜',
-        destination: 'どこかビル',
-        fare: 525,
-        line: 'JR',
-        purpose: '打ち合わせ'
-      }
-    ]
+  const state = useGlobalState();
+  const handlers = useHandlers(state);
+
+  const handleTemplateUpdate = (
+    transportation: Transportation,
+    transportationIndex: number
+  ) => {
+    state.templates[state.templateDetailIndex].transportations[
+      transportationIndex
+    ] = transportation;
+  };
+
+  const handleClickTemplate = (_t: TransportationTemplate, index: number) => {
+    handlers.updateTemplateDetailIndex(index);
+  };
+
+  const genUpdateCalendarHandler = (templateIndex: number) => {
+    return (dates: Date[]) => {
+      handlers.updateDays(dates, templateIndex);
+    };
   };
 
   return (
@@ -65,7 +88,11 @@ export const Index: React.FC = () => {
       <div className={classes.root}>
         <Grid container={true} spacing={2} justify={'flex-end'}>
           <Grid item={true} xs={4}>
-            <TemplateList />
+            <TemplateList
+              badgeNums={state.selectedDays.map(d => d.length)}
+              onClick={handleClickTemplate}
+              templates={state.templates}
+            />
             <ButtonGroup
               color="primary"
               aria-label="outlined primary button group"
@@ -76,7 +103,17 @@ export const Index: React.FC = () => {
             </ButtonGroup>
           </Grid>
           <Grid item={true} xs={8}>
-            <TemplateDetail template={transportationTemplate} />
+            <TemplateDetail
+              onUpdate={handleTemplateUpdate}
+              onUpdateCalendar={genUpdateCalendarHandler(
+                state.templateDetailIndex
+              )}
+              selectedDays={state.selectedDays[state.templateDetailIndex]}
+              template={state.templates[state.templateDetailIndex]}
+              isEditingTitle={state.isEditingTitle}
+              onClickEditTitleButton={handlers.updateTitleEditMode}
+              onClickSaveTitleButton={handlers.updateTitle}
+            />
           </Grid>
           <Grid item={true} xs={2}>
             <Button

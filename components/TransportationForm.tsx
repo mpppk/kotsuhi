@@ -7,7 +7,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
-import { Line, Transportation } from '../models/model';
+import { Transportation } from '../models/model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,18 +20,21 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface TransportationFormProps {
+  index: number;
   onClickSave: (t: Transportation) => void;
+  transportation: Transportation;
 }
 
 type ComponentState = ReturnType<typeof useComponentState>;
 
-const useComponentState = () => {
-  const [departure, setDeparture] = React.useState('');
-  const [arrival, setArrival] = React.useState('');
-  const [fare, setFare] = React.useState(0);
-  const [destination, setDestination] = React.useState('');
-  const [purpose, setPurpose] = React.useState('');
-  const [line, setLine] = React.useState('JR' as Line);
+const useComponentState = (props: TransportationFormProps) => {
+  const t = props.transportation;
+  const [departure, setDeparture] = React.useState(t.departure);
+  const [arrival, setArrival] = React.useState(t.arrival);
+  const [fare, setFare] = React.useState(t.fare);
+  const [destination, setDestination] = React.useState(t.destination);
+  const [purpose, setPurpose] = React.useState(t.purpose);
+  const [line, setLine] = React.useState(t.line);
 
   const transportation: Transportation = {
     arrival,
@@ -88,12 +91,12 @@ const generateComponentHandlers = (
 // export default function TransportationForm() {
 export default function TransportationForm(props: TransportationFormProps) {
   const classes = useStyles(undefined);
-  const componentState = useComponentState();
+  const componentState = useComponentState(props);
   const componentHandlers = generateComponentHandlers(props, componentState);
   const transportation = componentState.transportation;
   return (
     <div>
-      <Typography>Transportation 2</Typography>
+      <Typography>Transportation {props.index + 1}</Typography>
       <form className={classes.root}>
         <TextField
           label="出発"

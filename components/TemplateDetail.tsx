@@ -1,20 +1,26 @@
 import { Paper } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Edit from '@material-ui/icons/EditOutlined';
+import { useState } from 'react';
 import * as React from 'react';
 import {
   Transportation as TransportationEntity,
   TransportationTemplate
 } from '../models/model';
 import DaysPicker from './DaysPicker';
+import TemplateDetailTitle from './TemplateDetailTitle';
+import TemplateDetailTitleForm from './TemplateDetailTitleForm';
 import Transportation from './Transportation';
 import TransportationForm from './TransportationForm';
 
 interface TemplateDetailProps {
+  isEditingTitle: boolean;
   template: TransportationTemplate;
+  onClickEditTitleButton: (title: string) => void;
+  onClickSaveTitleButton: (title: string) => void;
+  onUpdate: (t: TransportationEntity, i: number) => void;
+  onUpdateCalendar: (dates: Date[]) => void;
+  selectedDays: Date[];
 }
 
 const useStyles = makeStyles((_theme: Theme) =>
@@ -25,36 +31,72 @@ const useStyles = makeStyles((_theme: Theme) =>
   })
 );
 
-const emptyHandler = (transportation: TransportationEntity) => {
-  console.log('hello', transportation);
-};
-
 export default function TemplateDetail(props: TemplateDetailProps) {
   const classes = useStyles(undefined);
   const handleClickDay = (days: Date[]) => {
-    // tslint:disable-next-line
-    console.log(days);
+    props.onUpdateCalendar(days);
   };
+
+  const [editTransportationIndices, setEditTransportationIndices] = useState(
+    [] as number[]
+  );
+  const genClickEditTransportationButtonHandler = (i: number) => {
+    return () => {
+      setEditTransportationIndices([...editTransportationIndices, i]);
+    };
+  };
+
+  const genClickSaveButtonHandler = (i: number) => {
+    return (transportation: TransportationEntity) => {
+      const newEditTransportationIndices = editTransportationIndices.filter(
+        ei => ei !== i
+      );
+      setEditTransportationIndices(newEditTransportationIndices);
+      props.onUpdate(transportation, i);
+    };
+  };
+
+  const handleClickEditTitleButton = () => {
+    props.onClickEditTitleButton(props.template.title);
+  };
+
   return (
     <Paper>
       <div className={classes.content}>
-        <Typography variant={'h4'}>
-          {props.template.title}
-          <IconButton edge="end" aria-label="more">
-            <Edit />
-          </IconButton>
-        </Typography>
-        {props.template.transportations.map((t, i) => (
-          <Transportation
-            transportation={t}
-            index={i + 1}
-            key={t.arrival + t.departure + i}
+        {props.isEditingTitle ? (
+          <TemplateDetailTitleForm
+            title={props.template.title}
+            onClickSaveTitleButton={props.onClickSaveTitleButton}
           />
-        ))}
-        <TransportationForm onClickSave={emptyHandler} />
+        ) : (
+          <TemplateDetailTitle
+            title={props.template.title}
+            onClickEditButton={handleClickEditTitleButton}
+          />
+        )}
+        {props.template.transportations.map((t, i) =>
+          editTransportationIndices.includes(i) ? (
+            <TransportationForm
+              transportation={t}
+              index={i}
+              key={t.arrival + t.departure + i + '_edit'}
+              onClickSave={genClickSaveButtonHandler(i)}
+            />
+          ) : (
+            <Transportation
+              transportation={t}
+              index={i + 1}
+              key={t.arrival + t.departure + i}
+              onClickEditButton={genClickEditTransportationButtonHandler(i)}
+            />
+          )
+        )}
         <Button variant="outlined">Add transportation</Button>
       </div>
-      <DaysPicker onClickDay={handleClickDay} />
+      <DaysPicker
+        onClickDay={handleClickDay}
+        selectedDays={props.selectedDays}
+      />
     </Paper>
   );
 }
