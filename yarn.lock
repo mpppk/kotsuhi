@@ -1234,7 +1234,7 @@
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
 
-"@types/next-redux-saga@^3.0.2":
+"@types/next-redux-saga@3.0.2":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@types/next-redux-saga/-/next-redux-saga-3.0.2.tgz#1440cabcfa1f979ccd52dd9e298fb53e0d39ed72"
   dependencies:
@@ -1448,7 +1448,7 @@
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
 
-"@zeit/next-css@^1.0.1":
+"@zeit/next-css@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@zeit/next-css/-/next-css-1.0.1.tgz#4f784e841e7ca1b21b3468a902e2c1fa95a3e75c"
   dependencies:
@@ -6386,7 +6386,7 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-day-picker@^7.4.0:
+react-day-picker@7.4.0:
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-7.4.0.tgz#1b3dfe76a81864518d241214ba658da25903b7df"
   dependencies:
