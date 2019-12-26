@@ -4,26 +4,22 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { indexActionCreators } from '../actions';
 import { counterActionCreators } from '../actions/counter';
 import TemplateDetail from '../components/TemplateDetail';
 import TemplateList from '../components/TemplateList';
 import { Transportation, TransportationTemplate } from '../models/model';
+import { State } from '../reducer';
 
-// const useHandlers = () => {
-//   const dispatch = useDispatch();
-//   return {
-//     clickAsyncIncrementButton: () => {
-//       dispatch(counterActionCreators.clickAsyncIncrementButton(undefined));
-//     },
-//     clickDecrementButton: () => {
-//       dispatch(counterActionCreators.clickDecrementButton(undefined));
-//     },
-//     clickIncrementButton: () => {
-//       dispatch(counterActionCreators.clickIncrementButton(undefined));
-//     },
-//     empty: () => {} //tslint:disable-line
-//   };
-// };
+const useHandlers = () => {
+  const dispatch = useDispatch();
+  return {
+    updateTemplateDetailIndex: (index: number) => {
+      dispatch(indexActionCreators.updateTemplateDetailIndex(index));
+    }
+  };
+};
 
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
@@ -37,70 +33,26 @@ const useStyles = makeStyles((_theme: Theme) =>
   })
 );
 
-const transportationTemplates: TransportationTemplate[] = [
-  {
-    description: 'test-description',
-    title: '東京↔横浜',
-    transportations: [
-      {
-        arrival: '東京',
-        departure: '横浜',
-        destination: 'どこかビル',
-        fare: 525,
-        line: 'JR',
-        purpose: '打ち合わせ'
-      },
-      {
-        arrival: '横浜',
-        departure: '東京',
-        destination: '自社',
-        fare: 525,
-        line: 'JR',
-        purpose: '帰社'
-      }
-    ]
-  },
-  {
-    description: 'test-description',
-    title: '新宿↔横浜',
-    transportations: [
-      {
-        arrival: '新宿',
-        departure: '横浜',
-        destination: 'なにかビル',
-        fare: 450,
-        line: '複数',
-        purpose: '打ち合わせ'
-      },
-      {
-        arrival: '横浜',
-        departure: '新宿',
-        destination: '自社',
-        fare: 525,
-        line: '複数',
-        purpose: '帰社'
-      }
-    ]
-  }
-];
-
-let currentIndex = 0;
-
 // tslint:disable-next-line variable-name
 export const Index: React.FC = () => {
-  // const handlers = useHandlers();
-  // const globalState = useSelector((state: State) => ({
-  //   count: state.count,
-  //   user: state.user
-  // }));
+  const handlers = useHandlers();
   const classes = useStyles(undefined);
+  const state = useSelector((s: State) => ({
+    templateDetailIndex: s.templateDetailIndex,
+    templates: s.templates
+  }));
 
-  const handleTemplateUpdate = (transportation: Transportation, i: number) => {
-    transportationTemplates[0].transportations[i] = transportation;
+  const handleTemplateUpdate = (
+    transportation: Transportation,
+    transportationIndex: number
+  ) => {
+    state.templates[state.templateDetailIndex].transportations[
+      transportationIndex
+    ] = transportation;
   };
 
   const handleClickTemplate = (_t: TransportationTemplate, index: number) => {
-    currentIndex = index;
+    handlers.updateTemplateDetailIndex(index);
   };
 
   return (
@@ -110,7 +62,7 @@ export const Index: React.FC = () => {
           <Grid item={true} xs={4}>
             <TemplateList
               onClick={handleClickTemplate}
-              templates={transportationTemplates}
+              templates={state.templates}
             />
             <ButtonGroup
               color="primary"
@@ -124,7 +76,7 @@ export const Index: React.FC = () => {
           <Grid item={true} xs={8}>
             <TemplateDetail
               onUpdate={handleTemplateUpdate}
-              template={transportationTemplates[currentIndex]}
+              template={state.templates[state.templateDetailIndex]}
             />
           </Grid>
           <Grid item={true} xs={2}>
