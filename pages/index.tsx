@@ -15,6 +15,9 @@ import { State } from '../reducer';
 const useHandlers = () => {
   const dispatch = useDispatch();
   return {
+    updateDays: (dates: Date[], index: number) => {
+      dispatch(indexActionCreators.updateDays({ dates, index }));
+    },
     updateTemplateDetailIndex: (index: number) => {
       dispatch(indexActionCreators.updateTemplateDetailIndex(index));
     }
@@ -38,6 +41,7 @@ export const Index: React.FC = () => {
   const handlers = useHandlers();
   const classes = useStyles(undefined);
   const state = useSelector((s: State) => ({
+    selectedDays: s.selectedDays,
     templateDetailIndex: s.templateDetailIndex,
     templates: s.templates
   }));
@@ -53,6 +57,12 @@ export const Index: React.FC = () => {
 
   const handleClickTemplate = (_t: TransportationTemplate, index: number) => {
     handlers.updateTemplateDetailIndex(index);
+  };
+
+  const genUpdateCalendarHandler = (templateIndex: number) => {
+    return (dates: Date[]) => {
+      handlers.updateDays(dates, templateIndex);
+    };
   };
 
   return (
@@ -76,6 +86,10 @@ export const Index: React.FC = () => {
           <Grid item={true} xs={8}>
             <TemplateDetail
               onUpdate={handleTemplateUpdate}
+              onUpdateCalendar={genUpdateCalendarHandler(
+                state.templateDetailIndex
+              )}
+              selectedDays={state.selectedDays[state.templateDetailIndex]}
               template={state.templates[state.templateDetailIndex]}
             />
           </Grid>

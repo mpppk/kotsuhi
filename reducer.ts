@@ -53,8 +53,11 @@ const templates: TransportationTemplate[] = [
   }
 ];
 
+const selectedDays = [[], []] as Date[][];
+
 export const initialState = {
   count: 0,
+  selectedDays,
   templateDetailIndex: 0,
   templates
 };
@@ -72,6 +75,11 @@ const reducer = reducerWithInitialState(initialState)
       return { ...state, templateDetailIndex };
     }
   )
+  .case(indexActionCreators.updateDays, (state, payload) => {
+    const newSelectedDays = [...state.selectedDays];
+    newSelectedDays.splice(payload.index, 1, payload.dates);
+    return { ...state, selectedDays: newSelectedDays };
+  })
   .case(counterActionCreators.clickIncrementButton, state => {
     return addCount(state, 1);
   })

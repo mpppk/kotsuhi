@@ -17,6 +17,8 @@ import TransportationForm from './TransportationForm';
 interface TemplateDetailProps {
   template: TransportationTemplate;
   onUpdate: (t: TransportationEntity, i: number) => void;
+  onUpdateCalendar: (dates: Date[]) => void;
+  selectedDays: Date[];
 }
 
 const useStyles = makeStyles((_theme: Theme) =>
@@ -30,8 +32,7 @@ const useStyles = makeStyles((_theme: Theme) =>
 export default function TemplateDetail(props: TemplateDetailProps) {
   const classes = useStyles(undefined);
   const handleClickDay = (days: Date[]) => {
-    // tslint:disable-next-line
-    console.log(days);
+    props.onUpdateCalendar(days);
   };
 
   const [editTransportationIndices, setEditTransportationIndices] = useState(
@@ -81,7 +82,10 @@ export default function TemplateDetail(props: TemplateDetailProps) {
         )}
         <Button variant="outlined">Add transportation</Button>
       </div>
-      <DaysPicker onClickDay={handleClickDay} />
+      <DaysPicker
+        onClickDay={handleClickDay}
+        selectedDays={props.selectedDays}
+      />
     </Paper>
   );
 }
