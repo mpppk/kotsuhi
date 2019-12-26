@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface TemplateListProps {
+  badgeNums: number[];
   templates: TransportationTemplate[];
   onClick: (t: TransportationTemplate, i: number) => void;
 }
@@ -36,6 +37,7 @@ export default function TemplateList(props: TemplateListProps) {
         {props.templates.map((t, i) => {
           return (
             <TemplateListItem
+              badgeNum={props.badgeNums[i]}
               key={i}
               template={t}
               onClick={genClickItemHandler(i)}

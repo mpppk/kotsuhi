@@ -71,6 +71,7 @@ export const Index: React.FC = () => {
         <Grid container={true} spacing={2} justify={'flex-end'}>
           <Grid item={true} xs={4}>
             <TemplateList
+              badgeNums={state.selectedDays.map(d => d.length)}
               onClick={handleClickTemplate}
               templates={state.templates}
             />
