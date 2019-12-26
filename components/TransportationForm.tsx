@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface TransportationFormProps {
+  index: number;
   onClickSave: (t: Transportation) => void;
 }
 
@@ -93,7 +94,7 @@ export default function TransportationForm(props: TransportationFormProps) {
   const transportation = componentState.transportation;
   return (
     <div>
-      <Typography>Transportation 2</Typography>
+      <Typography>Transportation {props.index + 1}</Typography>
       <form className={classes.root}>
         <TextField
           label="出発"
