@@ -25,8 +25,8 @@ const useHandlers = (state: GlobalState) => {
       dispatch(indexActionCreators.updateTitleEditMode(false));
       dispatch(
         indexActionCreators.updateTitle({
-          title,
-          index: state.templateDetailIndex
+          index: state.templateDetailIndex,
+          title
         })
       );
     },
