@@ -84,6 +84,8 @@ const transportationTemplates: TransportationTemplate[] = [
   }
 ];
 
+let currentIndex = 0;
+
 // tslint:disable-next-line variable-name
 export const Index: React.FC = () => {
   // const handlers = useHandlers();
@@ -97,12 +99,19 @@ export const Index: React.FC = () => {
     transportationTemplates[0].transportations[i] = transportation;
   };
 
+  const handleClickTemplate = (_t: TransportationTemplate, index: number) => {
+    currentIndex = index;
+  };
+
   return (
     <Container maxWidth="lg">
       <div className={classes.root}>
         <Grid container={true} spacing={2} justify={'flex-end'}>
           <Grid item={true} xs={4}>
-            <TemplateList />
+            <TemplateList
+              onClick={handleClickTemplate}
+              templates={transportationTemplates}
+            />
             <ButtonGroup
               color="primary"
               aria-label="outlined primary button group"
@@ -115,7 +124,7 @@ export const Index: React.FC = () => {
           <Grid item={true} xs={8}>
             <TemplateDetail
               onUpdate={handleTemplateUpdate}
-              template={transportationTemplates[0]}
+              template={transportationTemplates[currentIndex]}
             />
           </Grid>
           <Grid item={true} xs={2}>
