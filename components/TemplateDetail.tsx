@@ -16,6 +16,7 @@ import TransportationForm from './TransportationForm';
 
 interface TemplateDetailProps {
   template: TransportationTemplate;
+  onUpdate: (t: TransportationEntity, i: number) => void;
 }
 
 const useStyles = makeStyles((_theme: Theme) =>
@@ -43,10 +44,11 @@ export default function TemplateDetail(props: TemplateDetailProps) {
   };
 
   const genClickSaveButtonHandler = (i: number) => {
-    return (_transportation: TransportationEntity) => {
+    return (transportation: TransportationEntity) => {
       const newEditTransportationIndices = [...editTransportationIndices];
       newEditTransportationIndices.splice(i, 1);
       setEditTransportationIndices(newEditTransportationIndices);
+      props.onUpdate(transportation, i);
     };
   };
 
@@ -62,6 +64,7 @@ export default function TemplateDetail(props: TemplateDetailProps) {
         {props.template.transportations.map((t, i) =>
           editTransportationIndices.includes(i) ? (
             <TransportationForm
+              transportation={t}
               index={i}
               key={t.arrival + t.departure + i + '_edit'}
               onClickSave={genClickSaveButtonHandler(i)}

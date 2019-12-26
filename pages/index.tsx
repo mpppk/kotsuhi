@@ -7,7 +7,7 @@ import React from 'react';
 import { counterActionCreators } from '../actions/counter';
 import TemplateDetail from '../components/TemplateDetail';
 import TemplateList from '../components/TemplateList';
-import { TransportationTemplate } from '../models/model';
+import { Transportation, TransportationTemplate } from '../models/model';
 
 // const useHandlers = () => {
 //   const dispatch = useDispatch();
@@ -37,15 +37,8 @@ const useStyles = makeStyles((_theme: Theme) =>
   })
 );
 
-// tslint:disable-next-line variable-name
-export const Index: React.FC = () => {
-  // const handlers = useHandlers();
-  // const globalState = useSelector((state: State) => ({
-  //   count: state.count,
-  //   user: state.user
-  // }));
-  const classes = useStyles(undefined);
-  const transportationTemplate: TransportationTemplate = {
+const transportationTemplates: TransportationTemplate[] = [
+  {
     description: 'test-description',
     title: 'Template1',
     transportations: [
@@ -58,6 +51,20 @@ export const Index: React.FC = () => {
         purpose: '打ち合わせ'
       }
     ]
+  }
+];
+
+// tslint:disable-next-line variable-name
+export const Index: React.FC = () => {
+  // const handlers = useHandlers();
+  // const globalState = useSelector((state: State) => ({
+  //   count: state.count,
+  //   user: state.user
+  // }));
+  const classes = useStyles(undefined);
+
+  const handleTemplateUpdate = (transportation: Transportation, i: number) => {
+    transportationTemplates[0].transportations[i] = transportation;
   };
 
   return (
@@ -76,7 +83,10 @@ export const Index: React.FC = () => {
             </ButtonGroup>
           </Grid>
           <Grid item={true} xs={8}>
-            <TemplateDetail template={transportationTemplate} />
+            <TemplateDetail
+              onUpdate={handleTemplateUpdate}
+              template={transportationTemplates[0]}
+            />
           </Grid>
           <Grid item={true} xs={2}>
             <Button
