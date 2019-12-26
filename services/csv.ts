@@ -32,7 +32,10 @@ const toArrayFromRow = (row: CsvRow): string[] => {
   ];
 };
 
-const toStringFromRow = (row: CsvRow): string => toArrayFromRow(row).join(',');
+const toStringFromRow = (row: CsvRow): string =>
+  toArrayFromRow(row)
+    .map(s => `"${s}"`)
+    .join(',');
 
 const generateTableHeader = (
   employeeId: string,
@@ -51,7 +54,12 @@ const toStringFromCsv = (csv: Csv): string => {
     csv.code
   );
   const rowStrList = csv.rows.map(toStringFromRow);
-  return header.join(',') + '\r\n' + rowStrList.join('\r\n') + '\r\n';
+  return (
+    header.map(s => `"${s}"`).join(',') +
+    '\r\n' +
+    rowStrList.join('\r\n') +
+    '\r\n'
+  );
 };
 
 export const generateCsvStrList = (

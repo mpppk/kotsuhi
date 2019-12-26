@@ -7,6 +7,7 @@ export interface TemplateDetailTitleProps {
   onClickEditButton: () => void;
   title: string;
 }
+
 export default function TemplateDetailTitle(props: TemplateDetailTitleProps) {
   const handleClick = () => {
     props.onClickEditButton();
@@ -15,8 +16,8 @@ export default function TemplateDetailTitle(props: TemplateDetailTitleProps) {
   return (
     <Typography variant={'h4'}>
       {props.title}
-      <IconButton edge="end" aria-label="more">
-        <Edit onClick={handleClick} />
+      <IconButton edge="end" aria-label="more" onClick={handleClick}>
+        <Edit />
       </IconButton>
     </Typography>
   );
