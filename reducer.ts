@@ -56,11 +56,14 @@ const templates: TransportationTemplate[] = [
 const selectedDays = [[], []] as Date[][];
 
 export const initialState = {
+  code: 'BD01',
   count: 0,
+  employeeId: 'N00000',
   isEditingTitle: false,
   selectedDays,
   templateDetailIndex: 0,
-  templates
+  templates,
+  version: 'v.1.04'
 };
 
 export type State = typeof initialState;

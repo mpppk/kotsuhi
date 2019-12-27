@@ -14,6 +14,7 @@ export interface UpdateTitlePayload {
 
 export const indexActionCreators = {
   updateDays: indexActionCreatorFactory<UpdateDaysPayload>('UPDATE_DAYS'),
+  updateEmployeeId: indexActionCreatorFactory<string>('UPDATE_EMPLOYEE_ID'),
   updateTemplateDetailIndex: indexActionCreatorFactory<number>(
     'UPDATE_TEMPLATE_DETAIL_INDEX'
   ),

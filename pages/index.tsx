@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { indexActionCreators } from '../actions';
 import { counterActionCreators } from '../actions/counter';
@@ -11,6 +11,7 @@ import TemplateDetail from '../components/TemplateDetail';
 import TemplateList from '../components/TemplateList';
 import { Transportation, TransportationTemplate } from '../models/model';
 import { State } from '../reducer';
+import { CsvConfig, generateCsvStrList } from '../services/csv';
 
 const useHandlers = (state: GlobalState) => {
   const dispatch = useDispatch();
@@ -39,6 +40,11 @@ const useHandlers = (state: GlobalState) => {
 type GlobalState = ReturnType<typeof useGlobalState>;
 const useGlobalState = () => {
   return useSelector((s: State) => ({
+    config: {
+      code: s.code,
+      employeeId: s.employeeId,
+      version: s.version
+    } as CsvConfig,
     isEditingTitle: s.isEditingTitle,
     selectedDays: s.selectedDays,
     templateDetailIndex: s.templateDetailIndex,
@@ -64,6 +70,9 @@ export const Index: React.FC = () => {
   const state = useGlobalState();
   const handlers = useHandlers(state);
 
+  const exportCsvButtonEl = useRef(null as any | null);
+  // const exportCsvButtonEl = useRef(null as typeof Button | null);
+
   const handleTemplateUpdate = (
     transportation: Transportation,
     transportationIndex: number
@@ -81,6 +90,27 @@ export const Index: React.FC = () => {
     return (dates: Date[]) => {
       handlers.updateDays(dates, templateIndex);
     };
+  };
+
+  const handleClickExportCSVButton = () => {
+    const csvStrList = generateCsvStrList(
+      state.config,
+      state.templates,
+      state.selectedDays
+    );
+    const blob = new Blob([csvStrList[0]], { type: 'text/csv' });
+    if (window.navigator.msSaveBlob) {
+      window.navigator.msSaveBlob(blob, 'test.txt');
+
+      // msSaveOrOpenBlobの場合はファイルを保存せずに開ける
+      window.navigator.msSaveOrOpenBlob(blob, 'test.txt');
+    } else {
+      if (exportCsvButtonEl.current !== null) {
+        const url = window.URL.createObjectURL(blob);
+        // tslint:disable-next-line
+        (exportCsvButtonEl.current as any)['href'] = url;
+      }
+    }
   };
 
   return (
@@ -117,9 +147,13 @@ export const Index: React.FC = () => {
           </Grid>
           <Grid item={true} xs={2}>
             <Button
+              download={'test.csv'}
+              ref={exportCsvButtonEl}
+              href={'!#'}
               variant="outlined"
               color="primary"
               className={classes.exportCsvButton}
+              onClick={handleClickExportCSVButton}
             >
               Export CSV
             </Button>
