@@ -16,6 +16,9 @@ import { CsvConfig, generateCsvStrList } from '../services/csv';
 const useHandlers = (state: GlobalState) => {
   const dispatch = useDispatch();
   return {
+    deleteTransportation: (transportation: Transportation) => {
+      dispatch(indexActionCreators.deleteTransportation(transportation));
+    },
     updateDays: (dates: Date[], index: number) => {
       dispatch(indexActionCreators.updateDays({ dates, index }));
     },
@@ -143,6 +146,7 @@ export const Index: React.FC = () => {
               isEditingTitle={state.isEditingTitle}
               onClickEditTitleButton={handlers.updateTitleEditMode}
               onClickSaveTitleButton={handlers.updateTitle}
+              onClickDeleteTransportationButton={handlers.deleteTransportation}
             />
           </Grid>
           <Grid item={true} xs={2}>

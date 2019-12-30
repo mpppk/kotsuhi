@@ -41,8 +41,10 @@ const useComponentState = (props: TransportationFormProps) => {
     departure,
     destination,
     fare,
+    id: 'form-transportation-id',
     line,
-    purpose
+    purpose,
+    templateId: 'form-template-id'
   };
 
   return {

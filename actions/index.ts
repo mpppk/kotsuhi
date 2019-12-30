@@ -1,4 +1,5 @@
 import actionCreatorFactory from 'typescript-fsa';
+import { Transportation } from '../models/model';
 
 const indexActionCreatorFactory = actionCreatorFactory('INDEX');
 
@@ -13,6 +14,9 @@ export interface UpdateTitlePayload {
 }
 
 export const indexActionCreators = {
+  deleteTransportation: indexActionCreatorFactory<Transportation>(
+    'DELETE_TRANSPORTATION'
+  ),
   updateDays: indexActionCreatorFactory<UpdateDaysPayload>('UPDATE_DAYS'),
   updateEmployeeId: indexActionCreatorFactory<string>('UPDATE_EMPLOYEE_ID'),
   updateTemplateDetailIndex: indexActionCreatorFactory<number>(

@@ -16,6 +16,7 @@ import TransportationForm from './TransportationForm';
 interface TemplateDetailProps {
   isEditingTitle: boolean;
   template: TransportationTemplate;
+  onClickDeleteTransportationButton: (t: TransportationEntity) => void;
   onClickEditTitleButton: (title: string) => void;
   onClickSaveTitleButton: (title: string) => void;
   onUpdate: (t: TransportationEntity, i: number) => void;
@@ -88,6 +89,7 @@ export default function TemplateDetail(props: TemplateDetailProps) {
               index={i + 1}
               key={t.arrival + t.departure + i}
               onClickEditButton={genClickEditTransportationButtonHandler(i)}
+              onClickDeleteButton={props.onClickDeleteTransportationButton}
             />
           )
         )}

@@ -1,4 +1,5 @@
 import { reducerWithInitialState } from 'typescript-fsa-reducers';
+import uuidv4 from 'uuid/v4';
 import { indexActionCreators } from './actions';
 import {
   counterActionCreators,
@@ -6,9 +7,13 @@ import {
 } from './actions/counter';
 import { TransportationTemplate } from './models/model';
 
+const templateId1 = uuidv4();
+const templateId2 = uuidv4();
+
 const templates: TransportationTemplate[] = [
   {
     description: 'test-description',
+    id: templateId1,
     title: '東京↔横浜',
     transportations: [
       {
@@ -16,21 +21,26 @@ const templates: TransportationTemplate[] = [
         departure: '横浜',
         destination: 'どこかビル',
         fare: 525,
+        id: uuidv4(),
         line: 'JR',
-        purpose: '打ち合わせ'
+        purpose: '打ち合わせ',
+        templateId: templateId1
       },
       {
         arrival: '横浜',
         departure: '東京',
         destination: '自社',
         fare: 525,
+        id: uuidv4(),
         line: 'JR',
-        purpose: '帰社'
+        purpose: '帰社',
+        templateId: templateId1
       }
     ]
   },
   {
     description: 'test-description',
+    id: templateId2,
     title: '新宿↔横浜',
     transportations: [
       {
@@ -38,16 +48,20 @@ const templates: TransportationTemplate[] = [
         departure: '横浜',
         destination: 'なにかビル',
         fare: 450,
+        id: uuidv4(),
         line: '複数',
-        purpose: '打ち合わせ'
+        purpose: '打ち合わせ',
+        templateId: templateId2
       },
       {
         arrival: '横浜',
         departure: '新宿',
         destination: '自社',
         fare: 525,
+        id: uuidv4(),
         line: '複数',
-        purpose: '帰社'
+        purpose: '帰社',
+        templateId: templateId2
       }
     ]
   }
@@ -73,6 +87,10 @@ const addCount = (state: State, amount: number) => {
 };
 
 const reducer = reducerWithInitialState(initialState)
+  .case(indexActionCreators.deleteTransportation, (state, _transportation) => {
+    console.log(_transportation);
+    return { ...state }; // TODO
+  })
   .case(indexActionCreators.updateTitle, (state, payload) => {
     const newTemplates = [...state.templates];
     newTemplates[payload.index].title = payload.title;
