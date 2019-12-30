@@ -5,12 +5,12 @@ import {
   counterActionCreators,
   counterAsyncActionCreators
 } from './actions/counter';
-import { TransportationTemplate } from './models/model';
+import { Transportation, TransportationTemplate } from './models/model';
 
 const templateId1 = uuidv4();
 const templateId2 = uuidv4();
 
-const templates: TransportationTemplate[] = [
+const initialTemplates: TransportationTemplate[] = [
   {
     description: 'test-description',
     id: templateId1,
@@ -76,7 +76,7 @@ export const initialState = {
   isEditingTitle: false,
   selectedDays,
   templateDetailIndex: 0,
-  templates,
+  templates: initialTemplates,
   version: 'v.1.04'
 };
 
@@ -86,10 +86,34 @@ const addCount = (state: State, amount: number) => {
   return { ...state, count: state.count + amount };
 };
 
+const removeTransportation = (
+  templates: TransportationTemplate[],
+  transportation: Transportation
+) => {
+  const template = templates.find(t => t.id === transportation.templateId);
+  if (!template) {
+    return templates;
+  }
+
+  const transportationIndex = template.transportations.findIndex(
+    t => t.id === transportation.id
+  );
+  if (transportationIndex === -1) {
+    return templates;
+  }
+
+  const newTransportations = [...template.transportations];
+  newTransportations.splice(transportationIndex, 1);
+  template.transportations = newTransportations;
+  return templates;
+};
+
 const reducer = reducerWithInitialState(initialState)
-  .case(indexActionCreators.deleteTransportation, (state, _transportation) => {
-    console.log(_transportation);
-    return { ...state }; // TODO
+  .case(indexActionCreators.deleteTransportation, (state, transportation) => {
+    return {
+      ...state,
+      templates: removeTransportation(state.templates, transportation)
+    }; // TODO
   })
   .case(indexActionCreators.updateTitle, (state, payload) => {
     const newTemplates = [...state.templates];
