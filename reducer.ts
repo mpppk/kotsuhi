@@ -141,9 +141,14 @@ const reducer = reducerWithInitialState(initialState)
     }
 
     const newTransportations = [...template.transportations];
-    newTransportations.push(newEmptyTransportation(templateId));
+    const newTransportation = newEmptyTransportation(templateId);
+    newTransportations.push(newTransportation);
     template.transportations = newTransportations;
-    return { ...state, templates: newTemplates };
+    return {
+      ...state,
+      editingTransportation: newTransportation,
+      templates: newTemplates
+    };
   })
   .case(indexActionCreators.deleteTransportation, (state, transportation) => {
     return {
