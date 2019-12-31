@@ -14,7 +14,7 @@ const useStyles = makeStyles((_theme: Theme) =>
 
 interface TransportationProps {
   index: number;
-  onClickEditButton: (t: TransportationEntity, i: number) => void;
+  onClickEditButton: (t: TransportationEntity) => void;
   onClickDeleteButton: (t: TransportationEntity) => void;
   transportation: TransportationEntity;
 }
@@ -24,7 +24,7 @@ export default function Transportation(props: TransportationProps) {
   const t = props.transportation;
 
   const handleClickEditButton = () => {
-    props.onClickEditButton(props.transportation, props.index);
+    props.onClickEditButton(props.transportation);
   };
 
   const handleClickDeleteButton = () => {

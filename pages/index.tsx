@@ -20,6 +20,19 @@ import { CsvConfig, generateCsvStrList } from '../services/csv';
 const useHandlers = (state: GlobalState) => {
   const dispatch = useDispatch();
   return {
+    addTransportation: (templateId: TemplateID) => {
+      dispatch(indexActionCreators.addTransportation(templateId));
+    },
+    clickEditTransportationButton: (transportation: Transportation) => {
+      dispatch(
+        indexActionCreators.clickEditTransportationButton(transportation)
+      );
+    },
+    clickSaveTransportationButton: (transportation: Transportation) => {
+      dispatch(
+        indexActionCreators.clickSaveTransportationButton(transportation)
+      );
+    },
     deleteTransportation: (transportation: Transportation) => {
       dispatch(indexActionCreators.deleteTransportation(transportation));
     },
@@ -63,12 +76,17 @@ const selector = (s: State) => {
     selectedTemplateDays = [];
   }
 
+  const editingTransportationId = s.editingTransportation
+    ? s.editingTransportation.id
+    : null;
+
   const globalState = {
     config: {
       code: s.code,
       employeeId: s.employeeId,
       version: s.version
     } as CsvConfig,
+    editingTransportationId,
     isEditingTitle: s.isEditingTitle,
     selectedDays: s.selectedDays,
     selectedTemplate: null as TransportationTemplate | null,
@@ -109,16 +127,11 @@ export const Index: React.FC = () => {
   const exportCsvButtonEl = useRef(null as any | null);
   // const exportCsvButtonEl = useRef(null as typeof Button | null);
 
-  const handleTemplateUpdate = (
-    transportation: Transportation,
-    transportationIndex: number
-  ) => {
+  const handleTemplateUpdate = (transportation: Transportation) => {
     if (!state.selectedTemplate) {
       return;
     }
-    state.selectedTemplate.transportations[
-      transportationIndex
-    ] = transportation;
+    handlers.clickSaveTransportationButton(transportation);
   };
 
   const handleClickTemplate = (template: TransportationTemplate) => {
@@ -181,6 +194,11 @@ export const Index: React.FC = () => {
               onClickEditTitleButton={handlers.updateTitleEditMode}
               onClickSaveTitleButton={handlers.updateTitle}
               onClickDeleteTransportationButton={handlers.deleteTransportation}
+              onClickAddTransportationButton={handlers.addTransportation}
+              editingTransportationId={state.editingTransportationId}
+              onClickEditTransportationButton={
+                handlers.clickEditTransportationButton
+              }
             />
           </Grid>
           <Grid item={true} xs={2}>
