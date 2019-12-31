@@ -15,7 +15,7 @@ import TransportationForm from './TransportationForm';
 
 interface TemplateDetailProps {
   isEditingTitle: boolean;
-  template: TransportationTemplate;
+  template: TransportationTemplate | null;
   onClickDeleteTransportationButton: (t: TransportationEntity) => void;
   onClickEditTitleButton: (title: string) => void;
   onClickSaveTitleButton: (title: string) => void;
@@ -58,24 +58,28 @@ export default function TemplateDetail(props: TemplateDetailProps) {
   };
 
   const handleClickEditTitleButton = () => {
-    props.onClickEditTitleButton(props.template.title);
+    if (props.template) {
+      props.onClickEditTitleButton(props.template.title);
+    }
   };
+
+  const transportations = props.template ? props.template.transportations : [];
 
   return (
     <Paper>
       <div className={classes.content}>
         {props.isEditingTitle ? (
           <TemplateDetailTitleForm
-            title={props.template.title}
+            title={props.template ? props.template.title : ''}
             onClickSaveTitleButton={props.onClickSaveTitleButton}
           />
         ) : (
           <TemplateDetailTitle
-            title={props.template.title}
+            title={props.template ? props.template.title : ''}
             onClickEditButton={handleClickEditTitleButton}
           />
         )}
-        {props.template.transportations.map((t, i) =>
+        {transportations.map((t, i) =>
           editTransportationIndices.includes(i) ? (
             <TransportationForm
               transportation={t}

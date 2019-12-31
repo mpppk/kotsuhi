@@ -9,7 +9,11 @@ import { indexActionCreators } from '../actions';
 import { counterActionCreators } from '../actions/counter';
 import TemplateDetail from '../components/TemplateDetail';
 import TemplateList from '../components/TemplateList';
-import { Transportation, TransportationTemplate } from '../models/model';
+import {
+  TemplateID,
+  Transportation,
+  TransportationTemplate
+} from '../models/model';
 import { State } from '../reducer';
 import { CsvConfig, generateCsvStrList } from '../services/csv';
 
@@ -19,20 +23,22 @@ const useHandlers = (state: GlobalState) => {
     deleteTransportation: (transportation: Transportation) => {
       dispatch(indexActionCreators.deleteTransportation(transportation));
     },
-    updateDays: (dates: Date[], index: number) => {
-      dispatch(indexActionCreators.updateDays({ dates, index }));
+    updateDays: (dates: Date[], templateId: TemplateID) => {
+      dispatch(indexActionCreators.updateDays({ dates, templateId }));
     },
-    updateTemplateDetailIndex: (index: number) => {
-      dispatch(indexActionCreators.updateTemplateDetailIndex(index));
+    updateDetailTemplateId: (templateId: TemplateID) => {
+      dispatch(indexActionCreators.updateDetailTemplateId(templateId));
     },
     updateTitle: (title: string) => {
       dispatch(indexActionCreators.updateTitleEditMode(false));
-      dispatch(
-        indexActionCreators.updateTitle({
-          index: state.templateDetailIndex,
-          title
-        })
-      );
+      if (state.selectedTemplate) {
+        dispatch(
+          indexActionCreators.updateTitle({
+            templateId: state.selectedTemplate.id,
+            title
+          })
+        );
+      }
     },
     updateTitleEditMode: () => {
       dispatch(indexActionCreators.updateTitleEditMode(true));
@@ -41,8 +47,23 @@ const useHandlers = (state: GlobalState) => {
 };
 
 type GlobalState = ReturnType<typeof useGlobalState>;
-const useGlobalState = () => {
-  return useSelector((s: State) => ({
+const selector = (s: State) => {
+  const templateBadgeNums = Object.entries(s.selectedDays).reduce(
+    (acc, [templateId, days]) => {
+      acc[templateId] = days.length;
+      return acc;
+    },
+    {} as { [k: string]: number }
+  );
+
+  let selectedTemplateDays: Date[] = s.selectedTemplateId
+    ? s.selectedDays[s.selectedTemplateId]
+    : [];
+  if (!selectedTemplateDays) {
+    selectedTemplateDays = [];
+  }
+
+  const globalState = {
     config: {
       code: s.code,
       employeeId: s.employeeId,
@@ -50,10 +71,22 @@ const useGlobalState = () => {
     } as CsvConfig,
     isEditingTitle: s.isEditingTitle,
     selectedDays: s.selectedDays,
-    templateDetailIndex: s.templateDetailIndex,
+    selectedTemplate: null as TransportationTemplate | null,
+    selectedTemplateDays,
+    templateBadgeNums,
     templates: s.templates
-  }));
+  };
+
+  if (s.selectedTemplateId) {
+    const selectedTemplate = globalState.templates.find(
+      t => t.id === s.selectedTemplateId
+    );
+    globalState.selectedTemplate = selectedTemplate ? selectedTemplate : null;
+  }
+
+  return globalState;
 };
+const useGlobalState = () => useSelector(selector);
 
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
@@ -80,19 +113,22 @@ export const Index: React.FC = () => {
     transportation: Transportation,
     transportationIndex: number
   ) => {
-    state.templates[state.templateDetailIndex].transportations[
+    if (!state.selectedTemplate) {
+      return;
+    }
+    state.selectedTemplate.transportations[
       transportationIndex
     ] = transportation;
   };
 
-  const handleClickTemplate = (_t: TransportationTemplate, index: number) => {
-    handlers.updateTemplateDetailIndex(index);
+  const handleClickTemplate = (template: TransportationTemplate) => {
+    handlers.updateDetailTemplateId(template.id);
   };
 
-  const genUpdateCalendarHandler = (templateIndex: number) => {
-    return (dates: Date[]) => {
-      handlers.updateDays(dates, templateIndex);
-    };
+  const handleUpdateCalendar = (dates: Date[]) => {
+    if (state.selectedTemplate) {
+      handlers.updateDays(dates, state.selectedTemplate.id);
+    }
   };
 
   const handleClickExportCSVButton = () => {
@@ -122,7 +158,7 @@ export const Index: React.FC = () => {
         <Grid container={true} spacing={2} justify={'flex-end'}>
           <Grid item={true} xs={4}>
             <TemplateList
-              badgeNums={state.selectedDays.map(d => d.length)}
+              badgeNums={state.templateBadgeNums}
               onClick={handleClickTemplate}
               templates={state.templates}
             />
@@ -138,11 +174,9 @@ export const Index: React.FC = () => {
           <Grid item={true} xs={8}>
             <TemplateDetail
               onUpdate={handleTemplateUpdate}
-              onUpdateCalendar={genUpdateCalendarHandler(
-                state.templateDetailIndex
-              )}
-              selectedDays={state.selectedDays[state.templateDetailIndex]}
-              template={state.templates[state.templateDetailIndex]}
+              onUpdateCalendar={handleUpdateCalendar}
+              selectedDays={state.selectedTemplateDays}
+              template={state.selectedTemplate}
               isEditingTitle={state.isEditingTitle}
               onClickEditTitleButton={handlers.updateTitleEditMode}
               onClickSaveTitleButton={handlers.updateTitle}

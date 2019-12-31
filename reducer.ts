@@ -2,10 +2,10 @@ import { reducerWithInitialState } from 'typescript-fsa-reducers';
 import uuidv4 from 'uuid/v4';
 import { indexActionCreators } from './actions';
 import {
-  counterActionCreators,
-  counterAsyncActionCreators
-} from './actions/counter';
-import { Transportation, TransportationTemplate } from './models/model';
+  TemplateID,
+  Transportation,
+  TransportationTemplate
+} from './models/model';
 
 const templateId1 = uuidv4();
 const templateId2 = uuidv4();
@@ -67,24 +67,19 @@ const initialTemplates: TransportationTemplate[] = [
   }
 ];
 
-const selectedDays = [[], []] as Date[][];
+const selectedDays = {} as { [key: string]: Date[] };
 
 export const initialState = {
   code: 'BD01',
-  count: 0,
   employeeId: 'N00000',
   isEditingTitle: false,
   selectedDays,
-  templateDetailIndex: 0,
+  selectedTemplateId: null as string | null,
   templates: initialTemplates,
   version: 'v.1.04'
 };
 
 export type State = typeof initialState;
-
-const addCount = (state: State, amount: number) => {
-  return { ...state, count: state.count + amount };
-};
 
 const removeTransportation = (
   templates: TransportationTemplate[],
@@ -108,6 +103,14 @@ const removeTransportation = (
   return templates;
 };
 
+const findTemplateById = (
+  templates: TransportationTemplate[],
+  id: TemplateID
+): TransportationTemplate | null => {
+  const template = templates.find(t => t.id === id);
+  return template ? template : null;
+};
+
 const reducer = reducerWithInitialState(initialState)
   .case(indexActionCreators.deleteTransportation, (state, transportation) => {
     return {
@@ -117,34 +120,26 @@ const reducer = reducerWithInitialState(initialState)
   })
   .case(indexActionCreators.updateTitle, (state, payload) => {
     const newTemplates = [...state.templates];
-    newTemplates[payload.index].title = payload.title;
+    const template = findTemplateById(newTemplates, payload.templateId);
+    if (!template) {
+      throw new Error('non exist template id is given: ' + payload.templateId);
+    }
+    template.title = payload.title;
     return { ...state, templates: newTemplates };
   })
   .case(indexActionCreators.updateTitleEditMode, (state, isEditingTitle) => {
     return { ...state, isEditingTitle };
   })
   .case(
-    indexActionCreators.updateTemplateDetailIndex,
-    (state, templateDetailIndex) => {
-      return { ...state, templateDetailIndex };
+    indexActionCreators.updateDetailTemplateId,
+    (state, selectedTemplateId) => {
+      return { ...state, selectedTemplateId };
     }
   )
   .case(indexActionCreators.updateDays, (state, payload) => {
-    const newSelectedDays = [...state.selectedDays];
-    newSelectedDays.splice(payload.index, 1, payload.dates);
+    const newSelectedDays = { ...state.selectedDays };
+    newSelectedDays[payload.templateId] = payload.dates;
     return { ...state, selectedDays: newSelectedDays };
-  })
-  .case(counterActionCreators.clickIncrementButton, state => {
-    return addCount(state, 1);
-  })
-  .case(counterActionCreators.clickDecrementButton, state => {
-    return addCount(state, -1);
-  })
-  .case(
-    counterAsyncActionCreators.changeAmountWithSleep.done,
-    (state, payload) => {
-      return addCount(state, payload.result.amount);
-    }
-  );
+  });
 
 export default reducer;
