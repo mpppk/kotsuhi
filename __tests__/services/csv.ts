@@ -11,6 +11,7 @@ describe('generateCsvStrList', () => {
   const generateTemplates = (): TransportationTemplate[] => [
     {
       description: 'desc',
+      id: 'template-id-1',
       title: 'title',
       transportations: [
         {
@@ -18,21 +19,26 @@ describe('generateCsvStrList', () => {
           departure: 'departure',
           destination: 'destination',
           fare: 100,
+          id: 'transportation-id-1',
           line: 'JR' as Line,
-          purpose: 'purpose'
+          purpose: 'purpose',
+          templateId: 'template-id-1'
         },
         {
           arrival: 'arrival2',
           departure: 'departure2',
           destination: 'destination2',
           fare: 150,
+          id: 'transportation-id-2',
           line: '複数',
-          purpose: 'purpose2'
+          purpose: 'purpose2',
+          templateId: 'template-id-1'
         }
       ]
     },
     {
       description: 'desc2',
+      id: 'template-id-2',
       title: 'title2',
       transportations: [
         {
@@ -40,8 +46,10 @@ describe('generateCsvStrList', () => {
           departure: 'departure3',
           destination: 'destination3',
           fare: 175,
+          id: 'transportation-id-3',
           line: 'JR',
-          purpose: 'purpose3'
+          purpose: 'purpose3',
+          templateId: 'template-id-2'
         }
       ]
     }
@@ -49,10 +57,13 @@ describe('generateCsvStrList', () => {
 
   it('return valid csv string', async () => {
     const templates = generateTemplates();
-    const dateList = [
-      [new Date('2020-01-01T00:00:00')],
-      [new Date('2020-01-02T00:00:00'), new Date('2020-01-03T00:00:00')]
-    ];
+    const dateList = {
+      'template-id-1': [new Date('2020-01-01T00:00:00')],
+      'template-id-2': [
+        new Date('2020-01-02T00:00:00'),
+        new Date('2020-01-03T00:00:00')
+      ]
+    };
 
     const expectedCsvStr =
       '"N00000","600","v.1.04","立替交通費","BD01"\r\n' +
@@ -67,7 +78,7 @@ describe('generateCsvStrList', () => {
   });
 
   it('divide csv per 15 lines', async () => {
-    const dateList = [[new Date('2020-01-01T00:00:00')]];
+    const dateList = { 'template-id-2': [new Date('2020-01-01T00:00:00')] };
     const templates = [generateTemplates()[1]];
     const transportation = templates[0].transportations[0];
     templates[0].transportations = [];

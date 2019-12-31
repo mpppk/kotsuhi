@@ -15,33 +15,33 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface TemplateListProps {
-  badgeNums: number[];
+  badgeNums: { [k: string]: number };
   templates: TransportationTemplate[];
-  onClick: (t: TransportationTemplate, i: number) => void;
+  onClick: (t: TransportationTemplate) => void;
 }
 
 export default function TemplateList(props: TemplateListProps) {
   const classes = useStyles(undefined);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedTemplateId, setSelectedTemplateId] = React.useState(
+    'non-exist-id'
+  );
 
-  const genClickItemHandler = (index: number) => {
-    return (t: TransportationTemplate) => {
-      setSelectedIndex(index);
-      props.onClick(t, index);
-    };
+  const handleClickItem = (t: TransportationTemplate) => {
+    setSelectedTemplateId(t.id);
+    props.onClick(t);
   };
 
   return (
     <div className={classes.root}>
       <List component="nav" aria-label="secondary mailbox folder">
-        {props.templates.map((t, i) => {
+        {props.templates.map(t => {
           return (
             <TemplateListItem
-              badgeNum={props.badgeNums[i]}
-              key={i}
+              badgeNum={props.badgeNums[t.id]}
+              key={'TemplateListItem_' + t.id}
               template={t}
-              onClick={genClickItemHandler(i)}
-              selected={i === selectedIndex}
+              onClick={handleClickItem}
+              selected={t.id === selectedTemplateId}
             />
           );
         })}

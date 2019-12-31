@@ -65,7 +65,7 @@ const toStringFromCsv = (csv: Csv): string => {
 export const generateCsvStrList = (
   config: CsvConfig,
   templates: TransportationTemplate[],
-  dateList: Date[][]
+  dateList: { [k: string]: Date[] }
 ): string[] => {
   return generateCsvList(config, templates, dateList).map(csv =>
     toStringFromCsv(csv)
@@ -75,7 +75,7 @@ export const generateCsvStrList = (
 const generateCsvList = (
   config: CsvConfig,
   templates: TransportationTemplate[],
-  dateList: Date[][]
+  dateList: { [k: string]: Date[] }
 ): Csv[] => {
   const rows = generateTable(templates, dateList);
   return chunk<CsvRow>(rows, 15).map(
@@ -92,21 +92,16 @@ const calcFareSum = (rows: CsvRow[]) =>
 
 const generateTable = (
   templates: TransportationTemplate[],
-  datesList: Date[][]
+  datesList: { [k: string]: Date[] }
 ): CsvRow[] => {
-  if (templates.length !== datesList.length) {
-    throw new Error(
-      `templates(${templates.length}) and dates(${datesList.length}) have different length.`
-    );
-  }
-
-  const rows: CsvRow[] = [];
-  for (let i = 0; i < templates.length; i++) {
-    const template = templates[i];
-    const dates = datesList[i];
+  return templates.reduce((rows, template) => {
+    let dates = datesList[template.id];
+    if (!dates) {
+      dates = [];
+    }
     rows.push(...generateRowsFromTemplate(template, dates));
-  }
-  return rows;
+    return rows;
+  }, [] as CsvRow[]);
 };
 
 const generateRowsFromTemplate = (
