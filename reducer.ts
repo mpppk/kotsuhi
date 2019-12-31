@@ -111,7 +111,30 @@ const findTemplateById = (
   return template ? template : null;
 };
 
+const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
+  arrival: '',
+  departure: '',
+  destination: '',
+  fare: 0,
+  id: uuidv4(),
+  line: 'JR',
+  purpose: '',
+  templateId
+});
+
 const reducer = reducerWithInitialState(initialState)
+  .case(indexActionCreators.addTransportation, (state, templateId) => {
+    const newTemplates = [...state.templates];
+    const template = findTemplateById(newTemplates, templateId);
+    if (!template) {
+      throw new Error('non exist template id is given: ' + templateId);
+    }
+
+    const newTransportations = [...template.transportations];
+    newTransportations.push(newEmptyTransportation(templateId));
+    template.transportations = newTransportations;
+    return { ...state, templates: newTemplates };
+  })
   .case(indexActionCreators.deleteTransportation, (state, transportation) => {
     return {
       ...state,

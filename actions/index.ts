@@ -14,6 +14,9 @@ export interface UpdateTitlePayload {
 }
 
 export const indexActionCreators = {
+  addTransportation: indexActionCreatorFactory<TemplateID>(
+    'ADD_TRANSPORTATION'
+  ),
   deleteTransportation: indexActionCreatorFactory<Transportation>(
     'DELETE_TRANSPORTATION'
   ),

@@ -4,6 +4,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useState } from 'react';
 import * as React from 'react';
 import {
+  TemplateID,
   Transportation as TransportationEntity,
   TransportationTemplate
 } from '../models/model';
@@ -16,6 +17,7 @@ import TransportationForm from './TransportationForm';
 interface TemplateDetailProps {
   isEditingTitle: boolean;
   template: TransportationTemplate | null;
+  onClickAddTransportationButton: (templateId: TemplateID) => void;
   onClickDeleteTransportationButton: (t: TransportationEntity) => void;
   onClickEditTitleButton: (title: string) => void;
   onClickSaveTitleButton: (title: string) => void;
@@ -36,6 +38,12 @@ export default function TemplateDetail(props: TemplateDetailProps) {
   const classes = useStyles(undefined);
   const handleClickDay = (days: Date[]) => {
     props.onUpdateCalendar(days);
+  };
+
+  const handleClickNewTransportationButton = () => {
+    if (props.template) {
+      props.onClickAddTransportationButton(props.template.id);
+    }
   };
 
   const [editTransportationIndices, setEditTransportationIndices] = useState(
@@ -97,7 +105,9 @@ export default function TemplateDetail(props: TemplateDetailProps) {
             />
           )
         )}
-        <Button variant="outlined">Add transportation</Button>
+        <Button variant="outlined" onClick={handleClickNewTransportationButton}>
+          Add transportation
+        </Button>
       </div>
       <DaysPicker
         onClickDay={handleClickDay}
