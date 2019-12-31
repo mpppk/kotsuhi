@@ -1,11 +1,12 @@
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 
 export interface TemplateDetailTitleFormProps {
   onClickSaveTitleButton: (title: string) => void;
   title: string;
+  focus: boolean;
 }
 
 const useComponentState = (props: TemplateDetailTitleFormProps) => {
@@ -28,6 +29,12 @@ export default function TemplateDetailTitleForm(
   const handleClickSaveTitleButton = () => {
     props.onClickSaveTitleButton(componentState.title);
   };
+  const titleInputEl = useRef(null as HTMLInputElement | null);
+  useEffect(() => {
+    if (titleInputEl.current && props.focus) {
+      titleInputEl.current.focus();
+    }
+  }, [props.focus]);
 
   return (
     <div>
@@ -35,6 +42,7 @@ export default function TemplateDetailTitleForm(
         label="title"
         value={componentState.title}
         onChange={handleChangeInput}
+        inputRef={titleInputEl}
       />
       <Button
         variant="outlined"
