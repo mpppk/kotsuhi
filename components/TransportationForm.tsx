@@ -41,10 +41,10 @@ const useComponentState = (props: TransportationFormProps) => {
     departure,
     destination,
     fare,
-    id: 'form-transportation-id',
+    id: props.transportation.id,
     line,
     purpose,
-    templateId: 'form-template-id'
+    templateId: props.transportation.templateId
   };
 
   return {
@@ -98,7 +98,7 @@ export default function TransportationForm(props: TransportationFormProps) {
   const transportation = componentState.transportation;
   return (
     <div>
-      <Typography>Transportation {props.index + 1}</Typography>
+      <Typography>Transportation {props.index}</Typography>
       <form className={classes.root}>
         <TextField
           label="出発"

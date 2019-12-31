@@ -17,6 +17,12 @@ export const indexActionCreators = {
   addTransportation: indexActionCreatorFactory<TemplateID>(
     'ADD_TRANSPORTATION'
   ),
+  clickEditTransportationButton: indexActionCreatorFactory<Transportation>(
+    'CLICK_EDIT_TRANSPORTATION_BUTTON'
+  ),
+  clickSaveTransportationButton: indexActionCreatorFactory<Transportation>(
+    'CLICK_SAVE_TRANSPORTATION_BUTTON'
+  ),
   deleteTransportation: indexActionCreatorFactory<Transportation>(
     'DELETE_TRANSPORTATION'
   ),

@@ -71,6 +71,7 @@ const selectedDays = {} as { [key: string]: Date[] };
 
 export const initialState = {
   code: 'BD01',
+  editingTransportation: null as Transportation | null,
   employeeId: 'N00000',
   isEditingTitle: false,
   selectedDays,
@@ -123,6 +124,15 @@ const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
 });
 
 const reducer = reducerWithInitialState(initialState)
+  .case(
+    indexActionCreators.clickEditTransportationButton,
+    (state, transportation) => {
+      return {
+        ...state,
+        editingTransportation: transportation
+      };
+    }
+  )
   .case(indexActionCreators.addTransportation, (state, templateId) => {
     const newTemplates = [...state.templates];
     const template = findTemplateById(newTemplates, templateId);
@@ -156,13 +166,50 @@ const reducer = reducerWithInitialState(initialState)
   .case(
     indexActionCreators.updateDetailTemplateId,
     (state, selectedTemplateId) => {
-      return { ...state, selectedTemplateId };
+      return {
+        ...state,
+        editingTransportation: null,
+        selectedTemplateId
+      };
     }
   )
   .case(indexActionCreators.updateDays, (state, payload) => {
     const newSelectedDays = { ...state.selectedDays };
     newSelectedDays[payload.templateId] = payload.dates;
     return { ...state, selectedDays: newSelectedDays };
-  });
+  })
+  .case(
+    indexActionCreators.clickSaveTransportationButton,
+    (state, transportation) => {
+      const newTemplates = [...state.templates];
+      const template = findTemplateById(
+        newTemplates,
+        transportation.templateId
+      );
+      if (!template) {
+        throw new Error(
+          'non exist template id is given: ' + transportation.templateId
+        );
+      }
+
+      const newTransportations = [...template.transportations];
+      const index = newTransportations.findIndex(
+        t => t.id === transportation.id
+      );
+      if (index === -1) {
+        throw new Error(
+          'non exist transportation id is given: ' + transportation.id
+        );
+      }
+      newTransportations.splice(index, 1, transportation);
+      template.transportations = newTransportations;
+
+      return {
+        ...state,
+        editingTransportation: null,
+        templates: newTemplates
+      };
+    }
+  );
 
 export default reducer;
