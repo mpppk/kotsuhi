@@ -73,6 +73,7 @@ export const initialState = {
   code: 'BD01',
   editingTransportation: null as Transportation | null,
   employeeId: 'N00000',
+  focusTitle: false,
   isEditingTitle: false,
   selectedDays,
   selectedTemplateId: null as string | null,
@@ -112,6 +113,16 @@ const findTemplateById = (
   return template ? template : null;
 };
 
+const newEmptyTemplate = (): TransportationTemplate => {
+  const id = uuidv4();
+  return {
+    description: '',
+    id,
+    title: '',
+    transportations: []
+  };
+};
+
 const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
   arrival: '',
   departure: '',
@@ -124,6 +135,16 @@ const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
 });
 
 const reducer = reducerWithInitialState(initialState)
+  .case(indexActionCreators.clickAddTemplateButton, state => {
+    const newTemplate = newEmptyTemplate();
+    return {
+      ...state,
+      focusTitle: true,
+      isEditingTitle: true,
+      selectedTemplateId: newTemplate.id,
+      templates: [...state.templates, newTemplate]
+    };
+  })
   .case(
     indexActionCreators.clickEditTransportationButton,
     (state, transportation) => {
@@ -163,7 +184,7 @@ const reducer = reducerWithInitialState(initialState)
       throw new Error('non exist template id is given: ' + payload.templateId);
     }
     template.title = payload.title;
-    return { ...state, templates: newTemplates };
+    return { ...state, templates: newTemplates, focusTitle: false };
   })
   .case(indexActionCreators.updateTitleEditMode, (state, isEditingTitle) => {
     return { ...state, isEditingTitle };

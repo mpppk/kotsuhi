@@ -17,6 +17,7 @@ import TransportationForm from './TransportationForm';
 interface TemplateDetailProps {
   editingTransportationId: TransportationID | null;
   isEditingTitle: boolean;
+  focusTitle: boolean;
   template: TransportationTemplate | null;
   onClickAddTransportationButton: (templateId: TemplateID) => void;
   onClickDeleteTransportationButton: (t: TransportationEntity) => void;
@@ -63,6 +64,7 @@ export default function TemplateDetail(props: TemplateDetailProps) {
       <div className={classes.content}>
         {props.isEditingTitle ? (
           <TemplateDetailTitleForm
+            focus={props.focusTitle}
             title={props.template ? props.template.title : ''}
             onClickSaveTitleButton={props.onClickSaveTitleButton}
           />

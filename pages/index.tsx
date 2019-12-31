@@ -23,6 +23,9 @@ const useHandlers = (state: GlobalState) => {
     addTransportation: (templateId: TemplateID) => {
       dispatch(indexActionCreators.addTransportation(templateId));
     },
+    clickAddTemplateButton: () => {
+      dispatch(indexActionCreators.clickAddTemplateButton(undefined));
+    },
     clickEditTransportationButton: (transportation: Transportation) => {
       dispatch(
         indexActionCreators.clickEditTransportationButton(transportation)
@@ -87,6 +90,7 @@ const selector = (s: State) => {
       version: s.version
     } as CsvConfig,
     editingTransportationId,
+    focusTitle: s.focusTitle,
     isEditingTitle: s.isEditingTitle,
     selectedDays: s.selectedDays,
     selectedTemplate: null as TransportationTemplate | null,
@@ -179,13 +183,14 @@ export const Index: React.FC = () => {
               color="primary"
               aria-label="outlined primary button group"
             >
-              <Button>Add</Button>
+              <Button onClick={handlers.clickAddTemplateButton}>Add</Button>
               <Button>Import</Button>
               <Button>Export</Button>
             </ButtonGroup>
           </Grid>
           <Grid item={true} xs={8}>
             <TemplateDetail
+              focusTitle={state.focusTitle}
               onUpdate={handleTemplateUpdate}
               onUpdateCalendar={handleUpdateCalendar}
               selectedDays={state.selectedTemplateDays}
