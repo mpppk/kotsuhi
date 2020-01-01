@@ -3,10 +3,11 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { indexActionCreators } from '../actions';
 import { counterActionCreators } from '../actions/counter';
+import { ImportTemplateDialog } from '../components/ImportTemplateDialog';
 import TemplateDetail from '../components/TemplateDetail';
 import TemplateList from '../components/TemplateList';
 import {
@@ -41,6 +42,9 @@ const useHandlers = (state: GlobalState) => {
     },
     deleteTransportation: (transportation: Transportation) => {
       dispatch(indexActionCreators.deleteTransportation(transportation));
+    },
+    importNewTemplates: (templates: TransportationTemplate[]) => {
+      dispatch(indexActionCreators.importNewTemplates(templates));
     },
     updateDays: (dates: Date[], templateId: TemplateID) => {
       dispatch(indexActionCreators.updateDays({ dates, templateId }));
@@ -134,6 +138,8 @@ export const Index: React.FC = () => {
   const exportCsvButtonEl = useRef(null as any | null);
   const exportTemplatesButtonEl = useRef(null as any | null); // FIXME
 
+  const [openDialog, setOpenDialog] = useState(false);
+
   const handleTemplateUpdate = (transportation: Transportation) => {
     if (!state.selectedTemplate) {
       return;
@@ -149,6 +155,14 @@ export const Index: React.FC = () => {
     if (state.selectedTemplate) {
       handlers.updateDays(dates, state.selectedTemplate.id);
     }
+  };
+
+  const handleClickImportTemplatesButton = () => setOpenDialog(true);
+
+  const handleCloseDialog = () => setOpenDialog(false);
+
+  const handleImportTemplates = (templates: TransportationTemplate[]) => {
+    handlers.importNewTemplates(templates);
   };
 
   const handleClickExportTemplatesButton = () => {
@@ -206,7 +220,7 @@ export const Index: React.FC = () => {
               aria-label="outlined primary button group"
             >
               <Button onClick={handlers.clickAddTemplateButton}>Add</Button>
-              <Button>Import</Button>
+              <Button onClick={handleClickImportTemplatesButton}>Import</Button>
               <Button
                 download={'kotsuhi_templates.json'}
                 ref={exportTemplatesButtonEl}
@@ -250,6 +264,12 @@ export const Index: React.FC = () => {
           </Grid>
         </Grid>
       </div>
+      <ImportTemplateDialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onClickCancelButton={handleCloseDialog}
+        onImport={handleImportTemplates}
+      />
     </Container>
   );
 };

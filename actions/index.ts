@@ -1,5 +1,9 @@
 import actionCreatorFactory from 'typescript-fsa';
-import { TemplateID, Transportation } from '../models/model';
+import {
+  TemplateID,
+  Transportation,
+  TransportationTemplate
+} from '../models/model';
 
 const indexActionCreatorFactory = actionCreatorFactory('INDEX');
 
@@ -31,6 +35,9 @@ export const indexActionCreators = {
   ),
   deleteTransportation: indexActionCreatorFactory<Transportation>(
     'DELETE_TRANSPORTATION'
+  ),
+  importNewTemplates: indexActionCreatorFactory<TransportationTemplate[]>(
+    'IMPORT_NEW_TEMPLATES'
   ),
   updateDays: indexActionCreatorFactory<UpdateDaysPayload>('UPDATE_DAYS'),
   updateDetailTemplateId: indexActionCreatorFactory<TemplateID>(
