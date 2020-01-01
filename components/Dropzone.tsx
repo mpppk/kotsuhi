@@ -3,6 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import UploadIcon from '@material-ui/icons/CloudUploadOutlined';
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { TransportationTemplate } from '../models/model';
 
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
@@ -15,10 +16,27 @@ const useStyles = makeStyles((_theme: Theme) =>
   })
 );
 
-function Dropzone() {
+interface DropzoneProps {
+  onUpload: (templates: TransportationTemplate[]) => void;
+  onError: (msg: string) => void;
+}
+
+function Dropzone(props: DropzoneProps) {
   const classes = useStyles();
-  const onDrop = useCallback(_acceptedFiles => {
-    // Do something with the files
+  const onDrop = useCallback(acceptedFiles => {
+    const reader = new FileReader();
+    reader.onabort = () => props.onError('file reading was aborted');
+    reader.onerror = () => props.onError('file reading has failed');
+    reader.onload = () => {
+      const contents = reader.result;
+      if (contents === null) {
+        props.onError('file contents is null');
+        return;
+      }
+      const templates = JSON.parse(contents as string);
+      props.onUpload(templates);
+    };
+    reader.readAsText(acceptedFiles[0]);
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 

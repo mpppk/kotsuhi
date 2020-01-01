@@ -33,6 +33,11 @@ export const ImportTemplateDialog: React.FC<ImportTemplateDialogProps> = props =
     setImportURL((event.target as HTMLInputElement).value);
   };
 
+  const handleDropzoneError = (msg: string) => {
+    // tslint:disable-next-line
+    console.log(msg);
+  };
+
   return (
     <Dialog
       open={props.open}
@@ -62,7 +67,7 @@ export const ImportTemplateDialog: React.FC<ImportTemplateDialogProps> = props =
           />
         </RadioGroup>
         {radioValue === 'from-file' ? (
-          <Dropzone />
+          <Dropzone onError={handleDropzoneError} onUpload={props.onImport} />
         ) : (
           <TextField
             label="URL"

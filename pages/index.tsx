@@ -162,6 +162,7 @@ export const Index: React.FC = () => {
   const handleCloseDialog = () => setOpenDialog(false);
 
   const handleImportTemplates = (templates: TransportationTemplate[]) => {
+    setOpenDialog(false);
     handlers.importNewTemplates(templates);
   };
 
