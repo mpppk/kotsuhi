@@ -132,7 +132,7 @@ export const Index: React.FC = () => {
   const handlers = useHandlers(state);
 
   const exportCsvButtonEl = useRef(null as any | null);
-  // const exportCsvButtonEl = useRef(null as typeof Button | null);
+  const exportTemplatesButtonEl = useRef(null as any | null); // FIXME
 
   const handleTemplateUpdate = (transportation: Transportation) => {
     if (!state.selectedTemplate) {
@@ -148,6 +148,24 @@ export const Index: React.FC = () => {
   const handleUpdateCalendar = (dates: Date[]) => {
     if (state.selectedTemplate) {
       handlers.updateDays(dates, state.selectedTemplate.id);
+    }
+  };
+
+  const handleClickExportTemplatesButton = () => {
+    const blob = new Blob([JSON.stringify(state.templates, null, 2)], {
+      type: 'application/json'
+    });
+    if (window.navigator.msSaveBlob) {
+      window.navigator.msSaveBlob(blob, 'kotsuhi_templates.json');
+
+      // msSaveOrOpenBlobの場合はファイルを保存せずに開ける
+      window.navigator.msSaveOrOpenBlob(blob, 'kotsuhi_templates.json');
+    } else {
+      if (exportTemplatesButtonEl.current !== null) {
+        const url = window.URL.createObjectURL(blob);
+        // tslint:disable-next-line
+        (exportTemplatesButtonEl.current as any)['href'] = url;
+      }
     }
   };
 
@@ -189,7 +207,14 @@ export const Index: React.FC = () => {
             >
               <Button onClick={handlers.clickAddTemplateButton}>Add</Button>
               <Button>Import</Button>
-              <Button>Export</Button>
+              <Button
+                download={'kotsuhi_templates.json'}
+                ref={exportTemplatesButtonEl}
+                href={'!#'}
+                onClick={handleClickExportTemplatesButton}
+              >
+                Export
+              </Button>
             </ButtonGroup>
           </Grid>
           <Grid item={true} xs={8}>
