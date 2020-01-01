@@ -4,8 +4,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import MoreHoriz from '@material-ui/icons/MoreHorizOutlined';
-import NoteIcon from '@material-ui/icons/Note';
+import DeleteIcon from '@material-ui/icons/DeleteOutlined';
+import NoteIcon from '@material-ui/icons/NoteOutlined';
 import * as React from 'react';
 import { TransportationTemplate } from '../models/model';
 
@@ -14,11 +14,16 @@ interface TemplateListItemProps {
   template: TransportationTemplate;
   selected: boolean;
   onClick: (t: TransportationTemplate) => void;
+  onClickDeleteButton: (t: TransportationTemplate) => void;
 }
 
 export default function TemplateListItem(props: TemplateListItemProps) {
   const handleClick = () => {
     props.onClick(props.template);
+  };
+
+  const handleClickDeleteButton = () => {
+    props.onClickDeleteButton(props.template);
   };
 
   return (
@@ -30,8 +35,12 @@ export default function TemplateListItem(props: TemplateListItemProps) {
       </ListItemIcon>
       <ListItemText primary={props.template.title} />
       <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="more">
-          <MoreHoriz />
+        <IconButton
+          onClick={handleClickDeleteButton}
+          edge="end"
+          aria-label="more"
+        >
+          <DeleteIcon />
         </IconButton>
       </ListItemSecondaryAction>
     </ListItem>

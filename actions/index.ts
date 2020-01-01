@@ -20,6 +20,9 @@ export const indexActionCreators = {
   clickAddTemplateButton: indexActionCreatorFactory<undefined>(
     'CLICK_ADD_TEMPLATE_BUTTON'
   ),
+  clickDeleteTemplateButton: indexActionCreatorFactory<TemplateID>(
+    'CLICK_DELETE_TEMPLATE_BUTTON'
+  ),
   clickEditTransportationButton: indexActionCreatorFactory<Transportation>(
     'CLICK_EDIT_TRANSPORTATION_BUTTON'
   ),

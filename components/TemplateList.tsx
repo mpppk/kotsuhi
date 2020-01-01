@@ -18,6 +18,7 @@ interface TemplateListProps {
   badgeNums: { [k: string]: number };
   templates: TransportationTemplate[];
   onClick: (t: TransportationTemplate) => void;
+  onDelete: (t: TransportationTemplate) => void;
 }
 
 export default function TemplateList(props: TemplateListProps) {
@@ -31,6 +32,13 @@ export default function TemplateList(props: TemplateListProps) {
     props.onClick(t);
   };
 
+  const handleClickDeleteItemButton = (t: TransportationTemplate) => {
+    if (selectedTemplateId === t.id) {
+      setSelectedTemplateId('non-exist-id');
+    }
+    props.onDelete(t);
+  };
+
   return (
     <div className={classes.root}>
       <List component="nav" aria-label="secondary mailbox folder">
@@ -42,6 +50,7 @@ export default function TemplateList(props: TemplateListProps) {
               template={t}
               onClick={handleClickItem}
               selected={t.id === selectedTemplateId}
+              onClickDeleteButton={handleClickDeleteItemButton}
             />
           );
         })}
