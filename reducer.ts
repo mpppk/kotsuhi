@@ -135,6 +135,21 @@ const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
 });
 
 const reducer = reducerWithInitialState(initialState)
+  .case(indexActionCreators.clickDeleteTemplateButton, (state, templateId) => {
+    const selectedTemplateId =
+      state.selectedTemplateId === templateId ? null : state.selectedTemplateId;
+    const isEditingTitle = selectedTemplateId ? state.isEditingTitle : false;
+    const focusTitle = selectedTemplateId ? state.focusTitle : false;
+    const newTemplates = state.templates.filter(t => t.id !== templateId);
+
+    return {
+      ...state,
+      focusTitle,
+      isEditingTitle,
+      selectedTemplateId,
+      templates: newTemplates
+    };
+  })
   .case(indexActionCreators.clickAddTemplateButton, state => {
     const newTemplate = newEmptyTemplate();
     return {

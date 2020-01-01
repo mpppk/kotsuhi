@@ -26,6 +26,9 @@ const useHandlers = (state: GlobalState) => {
     clickAddTemplateButton: () => {
       dispatch(indexActionCreators.clickAddTemplateButton(undefined));
     },
+    clickDeleteTemplate: (template: TransportationTemplate) => {
+      dispatch(indexActionCreators.clickDeleteTemplateButton(template.id));
+    },
     clickEditTransportationButton: (transportation: Transportation) => {
       dispatch(
         indexActionCreators.clickEditTransportationButton(transportation)
@@ -178,6 +181,7 @@ export const Index: React.FC = () => {
               badgeNums={state.templateBadgeNums}
               onClick={handleClickTemplate}
               templates={state.templates}
+              onDelete={handlers.clickDeleteTemplate}
             />
             <ButtonGroup
               color="primary"
