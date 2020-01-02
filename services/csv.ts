@@ -69,7 +69,7 @@ export const countFileNum = (
   return Math.ceil(countRow(templates, dateList) / 15);
 };
 
-export const countRow = (
+const countRow = (
   templates: TransportationTemplate[],
   dateList: { [k: string]: Date[] }
 ) => {
@@ -83,14 +83,25 @@ export const countRow = (
   }, 0);
 };
 
+const genFileName = (csv: Csv): string => {
+  const fileName = `立替交通費申請_${csv.employeeId}`;
+  if (csv.rows.length === 0) {
+    return fileName;
+  }
+  const startDate = csv.rows[0].date.replace(/\//g, '');
+  const endDate = csv.rows[csv.rows.length - 1].date.replace(/\//g, '');
+  return startDate === endDate
+    ? `${fileName}_${startDate}`
+    : `${fileName}_${startDate}_${endDate}`;
+};
+
 export const generateCsvStrList = (
   config: CsvConfig,
   templates: TransportationTemplate[],
   dateList: { [k: string]: Date[] }
-): string[] => {
-  return generateCsvList(config, templates, dateList).map(csv =>
-    toStringFromCsv(csv)
-  );
+): [string[], string[]] => {
+  const csvList = generateCsvList(config, templates, dateList);
+  return [csvList.map(toStringFromCsv), csvList.map(genFileName)];
 };
 
 const generateCsvList = (
