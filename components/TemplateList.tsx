@@ -1,7 +1,7 @@
 import List from '@material-ui/core/List';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import * as React from 'react';
-import { TransportationTemplate } from '../models/model';
+import { TemplateID, TransportationTemplate } from '../models/model';
 import TemplateListItem from './TemplateListItem';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface TemplateListProps {
   badgeNums: { [k: string]: number };
+  selectedTemplateId: TemplateID | null;
   templates: TransportationTemplate[];
   onClick: (t: TransportationTemplate) => void;
   onDelete: (t: TransportationTemplate) => void;
@@ -23,19 +24,12 @@ interface TemplateListProps {
 
 export default function TemplateList(props: TemplateListProps) {
   const classes = useStyles(undefined);
-  const [selectedTemplateId, setSelectedTemplateId] = React.useState(
-    'non-exist-id'
-  );
 
   const handleClickItem = (t: TransportationTemplate) => {
-    setSelectedTemplateId(t.id);
     props.onClick(t);
   };
 
   const handleClickDeleteItemButton = (t: TransportationTemplate) => {
-    if (selectedTemplateId === t.id) {
-      setSelectedTemplateId('non-exist-id');
-    }
     props.onDelete(t);
   };
 
@@ -49,7 +43,7 @@ export default function TemplateList(props: TemplateListProps) {
               key={'TemplateListItem_' + t.id}
               template={t}
               onClick={handleClickItem}
-              selected={t.id === selectedTemplateId}
+              selected={t.id === props.selectedTemplateId}
               onClickDeleteButton={handleClickDeleteItemButton}
             />
           );

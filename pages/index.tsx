@@ -222,6 +222,9 @@ export const Index: React.FC = () => {
               onClick={handleClickTemplate}
               templates={state.templates}
               onDelete={handlers.clickDeleteTemplate}
+              selectedTemplateId={
+                state.selectedTemplate ? state.selectedTemplate.id : null
+              }
             />
             <ButtonGroup
               color="primary"
