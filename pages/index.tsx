@@ -19,7 +19,12 @@ import {
   TransportationTemplate
 } from '../models/model';
 import { State } from '../reducer';
-import { countFileNum, CsvConfig, generateCsvStrList } from '../services/csv';
+import {
+  convertToSJISBlob,
+  countFileNum,
+  CsvConfig,
+  generateCsvStrList
+} from '../services/csv';
 
 const useHandlers = (state: GlobalState) => {
   const dispatch = useDispatch();
@@ -198,7 +203,7 @@ export const Index: React.FC = () => {
 
     // TODO: support IE11 and Vivaldi
     const urls = csvStrList
-      .map(s => new Blob([s], { type: 'text/csv' }))
+      .map(convertToSJISBlob)
       .map(b => window.URL.createObjectURL(b));
     multiDownload(urls, {
       rename: ({ index }: { index: number }) => fileNames[index]
