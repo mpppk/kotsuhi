@@ -4,6 +4,7 @@ import {
   Transportation,
   TransportationTemplate
 } from '../models/model';
+import { CsvConfig } from '../services/csv';
 
 const indexActionCreatorFactory = actionCreatorFactory('INDEX');
 
@@ -30,6 +31,7 @@ export const indexActionCreators = {
   clickEditTransportationButton: indexActionCreatorFactory<Transportation>(
     'CLICK_EDIT_TRANSPORTATION_BUTTON'
   ),
+  clickSaveConfig: indexActionCreatorFactory<CsvConfig>('CLICK_SAVE_CONFIG'),
   clickSaveTransportationButton: indexActionCreatorFactory<Transportation>(
     'CLICK_SAVE_TRANSPORTATION_BUTTON'
   ),
@@ -44,6 +46,9 @@ export const indexActionCreators = {
     TransportationTemplate[],
     Error
   >('IMPORT_TEMPLATES_FROM_URL'),
+  updateConfigEditMode: indexActionCreatorFactory<boolean>(
+    'UPDATE_CONFIG_EDIT_MODE'
+  ),
   updateDays: indexActionCreatorFactory<UpdateDaysPayload>('UPDATE_DAYS'),
   updateDetailTemplateId: indexActionCreatorFactory<TemplateID>(
     'UPDATE_DETAIL_TEMPLATE_ID'
