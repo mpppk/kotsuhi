@@ -18,23 +18,27 @@ const useStyles = makeStyles((_theme: Theme) =>
 
 interface DropzoneProps {
   onUpload: (templates: TransportationTemplate[]) => void;
-  onError: (msg: string) => void;
+  onError: (e: Error) => void;
 }
 
 function Dropzone(props: DropzoneProps) {
   const classes = useStyles();
   const onDrop = useCallback(acceptedFiles => {
     const reader = new FileReader();
-    reader.onabort = () => props.onError('file reading was aborted');
-    reader.onerror = () => props.onError('file reading has failed');
+    reader.onabort = () => props.onError(Error('file reading was aborted'));
+    reader.onerror = () => props.onError(Error('file reading has failed'));
     reader.onload = () => {
       const contents = reader.result;
       if (contents === null) {
-        props.onError('file contents is null');
+        props.onError(Error('file contents is null'));
         return;
       }
-      const templates = JSON.parse(contents as string);
-      props.onUpload(templates);
+      try {
+        const templates = JSON.parse(contents as string);
+        props.onUpload(templates);
+      } catch (e) {
+        props.onError(e);
+      }
     };
     reader.readAsText(acceptedFiles[0]);
   }, []);

@@ -7,6 +7,7 @@ import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { indexActionCreators } from '../actions';
 import { counterActionCreators } from '../actions/counter';
+import { ErrorDialog } from '../components/ErrorDialog';
 import { ImportTemplateDialog } from '../components/ImportTemplateDialog';
 import TemplateDetail from '../components/TemplateDetail';
 import TemplateList from '../components/TemplateList';
@@ -139,6 +140,9 @@ export const Index: React.FC = () => {
   const exportTemplatesButtonEl = useRef(null as any | null); // FIXME
 
   const [openDialog, setOpenDialog] = useState(false);
+  const [currentOccurredError, setCurrentOccurredError] = useState(
+    null as Error | null
+  );
 
   const handleTemplateUpdate = (transportation: Transportation) => {
     if (!state.selectedTemplate) {
@@ -203,6 +207,15 @@ export const Index: React.FC = () => {
         (exportCsvButtonEl.current as any)['href'] = url;
       }
     }
+  };
+
+  const handleImportDialogError = (e: Error) => {
+    setOpenDialog(false);
+    setCurrentOccurredError(e);
+  };
+
+  const handleCloseErrorDialog = () => {
+    setCurrentOccurredError(null);
   };
 
   return (
@@ -270,6 +283,12 @@ export const Index: React.FC = () => {
         onClose={handleCloseDialog}
         onClickCancelButton={handleCloseDialog}
         onImport={handleImportTemplates}
+        onError={handleImportDialogError}
+      />
+      <ErrorDialog
+        error={currentOccurredError}
+        onClose={handleCloseErrorDialog}
+        open={!!currentOccurredError}
       />
     </Container>
   );

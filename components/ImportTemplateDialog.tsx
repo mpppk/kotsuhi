@@ -16,6 +16,7 @@ interface ImportTemplateDialogProps {
   onClose: () => void;
   onClickCancelButton: () => void;
   onImport: (templates: TransportationTemplate[]) => void;
+  onError: (e: Error) => void;
 }
 
 // tslint:disable-next-line variable-name
@@ -33,9 +34,8 @@ export const ImportTemplateDialog: React.FC<ImportTemplateDialogProps> = props =
     setImportURL((event.target as HTMLInputElement).value);
   };
 
-  const handleDropzoneError = (msg: string) => {
-    // tslint:disable-next-line
-    console.log(msg);
+  const handleDropzoneError = (e: Error) => {
+    props.onError(e);
   };
 
   return (
