@@ -155,7 +155,7 @@ const useHandlers = (
   };
 };
 
-type GlobalState = ReturnType<typeof useGlobalState>;
+type GlobalState = ReturnType<typeof selector>;
 const selector = (s: State) => {
   const templateBadgeNums = Object.entries(s.selectedDays).reduce(
     (acc, [templateId, days]) => {
@@ -182,6 +182,7 @@ const selector = (s: State) => {
       employeeId: s.employeeId,
       version: s.version
     } as CsvConfig,
+    csvFileNum: countFileNum(s.templates, s.selectedDays),
     editingTransportationId,
     error: s.error,
     focusTitle: s.focusTitle,
@@ -202,7 +203,6 @@ const selector = (s: State) => {
 
   return globalState;
 };
-const useGlobalState = () => useSelector(selector);
 
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
@@ -235,12 +235,10 @@ const useRefs = () => {
 // tslint:disable-next-line variable-name
 export const Index: React.FC = () => {
   const classes = useStyles(undefined);
-  const state = useGlobalState();
+  const state = useSelector(selector);
   const componentState = useComponentState();
   const refs = useRefs();
   const handlers = useHandlers(state, componentState, refs);
-
-  const csvFileNum = countFileNum(state.templates, state.selectedDays);
 
   return (
     <Container maxWidth="lg">
@@ -299,7 +297,7 @@ export const Index: React.FC = () => {
             )}
           </Grid>
           <Grid item={true} xs={2}>
-            <Badge badgeContent={csvFileNum} color="secondary">
+            <Badge badgeContent={state.csvFileNum} color="secondary">
               <Button
                 variant="outlined"
                 color="primary"
