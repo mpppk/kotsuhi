@@ -8,6 +8,7 @@ import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { indexActionCreators } from '../actions';
 import { counterActionCreators } from '../actions/counter';
+import { EmptyTemplateDetail } from '../components/EmptyTemplateDetail';
 import { ErrorDialog } from '../components/ErrorDialog';
 import { ImportTemplateDialog } from '../components/ImportTemplateDialog';
 import TemplateDetail from '../components/TemplateDetail';
@@ -243,22 +244,28 @@ export const Index: React.FC = () => {
             </ButtonGroup>
           </Grid>
           <Grid item={true} xs={8}>
-            <TemplateDetail
-              focusTitle={state.focusTitle}
-              onUpdate={handleTemplateUpdate}
-              onUpdateCalendar={handleUpdateCalendar}
-              selectedDays={state.selectedTemplateDays}
-              template={state.selectedTemplate}
-              isEditingTitle={state.isEditingTitle}
-              onClickEditTitleButton={handlers.updateTitleEditMode}
-              onClickSaveTitleButton={handlers.updateTitle}
-              onClickDeleteTransportationButton={handlers.deleteTransportation}
-              onClickAddTransportationButton={handlers.addTransportation}
-              editingTransportationId={state.editingTransportationId}
-              onClickEditTransportationButton={
-                handlers.clickEditTransportationButton
-              }
-            />
+            {state.selectedTemplate ? (
+              <TemplateDetail
+                focusTitle={state.focusTitle}
+                onUpdate={handleTemplateUpdate}
+                onUpdateCalendar={handleUpdateCalendar}
+                selectedDays={state.selectedTemplateDays}
+                template={state.selectedTemplate}
+                isEditingTitle={state.isEditingTitle}
+                onClickEditTitleButton={handlers.updateTitleEditMode}
+                onClickSaveTitleButton={handlers.updateTitle}
+                onClickDeleteTransportationButton={
+                  handlers.deleteTransportation
+                }
+                onClickAddTransportationButton={handlers.addTransportation}
+                editingTransportationId={state.editingTransportationId}
+                onClickEditTransportationButton={
+                  handlers.clickEditTransportationButton
+                }
+              />
+            ) : (
+              <EmptyTemplateDetail />
+            )}
           </Grid>
           <Grid item={true} xs={2}>
             <Button
