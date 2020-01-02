@@ -26,46 +26,117 @@ import {
   generateCsvStrList
 } from '../services/csv';
 
-const useHandlers = (state: GlobalState) => {
+const useHandlers = (
+  state: GlobalState,
+  componentState: ComponentState,
+  refs: Refs
+) => {
   const dispatch = useDispatch();
+
   return {
     addTransportation: (templateId: TemplateID) => {
       dispatch(indexActionCreators.addTransportation(templateId));
     },
+
     clickAddTemplateButton: () => {
       dispatch(indexActionCreators.clickAddTemplateButton(undefined));
     },
+
     clickDeleteTemplate: (template: TransportationTemplate) => {
       dispatch(indexActionCreators.clickDeleteTemplateButton(template.id));
     },
+
     clickEditTransportationButton: (transportation: Transportation) => {
       dispatch(
         indexActionCreators.clickEditTransportationButton(transportation)
       );
     },
-    clickSaveTransportationButton: (transportation: Transportation) => {
+
+    clickTemplate: (template: TransportationTemplate) => {
+      dispatch(indexActionCreators.updateDetailTemplateId(template.id));
+    },
+
+    deleteTransportation: (transportation: Transportation) => {
+      dispatch(indexActionCreators.deleteTransportation(transportation));
+    },
+
+    updateCalendar: (dates: Date[]) => {
+      if (state.selectedTemplate) {
+        dispatch(
+          indexActionCreators.updateDays({
+            dates,
+            templateId: state.selectedTemplate.id
+          })
+        );
+      }
+    },
+
+    clickImportTemplatesButton: () => componentState.setOpenDialog(true),
+
+    closeDialog: () => componentState.setOpenDialog(false),
+
+    importTemplates: (templates: TransportationTemplate[]) => {
+      componentState.setOpenDialog(false);
+      dispatch(indexActionCreators.importNewTemplates(templates));
+    },
+
+    clickExportTemplatesButton: () => {
+      const blob = new Blob([JSON.stringify(state.templates, null, 2)], {
+        type: 'application/json'
+      });
+      if (window.navigator.msSaveBlob) {
+        window.navigator.msSaveBlob(blob, 'kotsuhi_templates.json');
+
+        // msSaveOrOpenBlobの場合はファイルを保存せずに開ける
+        window.navigator.msSaveOrOpenBlob(blob, 'kotsuhi_templates.json');
+      } else {
+        if (refs.exportTemplatesButtonEl.current !== null) {
+          const url = window.URL.createObjectURL(blob);
+          // tslint:disable-next-line
+          (refs.exportTemplatesButtonEl.current as any)['href'] = url;
+        }
+      }
+    },
+
+    clickExportCSVButton: () => {
+      const [csvStrList, fileNames] = generateCsvStrList(
+        state.config,
+        state.templates,
+        state.selectedDays
+      );
+
+      // TODO: support IE11 and Vivaldi
+      const urls = csvStrList
+        .map(convertToSJISBlob)
+        .map(b => window.URL.createObjectURL(b));
+      multiDownload(urls, {
+        rename: ({ index }: { index: number }) => fileNames[index]
+      });
+    },
+
+    importDialogError: (e: Error) => {
+      componentState.setOpenDialog(false);
+      dispatch(indexActionCreators.updateError(e));
+    },
+
+    closeErrorDialog: () => {
+      dispatch(indexActionCreators.updateError(null));
+    },
+
+    clickImportFromURLButton: (url: string) => {
+      componentState.setOpenDialog(false);
+      dispatch(indexActionCreators.importTemplatesFromURL.started(url));
+    },
+
+    templateUpdate: (transportation: Transportation) => {
+      if (!state.selectedTemplate) {
+        return;
+      }
       dispatch(
         indexActionCreators.clickSaveTransportationButton(transportation)
       );
     },
-    deleteTransportation: (transportation: Transportation) => {
-      dispatch(indexActionCreators.deleteTransportation(transportation));
-    },
-    importNewTemplates: (templates: TransportationTemplate[]) => {
-      dispatch(indexActionCreators.importNewTemplates(templates));
-    },
-    importTemplatesFromURL: (url: string) => {
-      dispatch(indexActionCreators.importTemplatesFromURL.started(url));
-    },
-    updateDays: (dates: Date[], templateId: TemplateID) => {
-      dispatch(indexActionCreators.updateDays({ dates, templateId }));
-    },
-    updateDetailTemplateId: (templateId: TemplateID) => {
-      dispatch(indexActionCreators.updateDetailTemplateId(templateId));
-    },
-    updateError: (e: Error | null) => {
-      dispatch(indexActionCreators.updateError(e));
-    },
+
     updateTitle: (title: string) => {
       dispatch(indexActionCreators.updateTitleEditMode(false));
       if (state.selectedTemplate) {
@@ -77,6 +148,7 @@ const useHandlers = (state: GlobalState) => {
         );
       }
     },
+
     updateTitleEditMode: () => {
       dispatch(indexActionCreators.updateTitleEditMode(true));
     }
@@ -144,89 +216,29 @@ const useStyles = makeStyles((_theme: Theme) =>
   })
 );
 
+type ComponentState = ReturnType<typeof useComponentState>;
+const useComponentState = () => {
+  const [openDialog, setOpenDialog] = useState(false);
+  return {
+    openDialog,
+    setOpenDialog
+  };
+};
+
+type Refs = ReturnType<typeof useRefs>;
+const useRefs = () => {
+  return {
+    exportTemplatesButtonEl: useRef(null as any | null)
+  };
+};
+
 // tslint:disable-next-line variable-name
 export const Index: React.FC = () => {
   const classes = useStyles(undefined);
   const state = useGlobalState();
-  const handlers = useHandlers(state);
-
-  const exportTemplatesButtonEl = useRef(null as any | null); // FIXME
-
-  const [openDialog, setOpenDialog] = useState(false);
-
-  const handleTemplateUpdate = (transportation: Transportation) => {
-    if (!state.selectedTemplate) {
-      return;
-    }
-    handlers.clickSaveTransportationButton(transportation);
-  };
-
-  const handleClickTemplate = (template: TransportationTemplate) => {
-    handlers.updateDetailTemplateId(template.id);
-  };
-
-  const handleUpdateCalendar = (dates: Date[]) => {
-    if (state.selectedTemplate) {
-      handlers.updateDays(dates, state.selectedTemplate.id);
-    }
-  };
-
-  const handleClickImportTemplatesButton = () => setOpenDialog(true);
-
-  const handleCloseDialog = () => setOpenDialog(false);
-
-  const handleImportTemplates = (templates: TransportationTemplate[]) => {
-    setOpenDialog(false);
-    handlers.importNewTemplates(templates);
-  };
-
-  const handleClickExportTemplatesButton = () => {
-    const blob = new Blob([JSON.stringify(state.templates, null, 2)], {
-      type: 'application/json'
-    });
-    if (window.navigator.msSaveBlob) {
-      window.navigator.msSaveBlob(blob, 'kotsuhi_templates.json');
-
-      // msSaveOrOpenBlobの場合はファイルを保存せずに開ける
-      window.navigator.msSaveOrOpenBlob(blob, 'kotsuhi_templates.json');
-    } else {
-      if (exportTemplatesButtonEl.current !== null) {
-        const url = window.URL.createObjectURL(blob);
-        // tslint:disable-next-line
-        (exportTemplatesButtonEl.current as any)['href'] = url;
-      }
-    }
-  };
-
-  const handleClickExportCSVButton = () => {
-    const [csvStrList, fileNames] = generateCsvStrList(
-      state.config,
-      state.templates,
-      state.selectedDays
-    );
-
-    // TODO: support IE11 and Vivaldi
-    const urls = csvStrList
-      .map(convertToSJISBlob)
-      .map(b => window.URL.createObjectURL(b));
-    multiDownload(urls, {
-      rename: ({ index }: { index: number }) => fileNames[index]
-    });
-  };
-
-  const handleImportDialogError = (e: Error) => {
-    setOpenDialog(false);
-    handlers.updateError(e);
-  };
-
-  const handleCloseErrorDialog = () => {
-    handlers.updateError(null);
-  };
-
-  const handleClickImportFromURLButton = (url: string) => {
-    setOpenDialog(false);
-    handlers.importTemplatesFromURL(url);
-  };
+  const componentState = useComponentState();
+  const refs = useRefs();
+  const handlers = useHandlers(state, componentState, refs);
 
   const csvFileNum = countFileNum(state.templates, state.selectedDays);
 
@@ -237,7 +249,7 @@ export const Index: React.FC = () => {
           <Grid item={true} xs={4}>
             <TemplateList
               badgeNums={state.templateBadgeNums}
-              onClick={handleClickTemplate}
+              onClick={handlers.clickTemplate}
               templates={state.templates}
               onDelete={handlers.clickDeleteTemplate}
               selectedTemplateId={
@@ -249,12 +261,14 @@ export const Index: React.FC = () => {
               aria-label="outlined primary button group"
             >
               <Button onClick={handlers.clickAddTemplateButton}>Add</Button>
-              <Button onClick={handleClickImportTemplatesButton}>Import</Button>
+              <Button onClick={handlers.clickImportTemplatesButton}>
+                Import
+              </Button>
               <Button
                 download={'kotsuhi_templates.json'}
-                ref={exportTemplatesButtonEl}
+                ref={refs.exportTemplatesButtonEl}
                 href={'!#'}
-                onClick={handleClickExportTemplatesButton}
+                onClick={handlers.clickExportTemplatesButton}
               >
                 Export
               </Button>
@@ -264,8 +278,8 @@ export const Index: React.FC = () => {
             {state.selectedTemplate ? (
               <TemplateDetail
                 focusTitle={state.focusTitle}
-                onUpdate={handleTemplateUpdate}
-                onUpdateCalendar={handleUpdateCalendar}
+                onUpdate={handlers.templateUpdate}
+                onUpdateCalendar={handlers.updateCalendar}
                 selectedDays={state.selectedTemplateDays}
                 template={state.selectedTemplate}
                 isEditingTitle={state.isEditingTitle}
@@ -290,7 +304,7 @@ export const Index: React.FC = () => {
                 variant="outlined"
                 color="primary"
                 className={classes.exportCsvButton}
-                onClick={handleClickExportCSVButton}
+                onClick={handlers.clickExportCSVButton}
               >
                 Export CSV
               </Button>
@@ -299,16 +313,16 @@ export const Index: React.FC = () => {
         </Grid>
       </div>
       <ImportTemplateDialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        onClickCancelButton={handleCloseDialog}
-        onImport={handleImportTemplates}
-        onError={handleImportDialogError}
-        onClickImportFromURLButton={handleClickImportFromURLButton}
+        open={componentState.openDialog}
+        onClose={handlers.closeDialog}
+        onClickCancelButton={handlers.closeDialog}
+        onImport={handlers.importTemplates}
+        onError={handlers.importDialogError}
+        onClickImportFromURLButton={handlers.clickImportFromURLButton}
       />
       <ErrorDialog
         error={state.error}
-        onClose={handleCloseErrorDialog}
+        onClose={handlers.closeErrorDialog}
         open={!!state.error}
       />
     </Container>
