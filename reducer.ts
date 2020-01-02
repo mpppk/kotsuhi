@@ -151,6 +151,15 @@ const reducer = reducerWithInitialState(initialState)
       selectedTemplateId: null
     };
   })
+  .case(indexActionCreators.importTemplatesFromURL.done, (state, payload) => {
+    return {
+      ...state,
+      focusTitle: false,
+      isEditingTitle: false,
+      selectedTemplateId: null,
+      templates: payload.result
+    };
+  })
   .case(indexActionCreators.importNewTemplates, (state, templates) => {
     return {
       ...state,
