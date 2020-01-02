@@ -77,7 +77,12 @@ const generateCsvList = (
   templates: TransportationTemplate[],
   dateList: { [k: string]: Date[] }
 ): Csv[] => {
-  const rows = generateTable(templates, dateList);
+  const rows = generateTable(templates, dateList).sort((a, b) => {
+    if (a.date === b.date) {
+      return 0;
+    }
+    return a.date > b.date ? 1 : -1;
+  });
   return chunk<CsvRow>(rows, 15).map(
     rowChunks =>
       ({

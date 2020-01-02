@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import * as multiDownload from 'multi-download';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { indexActionCreators } from '../actions';
@@ -194,19 +195,12 @@ export const Index: React.FC = () => {
       state.templates,
       state.selectedDays
     );
-    const blob = new Blob([csvStrList[0]], { type: 'text/csv' });
-    if (window.navigator.msSaveBlob) {
-      window.navigator.msSaveBlob(blob, 'test.txt');
 
-      // msSaveOrOpenBlobの場合はファイルを保存せずに開ける
-      window.navigator.msSaveOrOpenBlob(blob, 'test.txt');
-    } else {
-      if (exportCsvButtonEl.current !== null) {
-        const url = window.URL.createObjectURL(blob);
-        // tslint:disable-next-line
-        (exportCsvButtonEl.current as any)['href'] = url;
-      }
-    }
+    // TODO: support IE11 and Vivaldi
+    const urls = csvStrList
+      .map(s => new Blob([s], { type: 'text/csv' }))
+      .map(b => window.URL.createObjectURL(b));
+    multiDownload(urls);
   };
 
   const handleImportDialogError = (e: Error) => {
