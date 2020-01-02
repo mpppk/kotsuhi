@@ -62,6 +62,27 @@ const toStringFromCsv = (csv: Csv): string => {
   );
 };
 
+export const countFileNum = (
+  templates: TransportationTemplate[],
+  dateList: { [k: string]: Date[] }
+) => {
+  return Math.ceil(countRow(templates, dateList) / 15);
+};
+
+export const countRow = (
+  templates: TransportationTemplate[],
+  dateList: { [k: string]: Date[] }
+) => {
+  return Object.entries(dateList).reduce((cnt, [templateId, dates]) => {
+    const template = templates.find(t => t.id === templateId);
+    if (!template) {
+      return cnt;
+    }
+    cnt += template.transportations.length * dates.length;
+    return cnt;
+  }, 0);
+};
+
 export const generateCsvStrList = (
   config: CsvConfig,
   templates: TransportationTemplate[],

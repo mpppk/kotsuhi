@@ -1,4 +1,4 @@
-import { Grid } from '@material-ui/core';
+import { Badge, Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Container from '@material-ui/core/Container';
@@ -19,7 +19,7 @@ import {
   TransportationTemplate
 } from '../models/model';
 import { State } from '../reducer';
-import { CsvConfig, generateCsvStrList } from '../services/csv';
+import { countFileNum, CsvConfig, generateCsvStrList } from '../services/csv';
 
 const useHandlers = (state: GlobalState) => {
   const dispatch = useDispatch();
@@ -213,6 +213,8 @@ export const Index: React.FC = () => {
     setCurrentOccurredError(null);
   };
 
+  const csvFileNum = countFileNum(state.templates, state.selectedDays);
+
   return (
     <Container maxWidth="lg">
       <div className={classes.root}>
@@ -268,17 +270,19 @@ export const Index: React.FC = () => {
             )}
           </Grid>
           <Grid item={true} xs={2}>
-            <Button
-              download={'test.csv'}
-              ref={exportCsvButtonEl}
-              href={'!#'}
-              variant="outlined"
-              color="primary"
-              className={classes.exportCsvButton}
-              onClick={handleClickExportCSVButton}
-            >
-              Export CSV
-            </Button>
+            <Badge badgeContent={csvFileNum} color="secondary">
+              <Button
+                download={'test.csv'}
+                ref={exportCsvButtonEl}
+                href={'!#'}
+                variant="outlined"
+                color="primary"
+                className={classes.exportCsvButton}
+                onClick={handleClickExportCSVButton}
+              >
+                Export CSV
+              </Button>
+            </Badge>
           </Grid>
         </Grid>
       </div>
