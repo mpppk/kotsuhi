@@ -138,7 +138,6 @@ export const Index: React.FC = () => {
   const state = useGlobalState();
   const handlers = useHandlers(state);
 
-  const exportCsvButtonEl = useRef(null as any | null);
   const exportTemplatesButtonEl = useRef(null as any | null); // FIXME
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -272,9 +271,6 @@ export const Index: React.FC = () => {
           <Grid item={true} xs={2}>
             <Badge badgeContent={csvFileNum} color="secondary">
               <Button
-                download={'test.csv'}
-                ref={exportCsvButtonEl}
-                href={'!#'}
                 variant="outlined"
                 color="primary"
                 className={classes.exportCsvButton}
