@@ -1,3 +1,4 @@
+import encoding from 'encoding-japanese';
 import chunk from 'lodash/chunk';
 import { Transportation, TransportationTemplate } from '../models/model';
 
@@ -18,6 +19,24 @@ export interface CsvConfig {
   version: string;
   code: string;
 }
+
+export const convertToSJISBlob = (str: string) => {
+  const sjisArray = convertToSJIS(str);
+  const uint8Array = new Uint8Array(sjisArray as any);
+  const type = 'text/csv';
+  return new Blob([uint8Array], { type });
+};
+
+const convertToSJIS = (str: string) => {
+  const unicodeArray = [];
+  for (let i = 0; i < str.length; i++) {
+    unicodeArray.push(str.charCodeAt(i));
+  }
+  return encoding.convert(unicodeArray, {
+    from: 'UNICODE',
+    to: 'SJIS'
+  });
+};
 
 const toArrayFromRow = (row: CsvRow): string[] => {
   return [
