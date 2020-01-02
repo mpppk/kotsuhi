@@ -46,7 +46,7 @@ function Dropzone(props: DropzoneProps) {
 
   return (
     <Paper {...getRootProps()} className={classes.root}>
-      <input {...getInputProps()} />
+      <input {...getInputProps()} accept={'.json'} />
       <UploadIcon className={classes.uploadIcon} />
       {isDragActive ? (
         <p>Drop the template json here ...</p>
