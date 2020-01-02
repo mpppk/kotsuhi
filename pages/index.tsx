@@ -190,7 +190,7 @@ export const Index: React.FC = () => {
   };
 
   const handleClickExportCSVButton = () => {
-    const csvStrList = generateCsvStrList(
+    const [csvStrList, fileNames] = generateCsvStrList(
       state.config,
       state.templates,
       state.selectedDays
@@ -200,7 +200,9 @@ export const Index: React.FC = () => {
     const urls = csvStrList
       .map(s => new Blob([s], { type: 'text/csv' }))
       .map(b => window.URL.createObjectURL(b));
-    multiDownload(urls);
+    multiDownload(urls, {
+      rename: ({ index }: { index: number }) => fileNames[index]
+    });
   };
 
   const handleImportDialogError = (e: Error) => {

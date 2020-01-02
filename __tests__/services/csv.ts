@@ -72,7 +72,7 @@ describe('generateCsvStrList', () => {
       '"2020/01/02","木","departure3","arrival3","JR","175","destination3","purpose3"\r\n' +
       '"2020/01/03","金","departure3","arrival3","JR","175","destination3","purpose3"\r\n';
 
-    const csvStrList = generateCsvStrList(config, templates, dateList);
+    const [csvStrList] = generateCsvStrList(config, templates, dateList);
     expect(csvStrList).toHaveLength(1);
     expect(csvStrList[0]).toBe(expectedCsvStr);
   });
@@ -89,7 +89,7 @@ describe('generateCsvStrList', () => {
       templates[0].transportations.push(t);
     }
 
-    const csvStrList = generateCsvStrList(config, templates, dateList);
+    const [csvStrList] = generateCsvStrList(config, templates, dateList);
     expect(csvStrList).toHaveLength(2);
 
     let expectedCsvStr1 = '"N00000","105","v.1.04","立替交通費","BD01"\r\n';
