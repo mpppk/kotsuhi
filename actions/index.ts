@@ -39,11 +39,17 @@ export const indexActionCreators = {
   importNewTemplates: indexActionCreatorFactory<TransportationTemplate[]>(
     'IMPORT_NEW_TEMPLATES'
   ),
+  importTemplatesFromURL: indexActionCreatorFactory.async<
+    string,
+    TransportationTemplate[],
+    Error
+  >('IMPORT_TEMPLATES_FROM_URL'),
   updateDays: indexActionCreatorFactory<UpdateDaysPayload>('UPDATE_DAYS'),
   updateDetailTemplateId: indexActionCreatorFactory<TemplateID>(
     'UPDATE_DETAIL_TEMPLATE_ID'
   ),
   updateEmployeeId: indexActionCreatorFactory<string>('UPDATE_EMPLOYEE_ID'),
+  updateError: indexActionCreatorFactory<Error | null>('UPDATE_ERROR'),
   updateTitle: indexActionCreatorFactory<UpdateTitlePayload>('UPDATE_TITLE'),
   updateTitleEditMode: indexActionCreatorFactory<boolean>(
     'UPDATE_TITLE_EDIT_MODE'

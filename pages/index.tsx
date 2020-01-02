@@ -54,11 +54,17 @@ const useHandlers = (state: GlobalState) => {
     importNewTemplates: (templates: TransportationTemplate[]) => {
       dispatch(indexActionCreators.importNewTemplates(templates));
     },
+    importTemplatesFromURL: (url: string) => {
+      dispatch(indexActionCreators.importTemplatesFromURL.started(url));
+    },
     updateDays: (dates: Date[], templateId: TemplateID) => {
       dispatch(indexActionCreators.updateDays({ dates, templateId }));
     },
     updateDetailTemplateId: (templateId: TemplateID) => {
       dispatch(indexActionCreators.updateDetailTemplateId(templateId));
+    },
+    updateError: (e: Error | null) => {
+      dispatch(indexActionCreators.updateError(e));
     },
     updateTitle: (title: string) => {
       dispatch(indexActionCreators.updateTitleEditMode(false));
@@ -105,6 +111,7 @@ const selector = (s: State) => {
       version: s.version
     } as CsvConfig,
     editingTransportationId,
+    error: s.error,
     focusTitle: s.focusTitle,
     isEditingTitle: s.isEditingTitle,
     selectedDays: s.selectedDays,
@@ -146,9 +153,6 @@ export const Index: React.FC = () => {
   const exportTemplatesButtonEl = useRef(null as any | null); // FIXME
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [currentOccurredError, setCurrentOccurredError] = useState(
-    null as Error | null
-  );
 
   const handleTemplateUpdate = (transportation: Transportation) => {
     if (!state.selectedTemplate) {
@@ -212,11 +216,16 @@ export const Index: React.FC = () => {
 
   const handleImportDialogError = (e: Error) => {
     setOpenDialog(false);
-    setCurrentOccurredError(e);
+    handlers.updateError(e);
   };
 
   const handleCloseErrorDialog = () => {
-    setCurrentOccurredError(null);
+    handlers.updateError(null);
+  };
+
+  const handleClickImportFromURLButton = (url: string) => {
+    setOpenDialog(false);
+    handlers.importTemplatesFromURL(url);
   };
 
   const csvFileNum = countFileNum(state.templates, state.selectedDays);
@@ -295,11 +304,12 @@ export const Index: React.FC = () => {
         onClickCancelButton={handleCloseDialog}
         onImport={handleImportTemplates}
         onError={handleImportDialogError}
+        onClickImportFromURLButton={handleClickImportFromURLButton}
       />
       <ErrorDialog
-        error={currentOccurredError}
+        error={state.error}
         onClose={handleCloseErrorDialog}
-        open={!!currentOccurredError}
+        open={!!state.error}
       />
     </Container>
   );
