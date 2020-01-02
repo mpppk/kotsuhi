@@ -1,6 +1,6 @@
 import { all } from '@redux-saga/core/effects';
-import { watchIncrementAsync } from './counter';
+import { watchImportTemplatesFromURL } from './import';
 
 export default function* rootSaga() {
-  yield all([watchIncrementAsync()]);
+  yield all([watchImportTemplatesFromURL()]);
 }

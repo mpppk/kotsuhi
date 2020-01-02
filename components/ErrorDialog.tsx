@@ -37,7 +37,7 @@ export const ErrorDialog: React.FC<ErrorDialogProps> = props => {
       aria-labelledby="error-dialog-title"
       aria-describedby="error-dialog-description"
     >
-      <DialogTitle id="error-dialog-title">Error({errorName})</DialogTitle>
+      <DialogTitle id="error-dialog-title">{errorName}</DialogTitle>
       <DialogContent>
         {errorMessage}
         {errorStack === '' ? null : <ErrorDetails details={errorStack} />}

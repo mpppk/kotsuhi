@@ -15,6 +15,7 @@ interface ImportTemplateDialogProps {
   open: boolean;
   onClose: () => void;
   onClickCancelButton: () => void;
+  onClickImportFromURLButton: (url: string) => void;
   onImport: (templates: TransportationTemplate[]) => void;
   onError: (e: Error) => void;
 }
@@ -22,7 +23,7 @@ interface ImportTemplateDialogProps {
 // tslint:disable-next-line variable-name
 export const ImportTemplateDialog: React.FC<ImportTemplateDialogProps> = props => {
   const [radioValue, setRadioValue] = useState('from-file');
-  const [importURL, setImportURL] = useState('');
+  const [importURL, setImportURL] = useState('https://');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRadioValue((event.target as HTMLInputElement).value);
@@ -36,6 +37,10 @@ export const ImportTemplateDialog: React.FC<ImportTemplateDialogProps> = props =
 
   const handleDropzoneError = (e: Error) => {
     props.onError(e);
+  };
+
+  const handleClickImportFromURLButton = () => {
+    props.onClickImportFromURLButton(importURL);
   };
 
   return (
@@ -80,7 +85,11 @@ export const ImportTemplateDialog: React.FC<ImportTemplateDialogProps> = props =
         <Button onClick={props.onClickCancelButton} color="primary">
           Cancel
         </Button>
-        <Button onClick={props.onClickCancelButton} color="primary">
+        <Button
+          onClick={handleClickImportFromURLButton}
+          color="primary"
+          disabled={importURL.length < 10}
+        >
           Import
         </Button>
       </DialogActions>

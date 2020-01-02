@@ -73,6 +73,7 @@ export const initialState = {
   code: 'BD01',
   editingTransportation: null as Transportation | null,
   employeeId: 'N00000',
+  error: null as Error | null,
   focusTitle: false,
   isEditingTitle: false,
   selectedDays,
@@ -135,6 +136,30 @@ const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
 });
 
 const reducer = reducerWithInitialState(initialState)
+  .case(indexActionCreators.updateError, (state, error) => {
+    return {
+      ...state,
+      error
+    };
+  })
+  .case(indexActionCreators.importTemplatesFromURL.failed, state => {
+    return {
+      ...state,
+      error: new Error('Template importing from URL is failed'),
+      focusTitle: false,
+      isEditingTitle: false,
+      selectedTemplateId: null
+    };
+  })
+  .case(indexActionCreators.importTemplatesFromURL.done, (state, payload) => {
+    return {
+      ...state,
+      focusTitle: false,
+      isEditingTitle: false,
+      selectedTemplateId: null,
+      templates: payload.result
+    };
+  })
   .case(indexActionCreators.importNewTemplates, (state, templates) => {
     return {
       ...state,
