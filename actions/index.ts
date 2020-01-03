@@ -22,15 +22,15 @@ export const indexActionCreators = {
   clickAddTemplateButton: indexActionCreatorFactory<undefined>(
     'CLICK_ADD_TEMPLATE_BUTTON'
   ),
-  clickDeleteTemplateButton: indexActionCreatorFactory<TemplateID>(
-    'CLICK_DELETE_TEMPLATE_BUTTON'
-  ),
   clickEditTransportationButton: indexActionCreatorFactory<Transportation>(
     'CLICK_EDIT_TRANSPORTATION_BUTTON'
   ),
   clickSaveConfig: indexActionCreatorFactory<CsvConfig>('CLICK_SAVE_CONFIG'),
   clickSaveTransportationButton: indexActionCreatorFactory<Transportation>(
     'CLICK_SAVE_TRANSPORTATION_BUTTON'
+  ),
+  confirmToDeleteTemplate: indexActionCreatorFactory<TemplateID>(
+    'CONFIRM_TO_DELETE_TEMPLATE'
   ),
   deleteTransportation: indexActionCreatorFactory<Transportation>(
     'DELETE_TRANSPORTATION'

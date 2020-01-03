@@ -32,6 +32,7 @@ import {
   KotsuhiConfig,
   toExportJson
 } from '../services/export';
+import { ConfirmToDeleteTemplateDialog } from '../components/ConfirmToDeleteTemplateDialog';
 
 const useHandlers = (
   state: GlobalState,
@@ -50,7 +51,7 @@ const useHandlers = (
     },
 
     clickDeleteTemplate: (template: TransportationTemplate) => {
-      dispatch(indexActionCreators.clickDeleteTemplateButton(template.id));
+      componentState.setTemplateForConfirmToDelete(template);
     },
 
     clickEditConfig: () => {
@@ -65,6 +66,15 @@ const useHandlers = (
 
     clickTemplate: (template: TransportationTemplate) => {
       dispatch(indexActionCreators.updateDetailTemplateId(template.id));
+    },
+
+    closeConfirmToDeleteTemplateDialog: () => {
+     componentState.setTemplateForConfirmToDelete(null); 
+    },
+
+    confirmToDeleteTemplate: (template: TransportationTemplate) => {
+      componentState.setTemplateForConfirmToDelete(null);
+      dispatch(indexActionCreators.confirmToDeleteTemplate(template.id));
     },
 
     deleteTransportation: (transportation: Transportation) => {
@@ -198,6 +208,7 @@ const selector = (s: State) => {
       employeeId: s.employeeId,
       version: s.version
     } as CsvConfig,
+    confirmToDeleteTemplate: s.confirmToDeleteTemplate,
     csvFileNum: countFileNum(s.templates, s.selectedDays),
     editingTransportationId,
     error: s.error,
@@ -236,9 +247,14 @@ const useStyles = makeStyles((_theme: Theme) =>
 type ComponentState = ReturnType<typeof useComponentState>;
 const useComponentState = () => {
   const [openDialog, setOpenDialog] = useState(false);
+  const [templateForConfirmToDelete, setTemplateForConfirmToDelete] = useState(
+    null as TransportationTemplate | null
+  );
   return {
     openDialog,
-    setOpenDialog
+    templateForConfirmToDelete,
+    setOpenDialog,
+    setTemplateForConfirmToDelete
   };
 };
 
@@ -350,6 +366,12 @@ export const Index: React.FC = () => {
         error={state.error}
         onClose={handlers.closeErrorDialog}
         open={!!state.error}
+      />
+      <ConfirmToDeleteTemplateDialog
+        template={componentState.templateForConfirmToDelete}
+        onClose={handlers.closeConfirmToDeleteTemplateDialog}
+        onConfirm={handlers.confirmToDeleteTemplate}
+        open={!!componentState.templateForConfirmToDelete}
       />
     </Container>
   );
