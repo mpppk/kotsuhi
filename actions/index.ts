@@ -1,10 +1,7 @@
 import actionCreatorFactory from 'typescript-fsa';
-import {
-  TemplateID,
-  Transportation,
-  TransportationTemplate
-} from '../models/model';
+import { TemplateID, Transportation } from '../models/model';
 import { CsvConfig } from '../services/csv';
+import { KotsuhiConfig } from '../services/export';
 
 const indexActionCreatorFactory = actionCreatorFactory('INDEX');
 
@@ -38,12 +35,12 @@ export const indexActionCreators = {
   deleteTransportation: indexActionCreatorFactory<Transportation>(
     'DELETE_TRANSPORTATION'
   ),
-  importNewTemplates: indexActionCreatorFactory<TransportationTemplate[]>(
+  importNewTemplates: indexActionCreatorFactory<KotsuhiConfig>(
     'IMPORT_NEW_TEMPLATES'
   ),
   importTemplatesFromURL: indexActionCreatorFactory.async<
     string,
-    TransportationTemplate[],
+    KotsuhiConfig,
     Error
   >('IMPORT_TEMPLATES_FROM_URL'),
   updateConfigEditMode: indexActionCreatorFactory<boolean>(

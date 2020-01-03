@@ -168,23 +168,33 @@ const reducer = reducerWithInitialState(initialState)
     };
   })
   .case(indexActionCreators.importTemplatesFromURL.done, (state, payload) => {
+    const { config, templates } = payload.result;
     return {
       ...state,
+      code: config.code,
+      employeeId: config.employeeId,
       focusTitle: false,
       isEditingTitle: false,
       selectedTemplateId: null,
-      templates: payload.result
+      templates,
+      version: config.version
     };
   })
-  .case(indexActionCreators.importNewTemplates, (state, templates) => {
-    return {
-      ...state,
-      focusTitle: false,
-      isEditingTitle: false,
-      selectedTemplateId: null,
-      templates
-    };
-  })
+  .case(
+    indexActionCreators.importNewTemplates,
+    (state, { config, templates }) => {
+      return {
+        ...state,
+        code: config.code,
+        employeeId: config.employeeId,
+        focusTitle: false,
+        isEditingTitle: false,
+        selectedTemplateId: null,
+        templates,
+        version: config.version
+      };
+    }
+  )
   .case(indexActionCreators.clickDeleteTemplateButton, (state, templateId) => {
     const selectedTemplateId =
       state.selectedTemplateId === templateId ? null : state.selectedTemplateId;

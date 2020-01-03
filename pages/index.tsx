@@ -27,6 +27,11 @@ import {
   CsvConfig,
   generateCsvStrList
 } from '../services/csv';
+import {
+  exportFileName,
+  KotsuhiConfig,
+  toExportJson
+} from '../services/export';
 
 const useHandlers = (
   state: GlobalState,
@@ -81,20 +86,21 @@ const useHandlers = (
 
     closeDialog: () => componentState.setOpenDialog(false),
 
-    importTemplates: (templates: TransportationTemplate[]) => {
+    importTemplates: (kotsuhiConfig: KotsuhiConfig) => {
       componentState.setOpenDialog(false);
-      dispatch(indexActionCreators.importNewTemplates(templates));
+      dispatch(indexActionCreators.importNewTemplates(kotsuhiConfig));
     },
 
     clickExportTemplatesButton: () => {
-      const blob = new Blob([JSON.stringify(state.templates, null, 2)], {
+      const json = toExportJson(state.config, state.templates);
+      const blob = new Blob([json], {
         type: 'application/json'
       });
       if (window.navigator.msSaveBlob) {
-        window.navigator.msSaveBlob(blob, 'kotsuhi_templates.json');
+        window.navigator.msSaveBlob(blob, exportFileName);
 
         // msSaveOrOpenBlobの場合はファイルを保存せずに開ける
-        window.navigator.msSaveOrOpenBlob(blob, 'kotsuhi_templates.json');
+        window.navigator.msSaveOrOpenBlob(blob, exportFileName);
       } else {
         if (refs.exportTemplatesButtonEl.current !== null) {
           const url = window.URL.createObjectURL(blob);
@@ -285,7 +291,7 @@ export const Index: React.FC = () => {
                 Import
               </Button>
               <Button
-                download={'kotsuhi_templates.json'}
+                download={exportFileName}
                 ref={refs.exportTemplatesButtonEl}
                 href={'!#'}
                 onClick={handlers.clickExportTemplatesButton}
