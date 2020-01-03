@@ -90,7 +90,6 @@ const generateComponentHandlers = (
   };
 };
 
-// export default function TransportationForm() {
 export default function TransportationForm(props: TransportationFormProps) {
   const classes = useStyles(undefined);
   const componentState = useComponentState(props);

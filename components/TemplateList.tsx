@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: theme.palette.background.paper,
+      margin: '10px 0px',
       maxWidth: 360,
       width: '100%'
     }

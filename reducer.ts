@@ -75,6 +75,7 @@ export const initialState = {
   employeeId: 'N00000',
   error: null as Error | null,
   focusTitle: false,
+  isEditingConfig: false,
   isEditingTitle: false,
   selectedDays,
   selectedTemplateId: null as string | null,
@@ -136,6 +137,21 @@ const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
 });
 
 const reducer = reducerWithInitialState(initialState)
+  .case(indexActionCreators.clickSaveConfig, (state, config) => {
+    return {
+      ...state,
+      code: config.code,
+      employeeId: config.employeeId,
+      isEditingConfig: false,
+      version: config.version
+    };
+  })
+  .case(indexActionCreators.updateConfigEditMode, (state, isEditingConfig) => {
+    return {
+      ...state,
+      isEditingConfig
+    };
+  })
   .case(indexActionCreators.updateError, (state, error) => {
     return {
       ...state,

@@ -8,6 +8,8 @@ import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { indexActionCreators } from '../actions';
 import { counterActionCreators } from '../actions/counter';
+import { ConfigCard } from '../components/ConfigCard';
+import { ConfigCardForm } from '../components/ConfigCardForm';
 import { EmptyTemplateDetail } from '../components/EmptyTemplateDetail';
 import { ErrorDialog } from '../components/ErrorDialog';
 import { ImportTemplateDialog } from '../components/ImportTemplateDialog';
@@ -44,6 +46,10 @@ const useHandlers = (
 
     clickDeleteTemplate: (template: TransportationTemplate) => {
       dispatch(indexActionCreators.clickDeleteTemplateButton(template.id));
+    },
+
+    clickEditConfig: () => {
+      dispatch(indexActionCreators.updateConfigEditMode(true));
     },
 
     clickEditTransportationButton: (transportation: Transportation) => {
@@ -128,6 +134,10 @@ const useHandlers = (
       dispatch(indexActionCreators.importTemplatesFromURL.started(url));
     },
 
+    clickSaveConfig: (config: CsvConfig) => {
+      dispatch(indexActionCreators.clickSaveConfig(config));
+    },
+
     templateUpdate: (transportation: Transportation) => {
       if (!state.selectedTemplate) {
         return;
@@ -186,6 +196,7 @@ const selector = (s: State) => {
     editingTransportationId,
     error: s.error,
     focusTitle: s.focusTitle,
+    isEditingConfig: s.isEditingConfig,
     isEditingTitle: s.isEditingTitle,
     selectedDays: s.selectedDays,
     selectedTemplate: null as TransportationTemplate | null,
@@ -245,6 +256,17 @@ export const Index: React.FC = () => {
       <div className={classes.root}>
         <Grid container={true} spacing={2} justify={'flex-end'}>
           <Grid item={true} xs={4}>
+            {state.isEditingConfig ? (
+              <ConfigCardForm
+                config={state.config}
+                onClickSave={handlers.clickSaveConfig}
+              />
+            ) : (
+              <ConfigCard
+                config={state.config}
+                onClickEdit={handlers.clickEditConfig}
+              />
+            )}
             <TemplateList
               badgeNums={state.templateBadgeNums}
               onClick={handlers.clickTemplate}
