@@ -8,7 +8,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import React, { useState } from 'react';
-import { TransportationTemplate } from '../models/model';
+import { KotsuhiConfig } from '../services/export';
 import Dropzone from './Dropzone';
 
 interface ImportTemplateDialogProps {
@@ -16,7 +16,7 @@ interface ImportTemplateDialogProps {
   onClose: () => void;
   onClickCancelButton: () => void;
   onClickImportFromURLButton: (url: string) => void;
-  onImport: (templates: TransportationTemplate[]) => void;
+  onImport: (kotsuhiConfig: KotsuhiConfig) => void;
   onError: (e: Error) => void;
 }
 

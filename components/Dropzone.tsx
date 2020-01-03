@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import UploadIcon from '@material-ui/icons/CloudUploadOutlined';
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { TransportationTemplate } from '../models/model';
+import { KotsuhiConfig } from '../services/export';
 
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
@@ -17,7 +17,7 @@ const useStyles = makeStyles((_theme: Theme) =>
 );
 
 interface DropzoneProps {
-  onUpload: (templates: TransportationTemplate[]) => void;
+  onUpload: (kotsuhiConfig: KotsuhiConfig) => void;
   onError: (e: Error) => void;
 }
 
