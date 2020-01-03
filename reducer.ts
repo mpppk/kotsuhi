@@ -71,6 +71,7 @@ const selectedDays = {} as { [key: string]: Date[] };
 
 export const initialState = {
   code: 'BD01',
+  confirmToDeleteTemplate: null as TransportationTemplate | null,
   editingTransportation: null as Transportation | null,
   employeeId: 'N00000',
   error: null as Error | null,
@@ -195,7 +196,7 @@ const reducer = reducerWithInitialState(initialState)
       };
     }
   )
-  .case(indexActionCreators.clickDeleteTemplateButton, (state, templateId) => {
+  .case(indexActionCreators.confirmToDeleteTemplate, (state, templateId) => {
     const selectedTemplateId =
       state.selectedTemplateId === templateId ? null : state.selectedTemplateId;
     const isEditingTitle = selectedTemplateId ? state.isEditingTitle : false;
