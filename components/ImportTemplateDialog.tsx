@@ -6,15 +6,17 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import TextField from '@material-ui/core/TextField';
 import React, { useState } from 'react';
 import { KotsuhiConfig } from '../services/export';
 import Dropzone from './Dropzone';
+import { ImportFromURLForm } from './ImportFromURLForm';
 
 interface ImportTemplateDialogProps {
+  importURLHistory: string[];
   open: boolean;
   onClose: () => void;
   onClickCancelButton: () => void;
+  onClickDeleteImportURL: (url: string) => void;
   onClickImportFromURLButton: (url: string) => void;
   onImport: (kotsuhiConfig: KotsuhiConfig) => void;
   onError: (e: Error) => void;
@@ -29,10 +31,8 @@ export const ImportTemplateDialog: React.FC<ImportTemplateDialogProps> = props =
     setRadioValue((event.target as HTMLInputElement).value);
   };
 
-  const handleChangeImportURLInput = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setImportURL((event.target as HTMLInputElement).value);
+  const handleChangeImportURLInput = (url: string) => {
+    setImportURL(url);
   };
 
   const handleDropzoneError = (e: Error) => {
@@ -42,6 +42,14 @@ export const ImportTemplateDialog: React.FC<ImportTemplateDialogProps> = props =
   const handleClickImportFromURLButton = () => {
     props.onClickImportFromURLButton(importURL);
   };
+
+  const handleClickDeleteImportURL = (url: string) => {
+    props.onClickDeleteImportURL(url);
+  }
+
+  const handleClickImporURLHistory = (url: string) => {
+    setImportURL(url);
+  }
 
   return (
     <Dialog
@@ -74,10 +82,12 @@ export const ImportTemplateDialog: React.FC<ImportTemplateDialogProps> = props =
         {radioValue === 'from-file' ? (
           <Dropzone onError={handleDropzoneError} onUpload={props.onImport} />
         ) : (
-          <TextField
-            label="URL"
-            value={importURL}
-            onChange={handleChangeImportURLInput}
+          <ImportFromURLForm
+            importURL={importURL}
+            importURLHisotry={props.importURLHistory}
+            onChangeImportURL={handleChangeImportURLInput}
+            onClickDeleteImportURL={handleClickDeleteImportURL}
+            onClickImportURLHistory={handleClickImporURLHistory}
           />
         )}
       </DialogContent>

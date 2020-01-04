@@ -6,6 +6,7 @@ import {
   Transportation,
   TransportationTemplate
 } from './models/model';
+import { addImportHistory, getImportHistory, deleteImportHistory } from './services/importHistory';
 
 const templateId1 = uuidv4();
 const templateId2 = uuidv4();
@@ -76,6 +77,7 @@ export const initialState = {
   employeeId: 'N00000',
   error: null as Error | null,
   focusTitle: false,
+  importURLHistory: [] as string[],
   isEditingConfig: false,
   isEditingTitle: false,
   selectedDays,
@@ -138,6 +140,18 @@ const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
 });
 
 const reducer = reducerWithInitialState(initialState)
+  .case(indexActionCreators.appLoaded, (state) => {
+    return {
+      ...state,
+      importURLHistory: getImportHistory(),
+    };
+  })
+  .case(indexActionCreators.clickDeleteImportURL, (state, url) => {
+    return {
+      ...state,
+      importURLHistory: deleteImportHistory(url),
+    };
+  })
   .case(indexActionCreators.cancelTransportationEditing, (state) => {
     return {
       ...state,
@@ -163,6 +177,12 @@ const reducer = reducerWithInitialState(initialState)
     return {
       ...state,
       error
+    };
+  })
+  .case(indexActionCreators.importTemplatesFromURL.started, (state, url) => {
+    return {
+      ...state,
+      importURLHistory: addImportHistory(url),
     };
   })
   .case(indexActionCreators.importTemplatesFromURL.failed, state => {
