@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface TransportationFormProps {
   index: number;
+  onClickCancel: () => void;
   onClickSave: (t: Transportation) => void;
   transportation: Transportation;
 }
@@ -84,6 +85,9 @@ const generateComponentHandlers = (
     changePurposeInput: (e: React.ChangeEvent<HTMLInputElement>) => {
       componentState.setPurpose(e.target.value);
     },
+    clickCancelButton: () => {
+      props.onClickCancel();
+    },
     clickSaveButton: () => {
       props.onClickSave(componentState.transportation);
     }
@@ -131,6 +135,12 @@ export default function TransportationForm(props: TransportationFormProps) {
             <MenuItem value={'複数'}>複数</MenuItem>
           </Select>
         </FormControl>
+        <Button
+          variant="outlined"
+          onClick={componentHandlers.clickCancelButton}
+        >
+          Cancel
+        </Button>
         <Button
           variant="outlined"
           color={'secondary'}

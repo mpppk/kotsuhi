@@ -46,6 +46,10 @@ const useHandlers = (
       dispatch(indexActionCreators.addTransportation(templateId));
     },
 
+    cancelTransportationEditing: () => {
+      dispatch(indexActionCreators.cancelTransportationEditing());
+    },
+
     clickAddTemplateButton: () => {
       dispatch(indexActionCreators.clickAddTemplateButton(undefined));
     },
@@ -320,6 +324,7 @@ export const Index: React.FC = () => {
             {state.selectedTemplate ? (
               <TemplateDetail
                 focusTitle={state.focusTitle}
+                onCancelTransportationEditing={handlers.cancelTransportationEditing}
                 onUpdate={handlers.templateUpdate}
                 onUpdateCalendar={handlers.updateCalendar}
                 selectedDays={state.selectedTemplateDays}

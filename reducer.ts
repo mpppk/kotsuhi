@@ -138,6 +138,12 @@ const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
 });
 
 const reducer = reducerWithInitialState(initialState)
+  .case(indexActionCreators.cancelTransportationEditing, (state) => {
+    return {
+      ...state,
+      editingTransportation: null,
+    };
+  })
   .case(indexActionCreators.clickSaveConfig, (state, config) => {
     return {
       ...state,

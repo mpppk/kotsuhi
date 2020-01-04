@@ -13,7 +13,6 @@ interface ConfigCardProps {
 
 // tslint:disable-next-line variable-name
 export const ConfigCard: React.FC<ConfigCardProps> = props => {
-  console.log('props', props);
   const handleClickEdit = () => {
     props.onClickEdit(props.config);
   };
