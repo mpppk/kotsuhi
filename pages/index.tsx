@@ -4,7 +4,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import * as multiDownload from 'multi-download';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { indexActionCreators } from '../actions';
 import { counterActionCreators } from '../actions/counter';
@@ -44,6 +44,11 @@ const useHandlers = (
   return {
     addTransportation: (templateId: TemplateID) => {
       dispatch(indexActionCreators.addTransportation(templateId));
+    },
+
+    beforeUnload: (e: any) => {
+      e.preventDefault();
+      e.returnValue = '未保存のデータがありますが、本当に閉じますか？';
     },
 
     cancelTransportationEditing: () => {
@@ -276,6 +281,13 @@ export const Index: React.FC = () => {
   const componentState = useComponentState();
   const refs = useRefs();
   const handlers = useHandlers(state, componentState, refs);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', handlers.beforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handlers.beforeUnload);
+    };
+  }, []);
 
   return (
     <Container maxWidth="lg">
