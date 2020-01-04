@@ -39,9 +39,11 @@ export const indexActionCreators = {
   confirmToDeleteTemplate: indexActionCreatorFactory<TemplateID>(
     'CONFIRM_TO_DELETE_TEMPLATE'
   ),
-  deleteTransportation: indexActionCreatorFactory<Transportation>(
-    'DELETE_TRANSPORTATION'
+  clickDeleteTransportationButton: indexActionCreatorFactory<Transportation>(
+    'CLICK_DELETE_TRANSPORTATION_BUTTON'
   ),
+  closeErrorDialog: indexActionCreatorFactory('CLOSE_ERROR_DIALOG'),
+  importDialogErrorOccurred: indexActionCreatorFactory<Error>('IMPORT_DIALOG_ERROR_OCCURRED'),
   importNewTemplates: indexActionCreatorFactory<KotsuhiConfig>(
     'IMPORT_NEW_TEMPLATES'
   ),
@@ -50,17 +52,13 @@ export const indexActionCreators = {
     KotsuhiConfig,
     Error
   >('IMPORT_TEMPLATES_FROM_URL'),
-  updateConfigEditMode: indexActionCreatorFactory<boolean>(
-    'UPDATE_CONFIG_EDIT_MODE'
+  clickEditConfig: indexActionCreatorFactory<boolean>(
+    'CLICK_EDIT_CONFIG'
   ),
-  updateDays: indexActionCreatorFactory<UpdateDaysPayload>('UPDATE_DAYS'),
-  updateDetailTemplateId: indexActionCreatorFactory<TemplateID>(
-    'UPDATE_DETAIL_TEMPLATE_ID'
+  updateCalendar: indexActionCreatorFactory<UpdateDaysPayload>('UPDATE_CALENDAR'),
+  clickTemplate: indexActionCreatorFactory<TemplateID>(
+    'CLICK_TEMPLATE'
   ),
-  updateEmployeeId: indexActionCreatorFactory<string>('UPDATE_EMPLOYEE_ID'),
-  updateError: indexActionCreatorFactory<Error | null>('UPDATE_ERROR'),
-  updateTitle: indexActionCreatorFactory<UpdateTitlePayload>('UPDATE_TITLE'),
-  updateTitleEditMode: indexActionCreatorFactory<boolean>(
-    'UPDATE_TITLE_EDIT_MODE'
-  )
+  clickSaveTitleButton: indexActionCreatorFactory<UpdateTitlePayload>('CLICK_SAVE_TITLE_BUTTON'),
+  clickEditTitleButton: indexActionCreatorFactory( 'CLICK_EDIT_TITLE_BUTTON')
 };

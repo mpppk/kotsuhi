@@ -6,7 +6,11 @@ import {
   Transportation,
   TransportationTemplate
 } from './models/model';
-import { addImportHistory, getImportHistory, deleteImportHistory } from './services/importHistory';
+import {
+  addImportHistory,
+  getImportHistory,
+  deleteImportHistory
+} from './services/importHistory';
 
 const templateId1 = uuidv4();
 const templateId2 = uuidv4();
@@ -140,22 +144,22 @@ const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
 });
 
 const reducer = reducerWithInitialState(initialState)
-  .case(indexActionCreators.appLoaded, (state) => {
+  .case(indexActionCreators.appLoaded, state => {
     return {
       ...state,
-      importURLHistory: getImportHistory(),
+      importURLHistory: getImportHistory()
     };
   })
   .case(indexActionCreators.clickDeleteImportURL, (state, url) => {
     return {
       ...state,
-      importURLHistory: deleteImportHistory(url),
+      importURLHistory: deleteImportHistory(url)
     };
   })
-  .case(indexActionCreators.cancelTransportationEditing, (state) => {
+  .case(indexActionCreators.cancelTransportationEditing, state => {
     return {
       ...state,
-      editingTransportation: null,
+      editingTransportation: null
     };
   })
   .case(indexActionCreators.clickSaveConfig, (state, config) => {
@@ -167,22 +171,28 @@ const reducer = reducerWithInitialState(initialState)
       version: config.version
     };
   })
-  .case(indexActionCreators.updateConfigEditMode, (state, isEditingConfig) => {
+  .case(indexActionCreators.clickEditConfig, (state, isEditingConfig) => {
     return {
       ...state,
       isEditingConfig
     };
   })
-  .case(indexActionCreators.updateError, (state, error) => {
+  .case(indexActionCreators.importDialogErrorOccurred, (state, error) => {
     return {
       ...state,
       error
     };
   })
+  .case(indexActionCreators.closeErrorDialog, (state) => {
+    return {
+      ...state,
+      error: null,
+    };
+  })
   .case(indexActionCreators.importTemplatesFromURL.started, (state, url) => {
     return {
       ...state,
-      importURLHistory: addImportHistory(url),
+      importURLHistory: addImportHistory(url)
     };
   })
   .case(indexActionCreators.importTemplatesFromURL.failed, state => {
@@ -273,35 +283,40 @@ const reducer = reducerWithInitialState(initialState)
       templates: newTemplates
     };
   })
-  .case(indexActionCreators.deleteTransportation, (state, transportation) => {
-    return {
-      ...state,
-      templates: removeTransportation(state.templates, transportation)
-    }; // TODO
-  })
-  .case(indexActionCreators.updateTitle, (state, payload) => {
+  .case(
+    indexActionCreators.clickDeleteTransportationButton,
+    (state, transportation) => {
+      return {
+        ...state,
+        templates: removeTransportation(state.templates, transportation)
+      }; // TODO
+    }
+  )
+  .case(indexActionCreators.clickSaveTitleButton, (state, payload) => {
     const newTemplates = [...state.templates];
     const template = findTemplateById(newTemplates, payload.templateId);
     if (!template) {
       throw new Error('non exist template id is given: ' + payload.templateId);
     }
     template.title = payload.title;
-    return { ...state, templates: newTemplates, focusTitle: false };
+    return {
+      ...state,
+      templates: newTemplates,
+      focusTitle: false,
+      isEditingTitle: false
+    };
   })
-  .case(indexActionCreators.updateTitleEditMode, (state, isEditingTitle) => {
-    return { ...state, isEditingTitle };
+  .case(indexActionCreators.clickEditTitleButton, (state) => {
+    return { ...state, isEditingTitle: true };
   })
-  .case(
-    indexActionCreators.updateDetailTemplateId,
-    (state, selectedTemplateId) => {
-      return {
-        ...state,
-        editingTransportation: null,
-        selectedTemplateId
-      };
-    }
-  )
-  .case(indexActionCreators.updateDays, (state, payload) => {
+  .case(indexActionCreators.clickTemplate, (state, selectedTemplateId) => {
+    return {
+      ...state,
+      editingTransportation: null,
+      selectedTemplateId
+    };
+  })
+  .case(indexActionCreators.updateCalendar, (state, payload) => {
     const newSelectedDays = { ...state.selectedDays };
     newSelectedDays[payload.templateId] = payload.dates;
     return { ...state, selectedDays: newSelectedDays };

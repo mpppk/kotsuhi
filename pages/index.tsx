@@ -45,7 +45,7 @@ const useHandlers = (
   return {
     appLoaded: () => dispatch(indexActionCreators.appLoaded()),
 
-    addTransportation: (templateId: TemplateID) => {
+    clickAddTransportationButton: (templateId: TemplateID) => {
       dispatch(indexActionCreators.addTransportation(templateId));
     },
 
@@ -66,12 +66,12 @@ const useHandlers = (
       dispatch(indexActionCreators.clickDeleteImportURL(url));
     },
 
-    clickDeleteTemplate: (template: TransportationTemplate) => {
-      componentState.setTemplateForConfirmToDelete(template);
+    deleteTemplate: (template: TransportationTemplate) => {
+      componentState.deleteTemplate(template);
     },
 
     clickEditConfig: () => {
-      dispatch(indexActionCreators.updateConfigEditMode(true));
+      dispatch(indexActionCreators.clickEditConfig(true));
     },
 
     clickEditTransportationButton: (transportation: Transportation) => {
@@ -81,26 +81,26 @@ const useHandlers = (
     },
 
     clickTemplate: (template: TransportationTemplate) => {
-      dispatch(indexActionCreators.updateDetailTemplateId(template.id));
+      dispatch(indexActionCreators.clickTemplate(template.id));
     },
 
     closeConfirmToDeleteTemplateDialog: () => {
-      componentState.setTemplateForConfirmToDelete(null);
+      componentState.deleteTemplate(null);
     },
 
     confirmToDeleteTemplate: (template: TransportationTemplate) => {
-      componentState.setTemplateForConfirmToDelete(null);
+      componentState.deleteTemplate(null);
       dispatch(indexActionCreators.confirmToDeleteTemplate(template.id));
     },
 
-    deleteTransportation: (transportation: Transportation) => {
-      dispatch(indexActionCreators.deleteTransportation(transportation));
+    clickDeleteTransportationButton: (transportation: Transportation) => {
+      dispatch(indexActionCreators.clickDeleteTransportationButton(transportation));
     },
 
     updateCalendar: (dates: Date[]) => {
       if (state.selectedTemplate) {
         dispatch(
-          indexActionCreators.updateDays({
+          indexActionCreators.updateCalendar({
             dates,
             templateId: state.selectedTemplate.id
           })
@@ -152,13 +152,13 @@ const useHandlers = (
       });
     },
 
-    importDialogError: (e: Error) => {
+    importDialogErrorOccurred: (e: Error) => {
       componentState.setOpenDialog(false);
-      dispatch(indexActionCreators.updateError(e));
+      dispatch(indexActionCreators.importDialogErrorOccurred(e));
     },
 
     closeErrorDialog: () => {
-      dispatch(indexActionCreators.updateError(null));
+      dispatch(indexActionCreators.closeErrorDialog());
     },
 
     clickImportFromURLButton: (url: string) => {
@@ -170,7 +170,7 @@ const useHandlers = (
       dispatch(indexActionCreators.clickSaveConfig(config));
     },
 
-    templateUpdate: (transportation: Transportation) => {
+    updateTemplate: (transportation: Transportation) => {
       if (!state.selectedTemplate) {
         return;
       }
@@ -179,11 +179,10 @@ const useHandlers = (
       );
     },
 
-    updateTitle: (title: string) => {
-      dispatch(indexActionCreators.updateTitleEditMode(false));
+    clickSaveTitleButton: (title: string) => {
       if (state.selectedTemplate) {
         dispatch(
-          indexActionCreators.updateTitle({
+          indexActionCreators.clickSaveTitleButton({
             templateId: state.selectedTemplate.id,
             title
           })
@@ -191,8 +190,8 @@ const useHandlers = (
       }
     },
 
-    updateTitleEditMode: () => {
-      dispatch(indexActionCreators.updateTitleEditMode(true));
+    clickEditTitleButton: () => {
+      dispatch(indexActionCreators.clickEditTitleButton());
     }
   };
 };
@@ -271,7 +270,7 @@ const useComponentState = () => {
     openDialog,
     templateForConfirmToDelete,
     setOpenDialog,
-    setTemplateForConfirmToDelete
+    deleteTemplate: setTemplateForConfirmToDelete
   };
 };
 
@@ -321,7 +320,7 @@ export const Index: React.FC = () => {
               badgeNums={state.templateBadgeNums}
               onClick={handlers.clickTemplate}
               templates={state.templates}
-              onDelete={handlers.clickDeleteTemplate}
+              onDelete={handlers.deleteTemplate}
               selectedTemplateId={
                 state.selectedTemplate ? state.selectedTemplate.id : null
               }
@@ -351,17 +350,17 @@ export const Index: React.FC = () => {
                 onCancelTransportationEditing={
                   handlers.cancelTransportationEditing
                 }
-                onUpdate={handlers.templateUpdate}
+                onUpdate={handlers.updateTemplate}
                 onUpdateCalendar={handlers.updateCalendar}
                 selectedDays={state.selectedTemplateDays}
                 template={state.selectedTemplate}
                 isEditingTitle={state.isEditingTitle}
-                onClickEditTitleButton={handlers.updateTitleEditMode}
-                onClickSaveTitleButton={handlers.updateTitle}
+                onClickEditTitleButton={handlers.clickEditTitleButton}
+                onClickSaveTitleButton={handlers.clickSaveTitleButton}
                 onClickDeleteTransportationButton={
-                  handlers.deleteTransportation
+                  handlers.clickDeleteTransportationButton
                 }
-                onClickAddTransportationButton={handlers.addTransportation}
+                onClickAddTransportationButton={handlers.clickAddTransportationButton}
                 editingTransportationId={state.editingTransportationId}
                 onClickEditTransportationButton={
                   handlers.clickEditTransportationButton
@@ -392,7 +391,7 @@ export const Index: React.FC = () => {
         onClickCancelButton={handlers.closeDialog}
         onClickDeleteImportURL={handlers.clickDeleteImportURL}
         onImport={handlers.importTemplates}
-        onError={handlers.importDialogError}
+        onError={handlers.importDialogErrorOccurred}
         onClickImportFromURLButton={handlers.clickImportFromURLButton}
       />
       <ErrorDialog
