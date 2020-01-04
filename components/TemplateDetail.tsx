@@ -19,6 +19,7 @@ interface TemplateDetailProps {
   isEditingTitle: boolean;
   focusTitle: boolean;
   template: TransportationTemplate | null;
+  onCancelTransportationEditing: () => void;
   onClickAddTransportationButton: (templateId: TemplateID) => void;
   onClickDeleteTransportationButton: (t: TransportationEntity) => void;
   onClickEditTitleButton: (title: string) => void;
@@ -80,6 +81,7 @@ export default function TemplateDetail(props: TemplateDetailProps) {
               transportation={t}
               index={i + 1}
               key={t.id + '_edit'}
+              onClickCancel={props.onCancelTransportationEditing}
               onClickSave={props.onUpdate}
             />
           ) : (
