@@ -16,12 +16,18 @@ export interface UpdateTitlePayload {
 }
 
 export const indexActionCreators = {
+  appLoaded: indexActionCreatorFactory('APP_LOADED'),
   addTransportation: indexActionCreatorFactory<TemplateID>(
     'ADD_TRANSPORTATION'
   ),
-  cancelTransportationEditing: indexActionCreatorFactory('CANCEL_TRANSPORTATION_EDITING'),
+  cancelTransportationEditing: indexActionCreatorFactory(
+    'CANCEL_TRANSPORTATION_EDITING'
+  ),
   clickAddTemplateButton: indexActionCreatorFactory<undefined>(
     'CLICK_ADD_TEMPLATE_BUTTON'
+  ),
+  clickDeleteImportURL: indexActionCreatorFactory<string>(
+    'CLICK_DELETE_IMPORT_URL'
   ),
   clickEditTransportationButton: indexActionCreatorFactory<Transportation>(
     'CLICK_EDIT_TRANSPORTATION_BUTTON'

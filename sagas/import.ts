@@ -2,6 +2,7 @@ import { call, takeEvery } from 'redux-saga/effects';
 import { Action } from 'typescript-fsa';
 import { bindAsyncAction } from 'typescript-fsa-redux-saga';
 import { indexActionCreators } from '../actions';
+import { addImportHistory } from '../services/importHistory';
 
 const importFromURLWorker = bindAsyncAction(
   indexActionCreators.importTemplatesFromURL,
@@ -16,7 +17,9 @@ export function* watchImportTemplatesFromURL() {
     indexActionCreators.importTemplatesFromURL.started.type,
     function*(action: Action<string>) {
       try {
-        yield call(importFromURLWorker, action.payload);
+        const url = action.payload;
+        addImportHistory(url);
+        yield call(importFromURLWorker, url);
       } catch (e) {
         /* ignore */
       }

@@ -34,6 +34,7 @@ import {
 } from '../services/export';
 import { ConfirmToDeleteTemplateDialog } from '../components/ConfirmToDeleteTemplateDialog';
 
+type Handlers = ReturnType<typeof useHandlers>;
 const useHandlers = (
   state: GlobalState,
   componentState: ComponentState,
@@ -42,6 +43,8 @@ const useHandlers = (
   const dispatch = useDispatch();
 
   return {
+    appLoaded: () => dispatch(indexActionCreators.appLoaded()),
+
     addTransportation: (templateId: TemplateID) => {
       dispatch(indexActionCreators.addTransportation(templateId));
     },
@@ -57,6 +60,10 @@ const useHandlers = (
 
     clickAddTemplateButton: () => {
       dispatch(indexActionCreators.clickAddTemplateButton(undefined));
+    },
+
+    clickDeleteImportURL: (url: string) => {
+      dispatch(indexActionCreators.clickDeleteImportURL(url));
     },
 
     clickDeleteTemplate: (template: TransportationTemplate) => {
@@ -78,7 +85,7 @@ const useHandlers = (
     },
 
     closeConfirmToDeleteTemplateDialog: () => {
-     componentState.setTemplateForConfirmToDelete(null); 
+      componentState.setTemplateForConfirmToDelete(null);
     },
 
     confirmToDeleteTemplate: (template: TransportationTemplate) => {
@@ -222,6 +229,7 @@ const selector = (s: State) => {
     editingTransportationId,
     error: s.error,
     focusTitle: s.focusTitle,
+    importURLHistory: s.importURLHistory,
     isEditingConfig: s.isEditingConfig,
     isEditingTitle: s.isEditingTitle,
     selectedDays: s.selectedDays,
@@ -274,6 +282,16 @@ const useRefs = () => {
   };
 };
 
+const useEffects = (handlers: Handlers) => {
+  useEffect(() => {
+    window.addEventListener('beforeunload', handlers.beforeUnload);
+    handlers.appLoaded();
+    return () => {
+      window.removeEventListener('beforeunload', handlers.beforeUnload);
+    };
+  }, []);
+};
+
 // tslint:disable-next-line variable-name
 export const Index: React.FC = () => {
   const classes = useStyles(undefined);
@@ -281,13 +299,7 @@ export const Index: React.FC = () => {
   const componentState = useComponentState();
   const refs = useRefs();
   const handlers = useHandlers(state, componentState, refs);
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', handlers.beforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handlers.beforeUnload);
-    };
-  }, []);
+  useEffects(handlers);
 
   return (
     <Container maxWidth="lg">
@@ -336,7 +348,9 @@ export const Index: React.FC = () => {
             {state.selectedTemplate ? (
               <TemplateDetail
                 focusTitle={state.focusTitle}
-                onCancelTransportationEditing={handlers.cancelTransportationEditing}
+                onCancelTransportationEditing={
+                  handlers.cancelTransportationEditing
+                }
                 onUpdate={handlers.templateUpdate}
                 onUpdateCalendar={handlers.updateCalendar}
                 selectedDays={state.selectedTemplateDays}
@@ -372,9 +386,11 @@ export const Index: React.FC = () => {
         </Grid>
       </div>
       <ImportTemplateDialog
+        importURLHistory={state.importURLHistory}
         open={componentState.openDialog}
         onClose={handlers.closeDialog}
         onClickCancelButton={handlers.closeDialog}
+        onClickDeleteImportURL={handlers.clickDeleteImportURL}
         onImport={handlers.importTemplates}
         onError={handlers.importDialogError}
         onClickImportFromURLButton={handlers.clickImportFromURLButton}
