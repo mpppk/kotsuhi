@@ -7,7 +7,6 @@ import * as multiDownload from 'multi-download';
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { indexActionCreators } from '../actions';
-import { counterActionCreators } from '../actions/counter';
 import { ConfigCard } from '../components/ConfigCard';
 import { ConfigCardForm } from '../components/ConfigCardForm';
 import { EmptyTemplateDetail } from '../components/EmptyTemplateDetail';
@@ -407,13 +406,6 @@ export const Index: React.FC = () => {
       />
     </Container>
   );
-};
-
-// FIXME
-(Index as any).getInitialProps = (props: any) => {
-  const { store, isServer } = props.ctx;
-  store.dispatch(counterActionCreators.requestAmountChanging({ amount: 1 }));
-  return { isServer };
 };
 
 export default Index;
