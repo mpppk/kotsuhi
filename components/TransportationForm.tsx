@@ -74,7 +74,12 @@ const generateComponentHandlers = (
       componentState.setDestination(e.target.value);
     },
     changeFareInput: (e: React.ChangeEvent<HTMLInputElement>) => {
-      componentState.setFare(parseInt(e.target.value, 10));
+      const fare = parseInt(e.target.value, 10);
+      if (Number.isNaN(fare)) {
+        componentState.setFare(0);
+        return;
+      }
+      componentState.setFare(fare);
     },
     changeLine: (e: React.ChangeEvent<{ value: unknown }>) => {
       const v = e.target.value;
@@ -113,7 +118,7 @@ export default function TransportationForm(props: TransportationFormProps) {
         />
         <TextField
           label="運賃"
-          value={transportation.fare}
+          value={transportation.fare === 0 ? '' : transportation.fare}
           onChange={componentHandlers.changeFareInput}
         />
         <TextField
