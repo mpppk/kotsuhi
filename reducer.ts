@@ -2,6 +2,7 @@ import { reducerWithInitialState } from 'typescript-fsa-reducers';
 import uuidv4 from 'uuid/v4';
 import { indexActionCreators } from './actions';
 import {
+  Line,
   TemplateID,
   Transportation,
   TransportationTemplate
@@ -27,7 +28,7 @@ const initialTemplates: TransportationTemplate[] = [
         destination: 'どこかビル',
         fare: 525,
         id: uuidv4(),
-        line: 'JR',
+        line: 'JR' as Line,
         purpose: '打ち合わせ',
         templateId: templateId1
       },
@@ -37,7 +38,7 @@ const initialTemplates: TransportationTemplate[] = [
         destination: '自社',
         fare: 525,
         id: uuidv4(),
-        line: 'JR',
+        line: 'JR' as Line,
         purpose: '帰社',
         templateId: templateId1
       }
@@ -138,7 +139,7 @@ const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
   destination: '',
   fare: 0,
   id: uuidv4(),
-  line: 'JR',
+  line: 'JR' as Line,
   purpose: '',
   templateId
 });

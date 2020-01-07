@@ -7,7 +7,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
-import { Transportation } from '../models/model';
+import { Line, Transportation } from '../models/model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -78,9 +78,7 @@ const generateComponentHandlers = (
     },
     changeLine: (e: React.ChangeEvent<HTMLInputElement>) => {
       const v = e.target.value;
-      if (v === 'JR' || v === '複数') {
-        componentState.setLine(v);
-      }
+      componentState.setLine(v as Line);
     },
     changePurposeInput: (e: React.ChangeEvent<HTMLInputElement>) => {
       componentState.setPurpose(e.target.value);
