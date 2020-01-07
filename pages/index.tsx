@@ -4,11 +4,12 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Container from '@material-ui/core/Container';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import * as multiDownload from 'multi-download';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { indexActionCreators } from '../actions';
 import { ConfigCard } from '../components/ConfigCard';
 import { ConfigCardForm } from '../components/ConfigCardForm';
+import { ConfirmToDeleteTemplateDialog } from '../components/ConfirmToDeleteTemplateDialog';
 import { EmptyTemplateDetail } from '../components/EmptyTemplateDetail';
 import { ErrorDialog } from '../components/ErrorDialog';
 import { ImportTemplateDialog } from '../components/ImportTemplateDialog';
@@ -31,7 +32,6 @@ import {
   KotsuhiConfig,
   toExportJson
 } from '../services/export';
-import { ConfirmToDeleteTemplateDialog } from '../components/ConfirmToDeleteTemplateDialog';
 
 type Handlers = ReturnType<typeof useHandlers>;
 const useHandlers = (
@@ -93,7 +93,9 @@ const useHandlers = (
     },
 
     clickDeleteTransportationButton: (transportation: Transportation) => {
-      dispatch(indexActionCreators.clickDeleteTransportationButton(transportation));
+      dispatch(
+        indexActionCreators.clickDeleteTransportationButton(transportation)
+      );
     },
 
     updateCalendar: (dates: Date[]) => {
@@ -266,10 +268,10 @@ const useComponentState = () => {
     null as TransportationTemplate | null
   );
   return {
+    deleteTemplate: setTemplateForConfirmToDelete,
     openDialog,
-    templateForConfirmToDelete,
     setOpenDialog,
-    deleteTemplate: setTemplateForConfirmToDelete
+    templateForConfirmToDelete
   };
 };
 
@@ -359,7 +361,9 @@ export const Index: React.FC = () => {
                 onClickDeleteTransportationButton={
                   handlers.clickDeleteTransportationButton
                 }
-                onClickAddTransportationButton={handlers.clickAddTransportationButton}
+                onClickAddTransportationButton={
+                  handlers.clickAddTransportationButton
+                }
                 editingTransportationId={state.editingTransportationId}
                 onClickEditTransportationButton={
                   handlers.clickEditTransportationButton
