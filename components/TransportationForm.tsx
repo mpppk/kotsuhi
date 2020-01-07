@@ -7,7 +7,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
-import { Transportation } from '../models/model';
+import { Line, Transportation } from '../models/model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,11 +76,9 @@ const generateComponentHandlers = (
     changeFareInput: (e: React.ChangeEvent<HTMLInputElement>) => {
       componentState.setFare(parseInt(e.target.value, 10));
     },
-    changeLine: (e: React.ChangeEvent<HTMLInputElement>) => {
+    changeLine: (e: React.ChangeEvent<{ value: unknown }>) => {
       const v = e.target.value;
-      if (v === 'JR' || v === '複数') {
-        componentState.setLine(v);
-      }
+      componentState.setLine(v as Line);
     },
     changePurposeInput: (e: React.ChangeEvent<HTMLInputElement>) => {
       componentState.setPurpose(e.target.value);
@@ -130,14 +128,19 @@ export default function TransportationForm(props: TransportationFormProps) {
         />
         <FormControl>
           <InputLabel>種別</InputLabel>
-          <Select value={'JR'}>
-            <MenuItem value={'JR'}>JR</MenuItem>
+          <Select
+            value={componentState.transportation.line}
+            onChange={componentHandlers.changeLine}
+          >
+            <MenuItem value={'ＪＲ'}>ＪＲ</MenuItem>
             <MenuItem value={'私鉄'}>私鉄</MenuItem>
             <MenuItem value={'地下鉄'}>地下鉄</MenuItem>
             <MenuItem value={'バス'}>バス</MenuItem>
             <MenuItem value={'モノレール'}>モノレール</MenuItem>
             <MenuItem value={'定期船'}>定期船</MenuItem>
-            <MenuItem value={'タクシー(業務昼間)'}>タクシー(業務昼間)</MenuItem>
+            <MenuItem value={'タクシー（業務昼間）'}>
+              タクシー（業務昼間）
+            </MenuItem>
             <MenuItem value={'タクシー(業務深夜)'}>タクシー(業務深夜)</MenuItem>
             <MenuItem value={'タクシー(交際費)'}>タクシー(交際費)</MenuItem>
             <MenuItem value={'Suica等Card'}>Suica等Card</MenuItem>

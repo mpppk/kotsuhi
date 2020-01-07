@@ -45,11 +45,11 @@ export const ImportTemplateDialog: React.FC<ImportTemplateDialogProps> = props =
 
   const handleClickDeleteImportURL = (url: string) => {
     props.onClickDeleteImportURL(url);
-  }
+  };
 
-  const handleClickImporURLHistory = (url: string) => {
+  const handleClickImportURLHistory = (url: string) => {
     setImportURL(url);
-  }
+  };
 
   return (
     <Dialog
@@ -84,10 +84,10 @@ export const ImportTemplateDialog: React.FC<ImportTemplateDialogProps> = props =
         ) : (
           <ImportFromURLForm
             importURL={importURL}
-            importURLHisotry={props.importURLHistory}
+            importURLHistory={props.importURLHistory}
             onChangeImportURL={handleChangeImportURLInput}
             onClickDeleteImportURL={handleClickDeleteImportURL}
-            onClickImportURLHistory={handleClickImporURLHistory}
+            onClickImportURLHistory={handleClickImportURLHistory}
           />
         )}
       </DialogContent>

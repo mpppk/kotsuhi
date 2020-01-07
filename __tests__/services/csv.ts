@@ -47,7 +47,7 @@ describe('generateCsvStrList', () => {
           destination: 'destination3',
           fare: 175,
           id: 'transportation-id-3',
-          line: 'JR',
+          line: 'JR' as Line,
           purpose: 'purpose3',
           templateId: 'template-id-2'
         }

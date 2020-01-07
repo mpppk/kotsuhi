@@ -149,7 +149,7 @@ const useHandlers = (
         .map(convertToSJISBlob)
         .map(b => window.URL.createObjectURL(b));
       multiDownload(urls, {
-        rename: ({ index }: { index: number }) => fileNames[index]
+        rename: ({ index }: { index: number }) => fileNames[index] + '.csv'
       });
     },
 
