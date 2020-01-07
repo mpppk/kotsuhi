@@ -8,8 +8,8 @@ import {
 } from './models/model';
 import {
   addImportHistory,
-  getImportHistory,
-  deleteImportHistory
+  deleteImportHistory,
+  getImportHistory
 } from './services/importHistory';
 
 const templateId1 = uuidv4();
@@ -183,10 +183,10 @@ const reducer = reducerWithInitialState(initialState)
       error
     };
   })
-  .case(indexActionCreators.closeErrorDialog, (state) => {
+  .case(indexActionCreators.closeErrorDialog, state => {
     return {
       ...state,
-      error: null,
+      error: null
     };
   })
   .case(indexActionCreators.importTemplatesFromURL.started, (state, url) => {
@@ -301,12 +301,12 @@ const reducer = reducerWithInitialState(initialState)
     template.title = payload.title;
     return {
       ...state,
-      templates: newTemplates,
       focusTitle: false,
-      isEditingTitle: false
+      isEditingTitle: false,
+      templates: newTemplates
     };
   })
-  .case(indexActionCreators.clickEditTitleButton, (state) => {
+  .case(indexActionCreators.clickEditTitleButton, state => {
     return { ...state, isEditingTitle: true };
   })
   .case(indexActionCreators.clickTemplate, (state, selectedTemplateId) => {
