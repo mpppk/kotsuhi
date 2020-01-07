@@ -1,4 +1,16 @@
-export type Line = 'JR' | '複数';
+export type Line =
+  | 'JR'
+  | '私鉄'
+  | '地下鉄'
+  | 'バス'
+  | 'モノレール'
+  | '定期船'
+  | 'タクシー(業務昼間)'
+  | 'タクシー(業務深夜)'
+  | 'タクシー(交際費)'
+  | 'Suica等Card'
+  | '複数'
+  | '深夜ホテル';
 export type TemplateID = string;
 export type TransportationID = string;
 
