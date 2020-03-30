@@ -1150,9 +1150,9 @@
     prop-types "^15.7.2"
     react-is "^16.8.0"
 
-"@next/polyfill-nomodule@9.3.2":
-  version "9.3.2"
-  resolved "https://registry.yarnpkg.com/@next/polyfill-nomodule/-/polyfill-nomodule-9.3.2.tgz#f8e282fdeb448eb6b70bcc18c5d46c911072687a"
+"@next/polyfill-nomodule@9.3.3":
+  version "9.3.3"
+  resolved "https://registry.yarnpkg.com/@next/polyfill-nomodule/-/polyfill-nomodule-9.3.3.tgz#07b206ead5cd65f6739e69accb71c1f8762ae891"
 
 "@redux-saga/core@^1.1.3":
   version "1.1.3"
@@ -4765,7 +4765,13 @@ json3@3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/json3/-/json3-3.3.0.tgz#0e9e7f6c5d270b758929af4d6fefdc84bd66e259"
 
-json5@2.1.1, json5@2.x, json5@^2.1.0:
+json5@2.1.2, json5@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/json5/-/json5-2.1.2.tgz#43ef1f0af9835dd624751a6b7fa48874fb2d608e"
+  dependencies:
+    minimist "^1.2.5"
+
+json5@2.x, json5@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.1.1.tgz#81b6cb04e9ba496f1c7005d07b4368a2638f90b6"
   dependencies:
@@ -4776,12 +4782,6 @@ json5@^1.0.1:
   resolved "https://registry.yarnpkg.com/json5/-/json5-1.0.1.tgz#779fb0018604fa854eacbf6252180d83543e3dbe"
   dependencies:
     minimist "^1.2.0"
-
-json5@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/json5/-/json5-2.1.2.tgz#43ef1f0af9835dd624751a6b7fa48874fb2d608e"
-  dependencies:
-    minimist "^1.2.5"
 
 jsonwebtoken@8.5.1:
   version "8.5.1"
@@ -5423,9 +5423,9 @@ next-tick@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
 
-next@9.3.2:
-  version "9.3.2"
-  resolved "https://registry.yarnpkg.com/next/-/next-9.3.2.tgz#fabf907f5397ae3581d4227789f625533fb4e64e"
+next@9.3.3:
+  version "9.3.3"
+  resolved "https://registry.yarnpkg.com/next/-/next-9.3.3.tgz#eb76f27c3dda53003dd4a69e9d7491fe4068d934"
   dependencies:
     "@ampproject/toolbox-optimizer" "2.0.1"
     "@babel/core" "7.7.2"
@@ -5444,7 +5444,7 @@ next@9.3.2:
     "@babel/preset-typescript" "7.7.2"
     "@babel/runtime" "7.7.2"
     "@babel/types" "7.7.4"
-    "@next/polyfill-nomodule" "9.3.2"
+    "@next/polyfill-nomodule" "9.3.3"
     amphtml-validator "1.0.30"
     async-retry "1.2.3"
     async-sema "3.0.0"
@@ -5478,7 +5478,7 @@ next@9.3.2:
     is-docker "2.0.0"
     is-wsl "2.1.1"
     jest-worker "24.9.0"
-    json5 "2.1.1"
+    json5 "2.1.2"
     jsonwebtoken "8.5.1"
     launch-editor "2.2.1"
     loader-utils "2.0.0"
