@@ -1585,9 +1585,9 @@
     jest-diff "^25.2.1"
     pretty-format "^25.2.1"
 
-"@types/lodash@4.14.151":
-  version "4.14.151"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.151.tgz#7d58cac32bedb0ec37cb7f99094a167d6176c9d5"
+"@types/lodash@4.14.152":
+  version "4.14.152"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.152.tgz#7e7679250adce14e749304cdb570969f77ec997c"
 
 "@types/minimatch@^3.0.3":
   version "3.0.3"
