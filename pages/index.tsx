@@ -199,7 +199,7 @@ const useHandlers = (
 
 type GlobalState = ReturnType<typeof selector>;
 const selector = (s: State) => {
-  const templateBadgeNums = Object.entries(s.selectedDays).reduce(
+  const templateBadgeNums = Object.entries(s.main.selectedDays).reduce(
     (acc, [templateId, days]) => {
       acc[templateId] = days.length;
       return acc;
@@ -207,41 +207,41 @@ const selector = (s: State) => {
     {} as { [k: string]: number }
   );
 
-  let selectedTemplateDays: Date[] = s.selectedTemplateId
-    ? s.selectedDays[s.selectedTemplateId]
+  let selectedTemplateDays: Date[] = s.main.selectedTemplateId
+    ? s.main.selectedDays[s.main.selectedTemplateId]
     : [];
   if (!selectedTemplateDays) {
     selectedTemplateDays = [];
   }
 
-  const editingTransportationId = s.editingTransportation
-    ? s.editingTransportation.id
+  const editingTransportationId = s.main.editingTransportation
+    ? s.main.editingTransportation.id
     : null;
 
   const globalState = {
     config: {
-      code: s.code,
-      employeeId: s.employeeId,
-      version: s.version
+      code: s.main.code,
+      employeeId: s.main.employeeId,
+      version: s.main.version
     } as CsvConfig,
-    confirmToDeleteTemplate: s.confirmToDeleteTemplate,
-    csvFileNum: countFileNum(s.templates, s.selectedDays),
+    confirmToDeleteTemplate: s.main.confirmToDeleteTemplate,
+    csvFileNum: countFileNum(s.main.templates, s.main.selectedDays),
     editingTransportationId,
-    error: s.error,
-    focusTitle: s.focusTitle,
-    importURLHistory: s.importURLHistory,
-    isEditingConfig: s.isEditingConfig,
-    isEditingTitle: s.isEditingTitle,
-    selectedDays: s.selectedDays,
+    error: s.main.error,
+    focusTitle: s.main.focusTitle,
+    importURLHistory: s.main.importURLHistory,
+    isEditingConfig: s.main.isEditingConfig,
+    isEditingTitle: s.main.isEditingTitle,
+    selectedDays: s.main.selectedDays,
     selectedTemplate: null as TransportationTemplate | null,
     selectedTemplateDays,
     templateBadgeNums,
-    templates: s.templates
+    templates: s.main.templates
   };
 
-  if (s.selectedTemplateId) {
+  if (s.main.selectedTemplateId) {
     const selectedTemplate = globalState.templates.find(
-      t => t.id === s.selectedTemplateId
+      t => t.id === s.main.selectedTemplateId
     );
     globalState.selectedTemplate = selectedTemplate ? selectedTemplate : null;
   }

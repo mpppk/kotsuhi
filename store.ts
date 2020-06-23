@@ -1,7 +1,7 @@
+import { Context, createWrapper, MakeStore } from 'next-redux-wrapper';
 import { applyMiddleware, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-
-import rootReducer, { initialState as iState } from './reducer';
+import reducer, { initialState, State } from './reducer';
 import rootSaga from './sagas/saga';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -15,9 +15,9 @@ const bindMiddleware = (middleware: any) => {
   return applyMiddleware(...middleware);
 };
 
-function configureStore(initialState = iState) {
+const makeStore: MakeStore<State> = (_context: Context) => {
   const store = createStore(
-    rootReducer,
+    reducer,
     initialState,
     bindMiddleware([sagaMiddleware])
   );
@@ -34,4 +34,8 @@ function configureStore(initialState = iState) {
   return store;
 }
 
-export default configureStore;
+const isEnableDebugMode = (): boolean => {
+  return process.env.enableReduxWrapperDebugMode as any as boolean;
+}
+
+export const wrapper = createWrapper<State>(makeStore, {debug: isEnableDebugMode()})

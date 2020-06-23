@@ -1,3 +1,5 @@
+import { HYDRATE } from 'next-redux-wrapper'
+import { combineReducers, Reducer } from 'redux';
 import { reducerWithInitialState } from 'typescript-fsa-reducers';
 import uuidv4 from 'uuid/v4';
 import { indexActionCreators } from './actions';
@@ -75,7 +77,7 @@ const initialTemplates: TransportationTemplate[] = [
 
 const selectedDays = {} as { [key: string]: Date[] };
 
-export const initialState = {
+const initialMainState = {
   code: 'BD01',
   confirmToDeleteTemplate: null as TransportationTemplate | null,
   editingTransportation: null as Transportation | null,
@@ -90,6 +92,8 @@ export const initialState = {
   templates: initialTemplates,
   version: 'v.1.04'
 };
+
+export const initialState = {main: initialMainState};
 
 export type State = typeof initialState;
 
@@ -144,7 +148,9 @@ const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
   templateId
 });
 
-const reducer = reducerWithInitialState(initialState)
+
+
+const mainReducer = reducerWithInitialState(initialMainState)
   .case(indexActionCreators.appLoaded, state => {
     return {
       ...state,
@@ -355,5 +361,20 @@ const reducer = reducerWithInitialState(initialState)
       };
     }
   );
+
+const combinedReducer = combineReducers({
+  main: mainReducer,
+});
+
+export const reducer: Reducer<State> = (state, action) => {
+  if (action.type === HYDRATE) {
+    return {
+      ...state, // use previous state
+      ...action.payload, // apply delta from hydration
+    }
+  } else {
+    return combinedReducer(state, action)
+  }
+}
 
 export default reducer;

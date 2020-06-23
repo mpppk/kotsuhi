@@ -2,6 +2,9 @@ const withCSS = require('@zeit/next-css');
 require('dotenv').config();
 
 module.exports = withCSS({
+  env: {
+    enableReduxWrapperDebugMode: true,
+  },
   publicRuntimeConfig: {
     firebase: {
       apiKey: process.env.FIREBASE_API_KEY,
