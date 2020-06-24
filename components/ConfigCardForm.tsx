@@ -59,16 +59,19 @@ export const ConfigCardForm: React.FC<ConfigCardFormProps> = props => {
             label="社員番号"
             value={componentState.config.employeeId}
             onChange={componentHandlers.changeEmployeeIdInput}
+            data-cy="config-employee-id-form"
           />
           <TextField
             label="コード"
             value={componentState.config.code}
             onChange={componentHandlers.changeCodeInput}
+            data-cy="config-code-form"
           />
           <TextField
             label="version"
             value={componentState.config.version}
             onChange={componentHandlers.changeVersionInput}
+            data-cy="config-version-form"
           />
           <Button
             variant="outlined"

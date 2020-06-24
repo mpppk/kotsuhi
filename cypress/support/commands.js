@@ -15,6 +15,15 @@
 //
 // -- This is a child command --
 // Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
+Cypress.Commands.add("ariaLabel", { prevSubject: 'optional'}, (subject, label) => {
+  return (subject ? subject : cy).get(`[aria-label="${label}"`)
+})
+
+Cypress.Commands.add("cyId", { prevSubject: 'optional'}, (subject, id) => {
+  return (subject ? subject : cy).get(`[data-cy="${id}"`)
+  // return subject.get(`[data-cy="${id}"`)
+})
+
 //
 //
 // -- This is a dual command --
