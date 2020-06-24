@@ -14,9 +14,9 @@ export default function TemplateDetailTitle(props: TemplateDetailTitleProps) {
   };
 
   return (
-    <Typography variant={'h4'}>
+    <Typography variant={'h4'} data-cy={'template-title'}>
       {props.title}
-      <IconButton edge="end" aria-label="more" onClick={handleClick}>
+      <IconButton edge="end" aria-label="Edit template title" onClick={handleClick}>
         <Edit />
       </IconButton>
     </Typography>

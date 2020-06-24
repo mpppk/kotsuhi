@@ -43,11 +43,13 @@ export default function TemplateDetailTitleForm(
         value={componentState.title}
         onChange={handleChangeInput}
         inputRef={titleInputEl}
+        data-cy={'template-title-form'}
       />
       <Button
         variant="outlined"
         color={'secondary'}
         onClick={handleClickSaveTitleButton}
+        data-cy={'save-template-title-button'}
       >
         Save
       </Button>

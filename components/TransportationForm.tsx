@@ -110,32 +110,39 @@ export default function TransportationForm(props: TransportationFormProps) {
           label="出発"
           value={transportation.departure}
           onChange={componentHandlers.changeDepartureInput}
+          data-cy="transportation-departure-form"
         />
         <TextField
           label="到着"
           value={transportation.arrival}
           onChange={componentHandlers.changeArrivalInput}
+          data-cy="transportation-arrival-form"
         />
         <TextField
           label="運賃"
           value={transportation.fare === 0 ? '' : transportation.fare}
           onChange={componentHandlers.changeFareInput}
+          data-cy="transportation-fare-form"
         />
         <TextField
           label="目的地"
           value={transportation.destination}
           onChange={componentHandlers.changeDestinationInput}
+          data-cy="transportation-destination-form"
         />
         <TextField
           label="目的"
           value={transportation.purpose}
           onChange={componentHandlers.changePurposeInput}
+          data-cy="transportation-purpose-form"
         />
+
         <FormControl>
           <InputLabel>種別</InputLabel>
           <Select
             value={componentState.transportation.line}
             onChange={componentHandlers.changeLine}
+            data-cy="transportation-transportation-form"
           >
             <MenuItem value={'ＪＲ'}>ＪＲ</MenuItem>
             <MenuItem value={'私鉄'}>私鉄</MenuItem>
@@ -156,6 +163,7 @@ export default function TransportationForm(props: TransportationFormProps) {
         <Button
           variant="outlined"
           onClick={componentHandlers.clickCancelButton}
+          data-cy="cancel-transportation-editing-button"
         >
           Cancel
         </Button>
@@ -163,6 +171,7 @@ export default function TransportationForm(props: TransportationFormProps) {
           variant="outlined"
           color={'secondary'}
           onClick={componentHandlers.clickSaveButton}
+          data-cy="save-transportation-button"
         >
           Save
         </Button>

@@ -27,7 +27,7 @@ export default function TemplateListItem(props: TemplateListItemProps) {
   };
 
   return (
-    <ListItem button={true} selected={props.selected} onClick={handleClick}>
+    <ListItem button={true} selected={props.selected} onClick={handleClick} data-cy="template-list-item">
       <ListItemIcon>
         <Badge badgeContent={props.badgeNum} color="secondary">
           <NoteIcon />
@@ -38,7 +38,7 @@ export default function TemplateListItem(props: TemplateListItemProps) {
         <IconButton
           onClick={handleClickDeleteButton}
           edge="end"
-          aria-label="more"
+          aria-label="Delete template"
         >
           <DeleteIcon />
         </IconButton>

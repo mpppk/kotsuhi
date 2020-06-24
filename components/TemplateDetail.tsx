@@ -62,7 +62,7 @@ export default function TemplateDetail(props: TemplateDetailProps) {
 
   return (
     <Paper>
-      <div className={classes.content}>
+      <div className={classes.content} data-cy="transportation-detail">
         {props.isEditingTitle ? (
           <TemplateDetailTitleForm
             focus={props.focusTitle}
