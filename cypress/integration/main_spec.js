@@ -2,12 +2,13 @@ describe('', () => {
   const id = cyId => `[data-cy="${cyId}"]`
 
   it('Update template title', () => {
+    const newTemplateTitle = 'new-template-title'
     cy.visit('http://localhost:3000')
-    cy.cyId('template-list-item').first().click() // FIXME
+    cy.cyId('template-list-item').first().click()
     cy.get('button[aria-label="Edit template title"]').click()
-    cy.get('[data-cy="template-title-form"] input').clear().type('aaa')
+    cy.get('[data-cy="template-title-form"] input').clear().type(newTemplateTitle)
     cy.get('button[data-cy="save-template-title-button"]').click()
-    cy.cyId('template-title').should('have.text', 'aaa')
+    cy.cyId('template-title').should('have.text', newTemplateTitle)
   })
 
   it('Edit config', () => {
@@ -52,13 +53,28 @@ describe('', () => {
     cy.cyId('template-title').contains(newTemplateTitle)
   })
 
-  it('Import template', () => {
-    // check cancel button behavior
+  it('Cancel to import template', () => {
     cy.contains('Import').click()
     cy.contains('Cancel').click()
   })
 
-  // it('Export template', () => {})
-  // it('Export csv', () => {})
+  // it('Import template from file', () => {
+  // })
+
+  // it('Import template from URL', () => {
+  // })
+
+  // it('Export templates', () => {
+  // })
+
+  it('Export csv', () => {
+    const selectDayNum = 8;
+    cy.cyId('template-list-item').first().click()
+    for (let i = 0; i < selectDayNum; i++) {
+      cy.get('.DayPicker-Day[aria-disabled=false]').eq(i).click()
+    }
+    cy.get(`${id('template-list-item')} .MuiBadge-badge`).should('have.text', selectDayNum)
+    cy.get(`button${id('export-csv-button')}+.MuiBadge-badge`).should('have.text', "2")
+  })
 })
 
