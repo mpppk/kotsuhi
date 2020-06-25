@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DayPicker, { DateUtils } from 'react-day-picker';
+import { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { DayModifiers } from 'react-day-picker/types/common';
 
 interface DaysPickerProps {
   onClickDay: (days: Date[]) => void;
