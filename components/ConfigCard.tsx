@@ -23,7 +23,7 @@ export const ConfigCard: React.FC<ConfigCardProps> = props => {
         <Typography variant="h5" component="h2">
           {props.config.employeeId} - {props.config.code}
           <IconButton edge="end" aria-label="more" onClick={handleClickEdit}>
-            <EditIcon />
+            <EditIcon aria-label="Edit config"/>
           </IconButton>
         </Typography>
         <Typography color="textSecondary">{props.config.version}</Typography>

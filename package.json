@@ -12,7 +12,8 @@
     "precommit": "pretty-quick --staged",
     "tslint:prettier-check": "tslint-config-prettier-check ./tslint.json",
     "tslint": "tslint -c tslint.json 'src/**/*.ts' 'src/**/*.tsx' 'test/**/*.ts'",
-    "export": "yarn build && next export"
+    "export": "yarn build && next export",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@material-ui/core": "4.10.2",
@@ -51,6 +52,7 @@
     "@types/react-dom": "16.9.8",
     "@types/react-redux": "7.1.9",
     "@types/uuid": "7.0.4",
+    "cypress": "4.8.0",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.2",
     "husky": "4.2.5",

@@ -380,6 +380,7 @@ export const Index: React.FC = () => {
                 color="primary"
                 className={classes.exportCsvButton}
                 onClick={handlers.clickExportCSVButton}
+                data-cy="export-csv-button"
               >
                 Export CSV
               </Button>

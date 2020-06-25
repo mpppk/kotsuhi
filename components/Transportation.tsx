@@ -38,14 +38,14 @@ export default function Transportation(props: TransportationProps) {
         <IconButton
           onClick={handleClickEditButton}
           edge="end"
-          aria-label="more"
+          aria-label="Edit transportation"
         >
           <Edit />
         </IconButton>
         <IconButton
           onClick={handleClickDeleteButton}
           edge="end"
-          aria-label="more"
+          aria-label="Delete transportation"
         >
           <Delete />
         </IconButton>
