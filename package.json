@@ -41,7 +41,7 @@
     "typescript-fsa": "3.0.0",
     "typescript-fsa-reducers": "1.2.1",
     "typescript-fsa-redux-saga": "2.0.0",
-    "uuid": "7.0.3"
+    "uuid": "8.2.0"
   },
   "devDependencies": {
     "@types/encoding-japanese": "1.0.15",
@@ -51,7 +51,7 @@
     "@types/react": "16.9.41",
     "@types/react-dom": "16.9.8",
     "@types/react-redux": "7.1.9",
-    "@types/uuid": "7.0.4",
+    "@types/uuid": "8.0.0",
     "cypress": "4.8.0",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.2",
