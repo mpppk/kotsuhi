@@ -1,7 +1,7 @@
 import { HYDRATE } from 'next-redux-wrapper'
 import { combineReducers, Reducer } from 'redux';
 import { reducerWithInitialState } from 'typescript-fsa-reducers';
-import uuidv4 from 'uuid/v4';
+import {v4 as uuidv4} from 'uuid';
 import { indexActionCreators } from './actions';
 import {
   Line,
