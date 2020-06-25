@@ -1,5 +1,6 @@
+// @ts-ignore
 describe('', () => {
-  const id = cyId => `[data-cy="${cyId}"]`
+  const id = (cyId: string) => `[data-cy="${cyId}"]`
 
   it('Update template title', () => {
     const newTemplateTitle = 'new-template-title'

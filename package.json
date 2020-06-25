@@ -12,7 +12,8 @@
     "precommit": "pretty-quick --staged",
     "tslint:prettier-check": "tslint-config-prettier-check ./tslint.json",
     "tslint": "tslint -c tslint.json 'src/**/*.ts' 'src/**/*.tsx' 'test/**/*.ts'",
-    "export": "yarn build && next export"
+    "export": "yarn build && next export",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@material-ui/core": "4.10.2",
