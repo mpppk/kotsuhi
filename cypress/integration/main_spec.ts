@@ -68,6 +68,18 @@ describe('', () => {
   // it('Export templates', () => {
   // })
 
+  it('Reset calendar selection', () => {
+    const selectDayNum = 8;
+    cy.cyId('template-list-item').first().click()
+    for (let i = 0; i < selectDayNum; i++) {
+      cy.get('.DayPicker-Day[aria-disabled=false]').eq(i).click()
+    }
+    cy.cyId('reset-calendar-button').click()
+    cy.get(`${id('template-list-item')} .MuiBadge-badge`).first().should('have.class', 'MuiBadge-invisible')
+
+    cy.get(`button${id('export-csv-button')}+.MuiBadge-badge`).should('have.class', 'MuiBadge-invisible')
+  })
+
   it('Export csv', () => {
     const selectDayNum = 8;
     cy.cyId('template-list-item').first().click()

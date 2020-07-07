@@ -37,6 +37,7 @@ export const indexActionCreators = {
   clickEditTransportationButton: indexActionCreatorFactory<Transportation>(
     'CLICK_EDIT_TRANSPORTATION_BUTTON'
   ),
+  clickResetCalendarButton: indexActionCreatorFactory<void>('CLICK_RESET_CALENDAR'),
   clickSaveConfig: indexActionCreatorFactory<CsvConfig>('CLICK_SAVE_CONFIG'),
   clickSaveTitleButton: indexActionCreatorFactory<UpdateTitlePayload>(
     'CLICK_SAVE_TITLE_BUTTON'
