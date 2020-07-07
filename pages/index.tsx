@@ -98,6 +98,10 @@ const useHandlers = (
       );
     },
 
+    clickResetCalendarButton: () => {
+      dispatch(indexActionCreators.clickResetCalendarButton())
+    },
+
     updateCalendar: (dates: Date[]) => {
       if (state.selectedTemplate) {
         dispatch(
@@ -249,10 +253,13 @@ const selector = (s: State) => {
   return globalState;
 };
 
-const useStyles = makeStyles((_theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     exportCsvButton: {
       float: 'right'
+    },
+    resetCalendarButton: {
+      marginRight: theme.spacing(1),
     },
     root: {
       flexGrow: 1,
@@ -373,19 +380,30 @@ export const Index: React.FC = () => {
               <EmptyTemplateDetail />
             )}
           </Grid>
-          <Grid item={true} xs={2}>
-            <Badge badgeContent={state.csvFileNum} color="secondary">
+          {/*<Grid container={true} alignItems={"flex-end"}>*/}
+            <Grid item={true} xs={8} justify={"flex-end"}>
               <Button
                 variant="outlined"
-                color="primary"
-                className={classes.exportCsvButton}
-                onClick={handlers.clickExportCSVButton}
+                color="secondary"
+                className={classes.resetCalendarButton}
+                onClick={handlers.clickResetCalendarButton}
                 data-cy="export-csv-button"
               >
-                Export CSV
+                Reset Calendar
               </Button>
-            </Badge>
-          </Grid>
+              <Badge badgeContent={state.csvFileNum} color="secondary">
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  className={classes.exportCsvButton}
+                  onClick={handlers.clickExportCSVButton}
+                  data-cy="export-csv-button"
+                >
+                  Export CSV
+                </Button>
+              </Badge>
+            </Grid>
+          {/*</Grid>*/}
         </Grid>
       </div>
       <ImportTemplateDialog

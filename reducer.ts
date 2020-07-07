@@ -328,6 +328,9 @@ const mainReducer = reducerWithInitialState(initialMainState)
     newSelectedDays[payload.templateId] = payload.dates;
     return { ...state, selectedDays: newSelectedDays };
   })
+  .case(indexActionCreators.clickResetCalendarButton, (state) => {
+    return { ...state, selectedDays: {} };
+  })
   .case(
     indexActionCreators.clickSaveTransportationButton,
     (state, transportation) => {
