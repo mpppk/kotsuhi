@@ -387,7 +387,7 @@ export const Index: React.FC = () => {
                 color="secondary"
                 className={classes.resetCalendarButton}
                 onClick={handlers.clickResetCalendarButton}
-                data-cy="export-csv-button"
+                data-cy="reset-calendar-button"
               >
                 Reset Calendar
               </Button>
