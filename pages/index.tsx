@@ -48,11 +48,6 @@ const useHandlers = (
       dispatch(indexActionCreators.addTransportation(templateId));
     },
 
-    beforeUnload: (e: any) => {
-      e.preventDefault();
-      e.returnValue = '未保存のデータがありますが、本当に閉じますか？';
-    },
-
     cancelTransportationEditing: () => {
       dispatch(indexActionCreators.cancelTransportationEditing());
     },
@@ -291,11 +286,7 @@ const useRefs = () => {
 
 const useEffects = (handlers: Handlers) => {
   useEffect(() => {
-    window.addEventListener('beforeunload', handlers.beforeUnload);
     handlers.appLoaded();
-    return () => {
-      window.removeEventListener('beforeunload', handlers.beforeUnload);
-    };
   }, []);
 };
 
@@ -381,7 +372,7 @@ export const Index: React.FC = () => {
             )}
           </Grid>
           {/*<Grid container={true} alignItems={"flex-end"}>*/}
-            <Grid item={true} xs={8} justify={"flex-end"}>
+            <Grid item={true} xs={8}>
               <Button
                 variant="outlined"
                 color="secondary"
