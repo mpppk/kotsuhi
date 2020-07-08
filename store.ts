@@ -1,5 +1,5 @@
 import { Context, createWrapper, MakeStore } from 'next-redux-wrapper';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, Reducer } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import reducer, { initialState, State } from './reducer';
 import rootSaga from './sagas/saga';
@@ -15,27 +15,45 @@ const bindMiddleware = (middleware: any) => {
   return applyMiddleware(...middleware);
 };
 
-const makeStore: MakeStore<State> = (_context: Context) => {
-  const store = createStore(
-    reducer,
-    initialState,
-    bindMiddleware([sagaMiddleware])
-  );
+const createStoreWithMiddleware = (r: Reducer<State>, state: State | null) => {
+  const store =
+    state === null
+      ? createStore(r, bindMiddleware([sagaMiddleware]))
+      : createStore(r, state, bindMiddleware([sagaMiddleware]));
 
-  // @ts-ignore
-  store.runSagaTask = () => {
-    // FIXME Add type
-    // @ts-ignore
-    store.sagaTask = sagaMiddleware.run(rootSaga); // FIXME Add type
+  (store as any).runSagaTask = () => {
+    (store as any).sagaTask = sagaMiddleware.run(rootSaga); // FIXME Add type
   };
 
-  // @ts-ignore
-  store.runSagaTask(); // FIXME Add type
+  (store as any).runSagaTask(); // FIXME Add type
   return store;
-}
+};
+
+const makeStore: MakeStore<State> = (context: Context) => {
+  if (context.hasOwnProperty('isServer') && (context as any).isServer) {
+    return createStoreWithMiddleware(reducer, initialState);
+  } else {
+    const { persistStore, persistReducer } = require('redux-persist');
+    const storage = require('redux-persist/lib/storage').default;
+
+    // 永続化の設定
+    const persistConfig = {
+      key: 'state', // Storageに保存されるキー名を指定する
+      storage, // 保存先としてlocalStorageがここで設定される
+      // whitelist: ['todos'] // Stateは`todos`のみStorageに保存する
+      // blacklist: ['visibilityFilter'] // `visibilityFilter`は保存しない
+    };
+    const persistedReducer = persistReducer(persistConfig, reducer);
+    const store = createStoreWithMiddleware(persistedReducer, null);
+    (store as any).__persistor = persistStore(store);
+    return store;
+  }
+};
 
 const isEnableDebugMode = (): boolean => {
-  return process.env.enableReduxWrapperDebugMode as any as boolean;
-}
+  return (process.env.enableReduxWrapperDebugMode as any) as boolean;
+};
 
-export const wrapper = createWrapper<State>(makeStore, {debug: isEnableDebugMode()})
+export const wrapper = createWrapper<State>(makeStore, {
+  debug: isEnableDebugMode(),
+});
