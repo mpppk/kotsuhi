@@ -74,7 +74,11 @@ const initialTemplates: TransportationTemplate[] = [
   },
 ];
 
-const selectedDays = {} as { [key: string]: Date[] };
+export interface SelectedDays {
+  [key: string]: Date[];
+}
+
+const selectedDays = {} as SelectedDays;
 
 const initialMainState = {
   code: 'BD01',
@@ -94,6 +98,7 @@ const initialMainState = {
 
 export const initialState = { main: initialMainState };
 
+export type MainState = typeof initialMainState;
 export type State = typeof initialState;
 
 const removeTransportation = (

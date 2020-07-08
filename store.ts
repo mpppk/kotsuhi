@@ -1,8 +1,12 @@
 import { Context, createWrapper, MakeStore } from 'next-redux-wrapper';
 import { applyMiddleware, createStore, Reducer } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import reducer, { initialState, State } from './reducer';
+import reducer, { initialState, MainState, State } from './reducer';
 import rootSaga from './sagas/saga';
+import {
+  parseSelectedDaysFromString,
+  SelectedStrDays,
+} from './services/transform';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -33,13 +37,31 @@ const makeStore: MakeStore<State> = (context: Context) => {
   if (context.hasOwnProperty('isServer') && (context as any).isServer) {
     return createStoreWithMiddleware(reducer, initialState);
   } else {
-    const { persistStore, persistReducer } = require('redux-persist');
+    const {
+      persistStore,
+      persistReducer,
+      createTransform,
+    } = require('redux-persist');
     const storage = require('redux-persist/lib/storage').default;
+
+    const dateTransform = createTransform(
+      (inboundState: MainState) => inboundState,
+      (outboundState: MainState) => {
+        return {
+          ...outboundState,
+          selectedDays: parseSelectedDaysFromString(
+            (outboundState.selectedDays as unknown) as SelectedStrDays
+          ),
+        };
+      },
+      { whitelist: ['main'] }
+    );
 
     // 永続化の設定
     const persistConfig = {
       key: 'state', // Storageに保存されるキー名を指定する
       storage, // 保存先としてlocalStorageがここで設定される
+      transforms: [dateTransform],
       // whitelist: ['todos'] // Stateは`todos`のみStorageに保存する
       // blacklist: ['visibilityFilter'] // `visibilityFilter`は保存しない
     };
