@@ -1,18 +1,17 @@
-import { HYDRATE } from 'next-redux-wrapper'
-import { combineReducers, Reducer } from 'redux';
+import { combineReducers } from 'redux';
 import { reducerWithInitialState } from 'typescript-fsa-reducers';
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { indexActionCreators } from './actions';
 import {
   Line,
   TemplateID,
   Transportation,
-  TransportationTemplate
+  TransportationTemplate,
 } from './models/model';
 import {
   addImportHistory,
   deleteImportHistory,
-  getImportHistory
+  getImportHistory,
 } from './services/importHistory';
 
 const templateId1 = uuidv4();
@@ -32,7 +31,7 @@ const initialTemplates: TransportationTemplate[] = [
         id: uuidv4(),
         line: 'JR' as Line,
         purpose: '打ち合わせ',
-        templateId: templateId1
+        templateId: templateId1,
       },
       {
         arrival: '横浜',
@@ -42,9 +41,9 @@ const initialTemplates: TransportationTemplate[] = [
         id: uuidv4(),
         line: 'JR' as Line,
         purpose: '帰社',
-        templateId: templateId1
-      }
-    ]
+        templateId: templateId1,
+      },
+    ],
   },
   {
     description: 'test-description',
@@ -59,7 +58,7 @@ const initialTemplates: TransportationTemplate[] = [
         id: uuidv4(),
         line: '複数',
         purpose: '打ち合わせ',
-        templateId: templateId2
+        templateId: templateId2,
       },
       {
         arrival: '横浜',
@@ -69,13 +68,17 @@ const initialTemplates: TransportationTemplate[] = [
         id: uuidv4(),
         line: '複数',
         purpose: '帰社',
-        templateId: templateId2
-      }
-    ]
-  }
+        templateId: templateId2,
+      },
+    ],
+  },
 ];
 
-const selectedDays = {} as { [key: string]: Date[] };
+export interface SelectedDays {
+  [key: string]: Date[];
+}
+
+const selectedDays = {} as SelectedDays;
 
 const initialMainState = {
   code: 'BD01',
@@ -90,24 +93,25 @@ const initialMainState = {
   selectedDays,
   selectedTemplateId: null as string | null,
   templates: initialTemplates,
-  version: 'v.1.04'
+  version: 'v.1.04',
 };
 
-export const initialState = {main: initialMainState};
+export const initialState = { main: initialMainState };
 
+export type MainState = typeof initialMainState;
 export type State = typeof initialState;
 
 const removeTransportation = (
   templates: TransportationTemplate[],
   transportation: Transportation
 ) => {
-  const template = templates.find(t => t.id === transportation.templateId);
+  const template = templates.find((t) => t.id === transportation.templateId);
   if (!template) {
     return templates;
   }
 
   const transportationIndex = template.transportations.findIndex(
-    t => t.id === transportation.id
+    (t) => t.id === transportation.id
   );
   if (transportationIndex === -1) {
     return templates;
@@ -123,7 +127,7 @@ const findTemplateById = (
   templates: TransportationTemplate[],
   id: TemplateID
 ): TransportationTemplate | null => {
-  const template = templates.find(t => t.id === id);
+  const template = templates.find((t) => t.id === id);
   return template ? template : null;
 };
 
@@ -133,7 +137,7 @@ const newEmptyTemplate = (): TransportationTemplate => {
     description: '',
     id,
     title: '',
-    transportations: []
+    transportations: [],
   };
 };
 
@@ -145,28 +149,26 @@ const newEmptyTransportation = (templateId: TemplateID): Transportation => ({
   id: uuidv4(),
   line: 'JR' as Line,
   purpose: '',
-  templateId
+  templateId,
 });
 
-
-
 const mainReducer = reducerWithInitialState(initialMainState)
-  .case(indexActionCreators.appLoaded, state => {
+  .case(indexActionCreators.appLoaded, (state) => {
     return {
       ...state,
-      importURLHistory: getImportHistory()
+      importURLHistory: getImportHistory(),
     };
   })
   .case(indexActionCreators.clickDeleteImportURL, (state, url) => {
     return {
       ...state,
-      importURLHistory: deleteImportHistory(url)
+      importURLHistory: deleteImportHistory(url),
     };
   })
-  .case(indexActionCreators.cancelTransportationEditing, state => {
+  .case(indexActionCreators.cancelTransportationEditing, (state) => {
     return {
       ...state,
-      editingTransportation: null
+      editingTransportation: null,
     };
   })
   .case(indexActionCreators.clickSaveConfig, (state, config) => {
@@ -175,40 +177,40 @@ const mainReducer = reducerWithInitialState(initialMainState)
       code: config.code,
       employeeId: config.employeeId,
       isEditingConfig: false,
-      version: config.version
+      version: config.version,
     };
   })
   .case(indexActionCreators.clickEditConfig, (state, isEditingConfig) => {
     return {
       ...state,
-      isEditingConfig
+      isEditingConfig,
     };
   })
   .case(indexActionCreators.importDialogErrorOccurred, (state, error) => {
     return {
       ...state,
-      error
+      error,
     };
   })
-  .case(indexActionCreators.closeErrorDialog, state => {
+  .case(indexActionCreators.closeErrorDialog, (state) => {
     return {
       ...state,
-      error: null
+      error: null,
     };
   })
   .case(indexActionCreators.importTemplatesFromURL.started, (state, url) => {
     return {
       ...state,
-      importURLHistory: addImportHistory(url)
+      importURLHistory: addImportHistory(url),
     };
   })
-  .case(indexActionCreators.importTemplatesFromURL.failed, state => {
+  .case(indexActionCreators.importTemplatesFromURL.failed, (state) => {
     return {
       ...state,
       error: new Error('Template importing from URL is failed'),
       focusTitle: false,
       isEditingTitle: false,
-      selectedTemplateId: null
+      selectedTemplateId: null,
     };
   })
   .case(indexActionCreators.importTemplatesFromURL.done, (state, payload) => {
@@ -221,7 +223,7 @@ const mainReducer = reducerWithInitialState(initialMainState)
       isEditingTitle: false,
       selectedTemplateId: null,
       templates,
-      version: config.version
+      version: config.version,
     };
   })
   .case(
@@ -235,7 +237,7 @@ const mainReducer = reducerWithInitialState(initialMainState)
         isEditingTitle: false,
         selectedTemplateId: null,
         templates,
-        version: config.version
+        version: config.version,
       };
     }
   )
@@ -244,24 +246,24 @@ const mainReducer = reducerWithInitialState(initialMainState)
       state.selectedTemplateId === templateId ? null : state.selectedTemplateId;
     const isEditingTitle = selectedTemplateId ? state.isEditingTitle : false;
     const focusTitle = selectedTemplateId ? state.focusTitle : false;
-    const newTemplates = state.templates.filter(t => t.id !== templateId);
+    const newTemplates = state.templates.filter((t) => t.id !== templateId);
 
     return {
       ...state,
       focusTitle,
       isEditingTitle,
       selectedTemplateId,
-      templates: newTemplates
+      templates: newTemplates,
     };
   })
-  .case(indexActionCreators.clickAddTemplateButton, state => {
+  .case(indexActionCreators.clickAddTemplateButton, (state) => {
     const newTemplate = newEmptyTemplate();
     return {
       ...state,
       focusTitle: true,
       isEditingTitle: true,
       selectedTemplateId: newTemplate.id,
-      templates: [...state.templates, newTemplate]
+      templates: [...state.templates, newTemplate],
     };
   })
   .case(
@@ -269,7 +271,7 @@ const mainReducer = reducerWithInitialState(initialMainState)
     (state, transportation) => {
       return {
         ...state,
-        editingTransportation: transportation
+        editingTransportation: transportation,
       };
     }
   )
@@ -287,7 +289,7 @@ const mainReducer = reducerWithInitialState(initialMainState)
     return {
       ...state,
       editingTransportation: newTransportation,
-      templates: newTemplates
+      templates: newTemplates,
     };
   })
   .case(
@@ -295,7 +297,7 @@ const mainReducer = reducerWithInitialState(initialMainState)
     (state, transportation) => {
       return {
         ...state,
-        templates: removeTransportation(state.templates, transportation)
+        templates: removeTransportation(state.templates, transportation),
       }; // TODO
     }
   )
@@ -310,17 +312,17 @@ const mainReducer = reducerWithInitialState(initialMainState)
       ...state,
       focusTitle: false,
       isEditingTitle: false,
-      templates: newTemplates
+      templates: newTemplates,
     };
   })
-  .case(indexActionCreators.clickEditTitleButton, state => {
+  .case(indexActionCreators.clickEditTitleButton, (state) => {
     return { ...state, isEditingTitle: true };
   })
   .case(indexActionCreators.clickTemplate, (state, selectedTemplateId) => {
     return {
       ...state,
       editingTransportation: null,
-      selectedTemplateId
+      selectedTemplateId,
     };
   })
   .case(indexActionCreators.updateCalendar, (state, payload) => {
@@ -347,7 +349,7 @@ const mainReducer = reducerWithInitialState(initialMainState)
 
       const newTransportations = [...template.transportations];
       const index = newTransportations.findIndex(
-        t => t.id === transportation.id
+        (t) => t.id === transportation.id
       );
       if (index === -1) {
         throw new Error(
@@ -360,24 +362,13 @@ const mainReducer = reducerWithInitialState(initialMainState)
       return {
         ...state,
         editingTransportation: null,
-        templates: newTemplates
+        templates: newTemplates,
       };
     }
   );
 
-const combinedReducer = combineReducers({
+const reducer = combineReducers({
   main: mainReducer,
 });
-
-export const reducer: Reducer<State> = (state, action) => {
-  if (action.type === HYDRATE) {
-    return {
-      ...state, // use previous state
-      ...action.payload, // apply delta from hydration
-    }
-  } else {
-    return combinedReducer(state, action)
-  }
-}
 
 export default reducer;
