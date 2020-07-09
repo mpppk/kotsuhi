@@ -1,0 +1,5 @@
+AppName: "交通費申請"
+Width: 1200
+Height: 800
+MacOS:
+  IconPath: ../public/kotsuhi.icns
