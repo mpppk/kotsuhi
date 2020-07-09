@@ -13,7 +13,8 @@
     "tslint:prettier-check": "tslint-config-prettier-check ./tslint.json",
     "tslint": "tslint -c tslint.json 'src/**/*.ts' 'src/**/*.tsx' 'test/**/*.ts'",
     "export": "yarn build && next export",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "build-app": "yarn export && cp everest.yml out/ && everest rebuild-with out/"
   },
   "dependencies": {
     "@material-ui/core": "4.11.0",

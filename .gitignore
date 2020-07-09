@@ -5,3 +5,5 @@ coverage
 out
 *.cache
 .env
+.DS_Store
+交通費申請.app
