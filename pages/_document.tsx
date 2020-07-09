@@ -8,6 +8,7 @@ export default class MyDocument extends Document {
     return (
       <html lang="en">
         <Head>
+          <title>交通費申請</title>
           <meta charSet="utf-8" />
           <meta
             name="viewport"
