@@ -43,7 +43,7 @@
     "typescript-fsa": "3.0.0",
     "typescript-fsa-reducers": "1.2.2",
     "typescript-fsa-redux-saga": "2.0.0",
-    "uuid": "8.3.0"
+    "uuid": "8.3.1"
   },
   "devDependencies": {
     "@types/encoding-japanese": "1.0.15",
